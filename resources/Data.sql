@@ -8,6 +8,7 @@ drop database if exists PayMyBuddyProd;
 create database PayMyBuddyProd;
 use PayMyBuddyProd;
 
+-- Table of users
 create table person (
 	id int PRIMARY KEY AUTO_INCREMENT,					-- User ID
 	person_connection varchar(50) NOT NULL,				-- User connection
@@ -16,6 +17,7 @@ create table person (
 	constraint uc_person_email UNIQUE KEY (person_email)
 );
 
+-- Buddy relationship join table
 create table buddy (
 	buddy_id_user int NOT NULL,							-- User ID
 	buddy_id_buddy int NOT NULL,						-- Friend ID
@@ -28,6 +30,7 @@ create table buddy (
 		on update CASCADE
 );
 
+-- User balances table
 create table user_account(
 	account_id_user int NOT NULL,						-- User account ID
 	account_balance float,								-- Account balance
@@ -37,11 +40,12 @@ create table user_account(
 		on update CASCADE
 );
 
+-- Table of user transactions
 create table bank_transaction (
 	id int PRIMARY KEY AUTO_INCREMENT,					-- Bank transaction ID
 	transaction_id_debtor int NOT NULL,					-- Debit User ID
-	transaction_id_credit int NOT NULL,					-- credit user ID
-    transaction_date timestamp(6),						-- Transaction date
+	transaction_id_credit int NOT NULL,					-- Credit user ID
+	transaction_date timestamp(6) NOT NULL,				-- Transaction date
 	transaction_description varchar(50),				-- Transaction description
 	transaction_amount float,							-- Transaction amount
 	constraint fk_bank_transaction_person_debtor FOREIGN KEY (transaction_id_debtor) REFERENCES person (id)
@@ -53,12 +57,13 @@ create table bank_transaction (
 	constraint ck_bank_transaction_amount check (transaction_amount > 0)
 );
 
+-- Table of user accounts
 create table bank_account (
 	id int PRIMARY KEY AUTO_INCREMENT,					-- Bank account ID
 	bank_id_user int NOT NULL,							-- Account User ID
-    bank_name varchar(50) NOT NULL,						-- Name of the bank
-    bank_code varchar(5) NOT NULL,						-- Bank code
-    bank_branch_code varchar(5) NOT NULL,				-- Branch code
+	bank_name varchar(50) NOT NULL,						-- Name of the bank
+	bank_code varchar(5) NOT NULL,						-- Bank code
+	bank_branch_code varchar(5) NOT NULL,				-- Branch code
 	bank_account_number varchar(11) NOT NULL,			-- Account number
 	bank_rib_key varchar(11) NOT NULL,					-- Bank key
 	bank_iban varchar(34) NOT NULL,						-- IBAN
@@ -70,10 +75,11 @@ create table bank_account (
 		on update CASCADE
 );
 
+-- User levy log
 create table levy_log (
 	id int PRIMARY KEY AUTO_INCREMENT,					-- Levy log ID
 	levy_id_user int NOT NULL,							-- Levy user ID
-	levy_date timestamp(6),								-- Levy date
+	levy_date timestamp(6) NOT NULL,					-- Levy date
 	levy_description varchar(50),						-- Levy description
 	levy_amount float,									-- Levy amount
 	constraint fk_levy_log_person FOREIGN KEY (levy_id_user) REFERENCES person (id),
@@ -132,6 +138,7 @@ drop database if exists PayMyBuddyTest;
 create database PayMyBuddyTest;
 use PayMyBuddyTest;
 
+-- Table of users
 create table person (
 	id int PRIMARY KEY AUTO_INCREMENT,					-- User ID
 	person_connection varchar(50) NOT NULL,				-- User connection
@@ -140,6 +147,7 @@ create table person (
 	constraint uc_person_email UNIQUE KEY (person_email)
 );
 
+-- Buddy relationship join table
 create table buddy (
 	buddy_id_user int NOT NULL,							-- User ID
 	buddy_id_buddy int NOT NULL,						-- Friend ID
@@ -152,6 +160,7 @@ create table buddy (
 		on update CASCADE
 );
 
+-- User balances table
 create table user_account(
 	account_id_user int NOT NULL,						-- User account ID
 	account_balance float,								-- Account balance
@@ -161,11 +170,12 @@ create table user_account(
 		on update CASCADE
 );
 
+-- Table of user transactions
 create table bank_transaction (
 	id int PRIMARY KEY AUTO_INCREMENT,					-- Bank transaction ID
 	transaction_id_debtor int NOT NULL,					-- Debit User ID
-	transaction_id_credit int NOT NULL,					-- credit user ID
-    transaction_date timestamp(6),						-- Transaction date
+	transaction_id_credit int NOT NULL,					-- Credit user ID
+	transaction_date timestamp(6) NOT NULL,				-- Transaction date
 	transaction_description varchar(50),				-- Transaction description
 	transaction_amount float,							-- Transaction amount
 	constraint fk_bank_transaction_person_debtor FOREIGN KEY (transaction_id_debtor) REFERENCES person (id)
@@ -177,12 +187,13 @@ create table bank_transaction (
 	constraint ck_bank_transaction_amount check (transaction_amount > 0)
 );
 
+-- Table of user accounts
 create table bank_account (
 	id int PRIMARY KEY AUTO_INCREMENT,					-- Bank account ID
 	bank_id_user int NOT NULL,							-- Account User ID
-    bank_name varchar(50) NOT NULL,						-- Name of the bank
-    bank_code varchar(5) NOT NULL,						-- Bank code
-    bank_branch_code varchar(5) NOT NULL,				-- Branch code
+	bank_name varchar(50) NOT NULL,						-- Name of the bank
+	bank_code varchar(5) NOT NULL,						-- Bank code
+	bank_branch_code varchar(5) NOT NULL,				-- Branch code
 	bank_account_number varchar(11) NOT NULL,			-- Account number
 	bank_rib_key varchar(11) NOT NULL,					-- Bank key
 	bank_iban varchar(34) NOT NULL,						-- IBAN
@@ -194,10 +205,11 @@ create table bank_account (
 		on update CASCADE
 );
 
+-- User levy log
 create table levy_log (
 	id int PRIMARY KEY AUTO_INCREMENT,					-- Levy log ID
 	levy_id_user int NOT NULL,							-- Levy user ID
-	levy_date timestamp(6),								-- Levy date
+	levy_date timestamp(6) NOT NULL,					-- Levy date
 	levy_description varchar(50),						-- Levy description
 	levy_amount float,									-- Levy amount
 	constraint fk_levy_log_person FOREIGN KEY (levy_id_user) REFERENCES person (id),
