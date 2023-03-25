@@ -3,6 +3,8 @@ package com.paymybuddy.paymybuddy.dao.db.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -21,7 +23,7 @@ import lombok.ToString;
 @Table(name = "user_account")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 @NoArgsConstructor
-@EqualsAndHashCode(of= {"accountIdPerson", "accountBalance"})
+@EqualsAndHashCode(of= {"accountIdPerson"})
 @ToString(callSuper = true)
 public class UserAccountEntity {
   /**
@@ -32,5 +34,7 @@ public class UserAccountEntity {
   /**
    * Account balance
    */
+  @PositiveOrZero(message = "Account balance must be a positive number or zero")
+  @Digits(integer=9, fraction=2)
   Float accountBalance;
 }

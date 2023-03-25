@@ -15,6 +15,8 @@
 	<description>Money transfer app</description>
 	<properties>
 		<java.version>19</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -37,6 +39,37 @@
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
 		</dependency>
+		
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-devtools</artifactId>
+	<optional>true</optional>
+</dependency>        
+<dependency>
+	<groupId>org.thymeleaf</groupId>
+	<artifactId>thymeleaf-spring5</artifactId>
+	<version>3.1.1.RELEASE</version>
+</dependency>
+<dependency>
+	<groupId>nz.net.ultraq.thymeleaf</groupId>
+	<artifactId>thymeleaf-layout-dialect</artifactId>
+	<!--<version>3.2.0</version>-->
+</dependency>
+
+		
+		
+<!--
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter</artifactId>
+</dependency>        
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+-->
+		
 
 		<dependency>
 			<groupId>com.mysql</groupId>
@@ -48,6 +81,23 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<!-- <version>2.18.0</version> -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<!-- <version>2.18.0</version> -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<!-- <version>2.18.0</version> -->
+		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -64,21 +114,88 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+
+<dependency>
+    <groupId>org.springframework.plugin</groupId>
+    <artifactId>spring-plugin-core</artifactId>
+    <version>3.0.0</version>
+</dependency>
+
+
+<dependency>
+	<groupId>org.assertj</groupId>
+	<artifactId>assertj-core</artifactId>
+	<!-- <version>3.23.1</version> -->
+	<scope>test</scope>
+</dependency>
+
+
+<dependency>
+    <groupId>org.hibernate.validator</groupId>
+    <artifactId>hibernate-validator</artifactId>
+</dependency>
+<dependency>
+    <groupId>javax.validation</groupId>
+    <artifactId>validation-api</artifactId>
+    <version>2.0.1.Final</version>
+</dependency>
+
+
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.8</version>
+			<type>maven-plugin</type>
+		</dependency>
 		
 		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<version>3.23.1</version>
-			<scope>test</scope>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-assembly-plugin</artifactId>
+			<version>3.5.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		
+<dependency>
+    <groupId>org.hamcrest</groupId>
+    <artifactId>hamcrest-library</artifactId>
+    <!-- <version>2.2</version> -->
+    <scope>test</scope>
+</dependency>
+
+<!--
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-ui</artifactId>
+    <version>1.6.9</version>
+</dependency>
+<dependency>
+	<groupId>org.springdoc</groupId>
+	<artifactId>springdoc-openapi-javadoc</artifactId>
+	<version>1.6.15</version>
+</dependency>
+-->
 		
 	</dependencies>
 
 	<build>
+        <sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
 				<configuration>
 					<excludes>
 						<exclude>
@@ -86,13 +203,38 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<!--<addResources>true</addResources>-->
 				</configuration>
 			</plugin>
 			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<!-- <version>3.4.2</version> -->
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>com.paymybuddy.paymybuddy.controller</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
+				<!-- <version>2.22.2</version> -->
 				<dependencies>
 					<dependency>
 						<groupId>org.junit.platform</groupId>
@@ -127,7 +269,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.22.2</version>
+				<!-- <version>2.22.2</version> -->
 				<executions>
 					<execution>
 						<id>integration-test</id>
@@ -144,8 +286,60 @@
 				</executions>
 			</plugin>
 			
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.8</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>jacoco-report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.7.3.2</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.12.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>3.4.2</version>
+			</plugin>
 			
 		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.7.3.2</version>
+				<configuration>
+					<xmlOutput>true</xmlOutput>
+					<!-- Optional directory to put spotbugs xdoc xml report -->
+					<xmlOutputDirectory>target/site/spotbugs</xmlOutputDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>
