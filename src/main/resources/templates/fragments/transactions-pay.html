@@ -1,0 +1,48 @@
+<!-- Send Money -->
+
+<div>
+	<!-- Add connection -->
+    <div class="row d-flex justify-content-between">
+    	<div class="col-3">
+	    	<p class="fw-bold">Send Money</p>
+		</div>
+    	<div class="col-3">
+	    	<button class="btn btn-primary w-100"
+	    		data-bs-toggle="modal" data-bs-target="#modalAddConnection">Add Connection</button>
+		</div>
+	</div>
+
+	<!-- Payment -->
+    <div class="row bg-light p-4">
+		<div class="d-flex justify-content-center align-items-center">
+			<div>
+				<select class="dropdown" th:field="${newTransaction.idCredit}" id="idSendCredit">
+					<option value="">Select A Connection</option>
+					<option th:each="buddy : ${buddies}"
+						th:value="${buddy.idBuddy}"
+						th:text="${buddy.connection}">pizza
+					</option>
+				</select>
+			</div>
+			
+			<div class="mx-3">
+				<input type="number" class="form-control"
+					id="idSendAmount"
+					placeholder="0€"
+					th:field="${newTransaction.amount}"
+					min="0" />
+			</div>
+			
+			<div>
+				<button type="button" class="btn btn-success bg-gradient px-5"
+					data-bs-toggle="modal" data-bs-target="#modalSendMoney">Pay</button>
+			</div>
+		</div>
+	</div>
+	
+    <div class="row">
+		<div th:if="${errorMessage}">
+			<p th:if="${errorMessage}"  th:text="${errorMessage}">Error</p>
+		</div>
+	</div>
+</div>

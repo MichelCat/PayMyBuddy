@@ -2,6 +2,7 @@ package com.paymybuddy.paymybuddy.dao.db.entities;
 
 import java.sql.Timestamp;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,11 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -22,52 +21,59 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * LevyLogEntity is Entity model
+ * TransactionLogEntity is Entity model
  * 
  * @author MC
  * @version 1.0
  */
 @Data
 @Entity
-@Table(name = "levy_log")
+@Table(name = "transaction_log")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"idLevy"})
-@ToString(callSuper = true)
-public class LevyLogEntity {
+@EqualsAndHashCode(of = {"id"})
+@ToString
+public class TransactionLogEntity {
   /**
-   * Levy log ID
+   * Log ID
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Integer idLevy;
+  @Column(name = "id_log")
+  Integer id;
   /**
-   * Levy debit user ID
+   * Log debit customer ID
    */
   @ManyToOne( cascade = { CascadeType.PERSIST, CascadeType.MERGE } )
-  @JoinColumn(name="levyIdDebit", nullable=false)
-  private PersonEntity personEntityDebit;
+  @JoinColumn(name="logIdDebit", nullable=false)
+  private CustomerEntity customerDebit;
   /**
-   * Levy credit user ID
+   * Log credit customer ID
    */
   @ManyToOne( cascade = { CascadeType.PERSIST, CascadeType.MERGE } )
-  @JoinColumn(name="levyIdCredit", nullable=false)
-  private PersonEntity personEntityCredit;
+  @JoinColumn(name="logIdCredit", nullable=false)
+  private CustomerEntity customerCredit;
   /**
-   * Levy date
+   * Log date
    */
-  @NotNull(message = "Levy date cannot be null")
+  @NotNull(message = "Log date cannot be null")
   @PastOrPresent
-  Timestamp levyDate;
+  @Column(name = "log_date")
+  Timestamp logDate;
   /**
-   * Levy description
+   * Log description
    */
-  @NotBlank(message = "Levy description is required")
-  String levyDescription;
+  @NotBlank(message = "Log description is required")
+  @Column(name = "log_description")
+  String description;
   /**
-   * Levy amount
+   * Log amount
    */
-  @Positive(message = "Levy amount should be a positive number")
-  @Digits(integer=9, fraction=2)
-  Float levyAmount;
+  @Column(name = "log_amount")
+  Float amount;
+  /**
+   * Log levy
+   */
+  @Column(name = "log_levy")
+  Float levy;
 }

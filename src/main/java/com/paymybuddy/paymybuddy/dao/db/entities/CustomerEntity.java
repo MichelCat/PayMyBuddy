@@ -22,93 +22,90 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * PersonEntity is Entity model
+ * CustomerEntity is Entity model
  * 
  * @author MC
  * @version 1.0
  */
 @Data
 @Entity
-@Table(name = "person")
+@Table(name = "customer")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"personEmail"})
-@ToString(callSuper = true)
-public class PersonEntity {
+@EqualsAndHashCode(of = {"email"})
+@ToString
+public class CustomerEntity {
   /**
-   * User ID
+   * Customer ID
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Integer idPerson;
+  @Column(name = "id_customer")
+  Integer id;
   /**
-   * User connection
+   * Customer email
    */
-  @NotBlank(message = "User connection is required")
-  String personConnection;
-  /**
-   * User email
-   */
-  @Column(unique=true)
   @Email(message = "Email should be valid")
-  String personEmail;
+  @Column(name = "customer_email", unique=true)
+  String email;
   /**
-   * User password
+   * Customer password
    */
   @ToString.Exclude
-  @NotBlank(message = "User password is required")
-  String personPassword;
+  @NotBlank(message = "Customer password is required")
+  @Column(name = "customer_password")
+  String password;
   
   /**
-   * PersonEntity [1..1] to LevyLogEntity [0..n], debit relationship
+   * CustomerEntity [1..1] to TransactionLogEntity [0..n], debit relationship
    */
-  @OneToMany( targetEntity=LevyLogEntity.class, mappedBy="personEntityDebit"
+  @OneToMany( targetEntity=TransactionLogEntity.class, mappedBy="customerDebit"
             , cascade = CascadeType.ALL )
-  private List<LevyLogEntity> levyLogEntityDebits = new ArrayList<>();
+  private List<TransactionLogEntity> transactionLogEntityDebits = new ArrayList<>();
   /**
-   * PersonEntity [1..1] to LevyLogEntity [0..n], credit relationship
+   * CustomerEntity [1..1] to TransactionLogEntity [0..n], credit relationship
    */
-  @OneToMany( targetEntity=LevyLogEntity.class, mappedBy="personEntityCredit"
+  @OneToMany( targetEntity=TransactionLogEntity.class, mappedBy="customerCredit"
             , cascade = CascadeType.ALL )
-  private List<LevyLogEntity> levyLogEntityCredits = new ArrayList<>();
+  private List<TransactionLogEntity> transactionLogEntityCredits = new ArrayList<>();
   
   /**
-   * PersonEntity [1..1] to BankAccountEntity [1..n]
+   * CustomerEntity [1..1] to BankAccountEntity [1..n]
    */
-  @OneToMany( targetEntity=BankAccountEntity.class, mappedBy="personEntity"
+  @OneToMany( targetEntity=BankAccountEntity.class, mappedBy="customer"
             , cascade = CascadeType.ALL )
   private List<BankAccountEntity> bankAccountEntities = new ArrayList<>();
   
   /**
-   * PersonEntity [1..1] to BankTransactionEntity [0..n], debit relationship
+   * CustomerEntity [1..1] to BankTransactionEntity [0..n], debit relationship
    */
-  @OneToMany( targetEntity=BankTransactionEntity.class, mappedBy="personEntityDebit"
+  @OneToMany( targetEntity=BankTransactionEntity.class, mappedBy="customerDebit"
           , cascade = CascadeType.ALL )
   private List<BankTransactionEntity> bankTransactionEntityDebits = new ArrayList<>();
   /**
-   * PersonEntity [1..1] to BankTransactionEntity [0..n], credit relationship
+   * CustomerEntity [1..1] to BankTransactionEntity [0..n], credit relationship
    */
-  @OneToMany( targetEntity=BankTransactionEntity.class, mappedBy="personEntityCredit"
+  @OneToMany( targetEntity=BankTransactionEntity.class, mappedBy="customerCredit"
           , cascade = CascadeType.ALL )
   private List<BankTransactionEntity> bankTransactionEntityCredits = new ArrayList<>();
   
   /**
-   * PersonEntity [1..1] to UserAccountEntity [1..1]
+   * CustomerEntity [1..1] to CustomerAccountEntity [1..1]
    */
   @OneToOne( cascade = CascadeType.ALL ) 
-  @JoinColumn( name="accountIdPerson" )
-  private UserAccountEntity userAccountEntity;
+  @JoinColumn( name="idCustomer" )
+  private CustomerAccountEntity customerAccountEntity;
   
   /**
-   * PersonEntity [1..1] to BuddyEntity [0..n], user relationship
+   * CustomerEntity [1..1] to BuddyEntity [0..n], customer relationship
    */
-  @OneToMany( targetEntity=BuddyEntity.class, mappedBy="personEntityUser"
+  @OneToMany( targetEntity=BuddyEntity.class, mappedBy="customerUser"
           , cascade = CascadeType.ALL )
   private List<BuddyEntity> BuddyEntityUsers = new ArrayList<>();
   /**
-   * PersonEntity [1..1] to BuddyEntity [0..n], buddy relationship
+   * CustomerEntity [1..1] to BuddyEntity [0..n], buddy relationship
    */
-  @OneToMany( targetEntity=BuddyEntity.class, mappedBy="personEntityBuddy"
+  @OneToMany( targetEntity=BuddyEntity.class, mappedBy="customerBuddy"
           , cascade = CascadeType.ALL )
   private List<BuddyEntity> BuddyEntityBuddy = new ArrayList<>();
 }

@@ -1,0 +1,70 @@
+<!-- My Transactions -->
+
+<!-- Transaction table -->
+<div class="row">
+	<div class="table-responsive">
+		<table class="table table-striped table-sm table-hover caption-top text-center border mb-0">
+			<caption class="fw-bold">My Transactions</caption>
+			
+			<!-- Transaction title -->
+			<thead class="bg-success text-white">
+				<tr>
+					<th scope="col" style="display:none">#</th>
+					<th scope="col" class="fw-normal">Connections</th>
+					<th scope="col" class="fw-normal">Description</th>
+					<th scope="col" class="fw-normal">Amount</th>
+				</tr>
+			</thead>
+			
+			<!-- Transaction detail -->
+			<tbody>
+				<tr th:if="${transactionPage.content.empty}">
+					<td colspan="3">No transaction in database</td>
+				</tr>
+				<tr th:each="transaction: ${transactionPage.content}">
+					<th scope="row" style="display:none" th:text="${transaction.id}" />
+					<td th:text="${transaction.connection}" />
+					<td th:text="${transaction.description}" />
+					<td th:text="${transaction.amount + '€'}" />						
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<!-- Pagination -->
+<div class="row">
+	<nav aria-label="Page navigation example">
+		<ul class="pagination justify-content-center">
+			<!-- Previous page -->
+			<th:block>
+				<li th:if="${transactionPage.hasPrevious()}" class="page-item">
+					<a class="page-link" th:href="@{/transactions(page=${transactionPage.number},size=${transactionPage.size})}">&laquo;</a>
+				</li>
+				<li th:unless="${transactionPage.hasPrevious()}" class="page-item disabled">
+					<span class="page-link">&laquo;</span>
+				</li>
+			</th:block>
+			
+			<!-- Current page -->
+		    <th:block th:each="i: ${#numbers.sequence(0, transactionPage.totalPages - 1)}">
+				<li th:if="${transactionPage.number == i}" class="page-item active" aria-current="page">
+					<a class="page-link" href="#">[[${i}+1]]</a>
+				</li>
+		        <li th:unless="${transactionPage.number == i}" class="page-item">
+		             <a class="page-link" th:href="@{/transactions(page=${i+1},size=${transactionPage.size})}">[[${i}+1]]</a>
+		        </li>
+		    </th:block>
+		    
+			<!-- Next page -->
+			<th:block>
+				<li th:if="${transactionPage.hasNext()}" class="page-item">
+					<a class="page-link" th:href="@{/transactions(page=${transactionPage.number+2},size=${transactionPage.size})}">&raquo;</a>
+				</li>
+				<li th:unless="${transactionPage.hasNext()}" class="page-item disabled">
+					<span class="page-link">&raquo;</span>
+				</li>
+			</th:block>
+		</ul>
+	</nav>
+</div>

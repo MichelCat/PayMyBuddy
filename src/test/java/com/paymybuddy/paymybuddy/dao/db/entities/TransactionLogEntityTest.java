@@ -11,24 +11,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
- * LevyLogEntityTest is a class of unit tests on levy  log.
+ * TransactionLogEntityTest is a class of unit tests on transaction log.
  * 
  * @author MC
  * @version 1.0
  */
 @SpringBootTest
-public class LevyLogEntityTest {
+public class TransactionLogEntityTest {
 
 //  @Autowired
-//  private LevyLogEntity levyLogEntity;
+//  private TransactionLogEntity transactionLogEntity;
   
   
   
   // -----------------------------------------------------------------------------------------------
-  // Method setLevyDate
+  // Method setLogDate
   // -----------------------------------------------------------------------------------------------
   @Test
-  void setLevyDate_Normal() {
+  void setLogDate_Normal() {
     assertThat(1).isEqualTo(1);
   }
 }

@@ -1,0 +1,40 @@
+<!-- Modal send money -->
+
+<div class="modal fade" id="modalSendMoney" tabindex="-1"
+		aria-labelledby="sendMoneyLabel" aria-hidden="true">
+	<form th:action="@{/send-money}" th:object="${newTransaction}" method="post">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="sendMoneyLabel">Send Money</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				
+				<div class="modal-body">
+			        <input type="hidden" id="idPaymentDebit" th:field="*{idDebit}" />
+					<input type="hidden" id="idPaymentCredit" th:field="*{idCredit}" />
+			
+					<div class="mb-3">
+						<label for="idPaymentConnection" class="form-label">Name of creditor</label>
+				        <input type="text" readonly class="form-control" id="idPaymentConnection" th:field="*{connection}" />
+					</div>
+					
+					<div class="mb-3">
+						<label for="idPaymentDescription" class="form-label">Description</label>
+				        <input type="text" required class="form-control" id="idPaymentDescription" th:field="*{description}" />
+					</div>
+				            
+					<div class="mb-3">
+						<label for="idPaymentAmount" class="form-label">Amount</label>
+				        <input type="number" readonly class="form-control" id="idPaymentAmount" th:field="*{amount}" />
+					</div>
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Payment</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

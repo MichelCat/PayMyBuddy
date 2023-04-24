@@ -2,13 +2,13 @@ package com.paymybuddy.paymybuddy.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paymybuddy.paymybuddy.dao.db.UserAccountDao;
+import com.paymybuddy.paymybuddy.dao.db.CustomerAccountDao;
 
 @Service
-public class UserAccountBusiness {
+public class CustomerAccountBusiness {
   
   @Autowired
-  private UserAccountDao userAccountDao;
+  private CustomerAccountDao customerAccountDao;
 
 
 }

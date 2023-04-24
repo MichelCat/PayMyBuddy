@@ -2,6 +2,7 @@ package com.paymybuddy.paymybuddy.dao.db.entities;
 
 import java.sql.Timestamp;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,11 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -32,42 +31,49 @@ import lombok.ToString;
 @Table(name = "bank_transaction")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"idBankTransaction"})
-@ToString(callSuper = true)
+@EqualsAndHashCode(of = {"id"})
+@ToString
 public class BankTransactionEntity {
   /**
    * Bank transaction ID
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Integer idBankTransaction;
+  @Column(name = "id_bank_transaction")
+  Integer id;
   /**
-   * Debit User ID
+   * Debit customer ID
    */
   @ManyToOne( cascade = { CascadeType.PERSIST, CascadeType.MERGE } )
   @JoinColumn(name="transactionIdDebit", nullable=false)
-  private PersonEntity personEntityDebit;
+  private CustomerEntity customerDebit;
   /**
-   * Credit user ID
+   * Credit customer ID
    */
   @ManyToOne( cascade = { CascadeType.PERSIST, CascadeType.MERGE } )
   @JoinColumn(name="transactionIdCredit", nullable=false)
-  private PersonEntity personEntityCredit;
+  private CustomerEntity customerCredit;
   /**
    * Transaction date
    */
   @NotNull(message = "Transaction date cannot be null")
   @PastOrPresent
+  @Column(name = "transaction_date")
   Timestamp transactionDate;
   /**
    * Transaction description
    */
   @NotBlank(message = "Transaction description is required")
-  String transactionDescription;
+  @Column(name = "transaction_description")
+  String description;
   /**
    * Transaction amount
    */
-  @Positive(message = "Transaction amount should be a positive number")
-  @Digits(integer=9, fraction=2)
-  Float transactionAmount;
+  @Column(name = "transaction_amount")
+  Float amount;
+  /**
+   * Transaction levy
+   */
+  @Column(name = "transaction_levy")
+  Float levy;
 }
