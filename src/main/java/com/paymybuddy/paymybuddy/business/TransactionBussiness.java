@@ -5,12 +5,15 @@ import java.util.Optional;
 import java.util.ArrayList;
 import java.sql.Timestamp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.paymybuddy.paymybuddy.MyException;
 import com.paymybuddy.paymybuddy.controller.model.Transaction;
+import com.paymybuddy.paymybuddy.controller.utils.TransactionUtils;
 import com.paymybuddy.paymybuddy.dao.db.BankTransactionDao;
 import com.paymybuddy.paymybuddy.dao.db.BuddyDao;
 import com.paymybuddy.paymybuddy.dao.db.TransactionLogDao;
@@ -39,6 +42,10 @@ public class TransactionBussiness {
   private TransactionParameterDao transactionParameterDao;
   @Autowired
   private BuddyDao buddyDao;
+  @Autowired
+  private TransactionUtils transactionUtils;
+  @Autowired
+  private ResourceBundleMessageSource resourceBundleMessageSource;
 
   public Page<Transaction> getTransactionsById(final Integer id, final int pageNumber, final int pageSize) {
     List<Transaction> transactions = new ArrayList<>();
@@ -51,7 +58,7 @@ public class TransactionBussiness {
     // Customer transactions
     Page<BankTransactionEntity> bankTransactionEntities = bankTransactionDao.findByIdNative(id, pageable);
     bankTransactionEntities.getContent().forEach(b -> {
-      Transaction transaction = from(b);
+      Transaction transaction = transactionUtils.fromBankTransactionEntityToTransaction(b);
 
       for (BuddyEntity buddyEntity : buddyEntities) {
         if (b.getCustomerCredit().getId().equals(id)) {
@@ -74,33 +81,8 @@ public class TransactionBussiness {
     return new PageImpl<>(transactions, pageable, bankTransactionEntities.getTotalElements());
   }
   
-  private Transaction from(BankTransactionEntity bankTransactionEntity) {
-    Transaction transaction = new Transaction();
-    transaction.setId(bankTransactionEntity.getId());
-    transaction.setIdDebit(bankTransactionEntity.getCustomerDebit().getId());
-    transaction.setIdCredit(bankTransactionEntity.getCustomerCredit().getId());
-    transaction.setConnection("");
-    transaction.setTransactionDate(bankTransactionEntity.getTransactionDate());
-    transaction.setDescription(bankTransactionEntity.getDescription());
-    transaction.setAmount(bankTransactionEntity.getAmount());
-    transaction.setLevy(bankTransactionEntity.getLevy());
-    return transaction;
-  }
-  
-  private BankTransactionEntity from(Transaction transaction) {
-    BankTransactionEntity bankTransactionEntity = new BankTransactionEntity();
-    bankTransactionEntity.setId(transaction.getId());
-    bankTransactionEntity.setCustomerDebit(customerDao.findById(transaction.getIdDebit()).get());
-    bankTransactionEntity.setCustomerCredit(customerDao.findById(transaction.getIdCredit()).get());
-    bankTransactionEntity.setTransactionDate(transaction.getTransactionDate());
-    bankTransactionEntity.setDescription(transaction.getDescription());
-    bankTransactionEntity.setAmount(transaction.getAmount());
-    bankTransactionEntity.setLevy(transaction.getLevy());
-    return bankTransactionEntity;
-  }
-  
   @Transactional(rollbackFor = Exception.class)
-  public Transaction addTransaction(Transaction transaction) throws Exception {
+  public Transaction addTransaction(Transaction transaction) throws MyException {
     // Transaction amount
     Float transactionAmount = transaction.getAmount();
     // Transaction levy
@@ -118,8 +100,7 @@ public class TransactionBussiness {
     CustomerAccountEntity customerAccountDebit = customerAccountDao.findById(customerDebit.getId()).get();
     Float balance =customerAccountDebit.getBalance() - transactionAmount - transactionLevy;
     if (balance < 0) {
-      String errorMessage = "Transaction refused, for lack of sufficient money in the account.";
-      throw new Exception(errorMessage);
+      throw new MyException(resourceBundleMessageSource, "throw.InsufficientMoneyInAccount");
     }
     customerAccountDebit.setBalance(balance);
     customerAccountDao.save(customerAccountDebit);
@@ -143,6 +124,9 @@ public class TransactionBussiness {
     transaction.setTransactionDate(currentTimestamp);
     transaction.setAmount(transactionAmount);
     transaction.setLevy(transactionLevy);
-    return from(bankTransactionDao.save(from(transaction)));
+    
+    BankTransactionEntity bankTransactionEntity = transactionUtils.fromTransactionToBankTransactionEntity(
+                                                    transaction, customerDebit, customerCredit);
+    return transactionUtils.fromBankTransactionEntityToTransaction(bankTransactionDao.save(bankTransactionEntity));
   }
 }

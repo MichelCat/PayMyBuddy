@@ -1,0 +1,68 @@
+<!-- Bank account -->
+
+<section class="mt-2">
+	<div class="container">
+		<div class="row">
+			<p class="fw-bold">Change your bank account</p>
+		</div>
+		<div class="row gy-4 mt-0 bg-light">
+			<!-- Formulaire -->
+			<form class="row" th:action="@{/profile-bank-account}" th:object="${bankAccount}" method="post">
+				<input type="hidden" id="id" th:field="*{id}" />
+				<input type="hidden" id="idCustomer" th:field="*{idCustomer}" />
+			
+			    <div class="row my-2">
+			    	<div>
+						<label for=idBankName class="form-label">Name of the bank</label>
+						<input type="text" required th:maxlength="50"
+							id="idBankName" th:field="*{bankName}" style="width: 460px;">
+					</div>
+				</div>
+									
+			    <div class="row my-2">
+					<div class="d-flex justify-content-start align-items-center">
+						<div class="border border-secondary rounded-start px-3 pb-3">
+							<label for=idBankCode class="form-label">Bank code</label>
+							<input type="text" required class="form-control" th:maxlength="5"
+								id="idBankCode" th:field="*{bankCode}" style="width: 70px;">
+						</div>
+						<div class="border border-secondary px-3 pb-3">
+							<label for=idBranchCode class="form-label">Branch code</label>
+							<input type="text" required class="form-control" th:maxlength="5"
+								id="idBranchCode" th:field="*{branchCode}" style="width: 70px;">
+						</div>
+						<div class="border border-secondary px-3 pb-3">
+							<label for=idAccountNumber class="form-label">Account number</label>
+							<input type="text" required class="form-control" th:maxlength="11"
+								id="idAccountNumber" th:field="*{accountNumber}" style="width: 120px;">
+						</div>
+						<div class="border border-secondary rounded-end px-3 pb-3">
+							<label for=idRib class="form-label">Bank key</label>
+							<input type="text" required class="form-control" th:maxlength="11"
+								id="idRib" th:field="*{rib}" style="width: 120px;">
+						</div>
+					</div>
+				</div>
+									
+			    <div class="row my-2">
+					<div class="d-flex justify-content-start align-items-center">
+						<div class="border border-secondary rounded-start px-3 pb-3">
+							<label for=idIban class="form-label">IBAN</label>
+							<input type="text" required class="form-control" th:maxlength="34"
+								id="idIban" th:field="*{iban}" style="width: 320px;">
+						</div>
+						<div class="border border-secondary rounded-end px-3 pb-3">
+							<label for=idBic class="form-label">BIC code</label>
+							<input type="text" required class="form-control" th:maxlength="11"
+								id="idBic" th:field="*{bic}" style="width: 120px;">
+						</div>
+					</div>
+				</div>
+				
+				<div class="d-flex justify-content-center my-2">
+					<button type="submit" class="btn btn-primary">Send</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>

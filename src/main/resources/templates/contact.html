@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>contact</title>
-</head>
+<html lang="en"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="fragments/main-layout">
+
 <body>
-    <h2>contact</h2>
+  
+	<main layout:fragment="content">
+		<div class="container">
+			<div class="row bg-light">
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Contact</li>
+					</ol>
+				</nav>	
+			</div>
+		</div>
+		
+		
+	</main>
+    
 </body>
+  
 </html>

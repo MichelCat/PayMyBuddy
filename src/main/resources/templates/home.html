@@ -1,10 +1,85 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>Home</title>
-</head>
+<html lang="en"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="fragments/main-layout">
+
 <body>
-    <h2>Home</h2>
+  
+	<main layout:fragment="content">
+		<div class="container">
+			<div class="row bg-light">
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item active" aria-current="Home">Profile</li>
+					</ol>
+				</nav>	
+			</div>
+		</div>
+		
+		
+		
+<!--
+			<div class="position-relative">
+				<h4 class="z-index-1 position-relative">Background image with .obj-fit-cover</h4>
+				<img class="bg obj-fit-cover" src="img/ImagePayMyBuddy.png" alt="Pay My Buddy">
+			</div>
+		
+		
+			<div class="bg-image" style="background-image: url('img/ImagePayMyBuddy.png')"></div>
+			
+			
+			<div
+			  class="bg-image d-flex justify-content-center align-items-center"
+			  style="
+			    background-image: url('img/ImagePayMyBuddy.png');
+			    height: 100vh;
+			  ">
+			  <h1 class="text-white">Page title</h1>
+			</div>
+			
+					
+			<div class="bg-image bg-size-half bg-position-top" style="background-image: url('img/ImagePayMyBuddy.png')"></div>
+			
+			 
+			<div class="bg-img" style="
+				border: 1px solid black;
+				background-image: url('img/ImagePayMyBuddy.png');
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				height: 200px;
+			"></div>		
+	
+
+	<img class="bg-img" src="img/ImagePayMyBuddy.png" alt="Pay My Buddy">
+	
+	<img src="images/ImagePayMyBuddy.png" class="rounded mx-auto d-block" alt="Pay My Buddy">
+
+<img src="images/ImagePayMyBuddy.png" class="img-fluid img-thumbnail" alt="Pay My Buddy">
+
+
+D:\eclipse-workspace\OpenClassrooms\PayMyBuddy\src\main\java\com\paymybuddy\paymybuddy
+D:\eclipse-workspace\OpenClassrooms\PayMyBuddy\src\main\resources\static\images
+D:\eclipse-workspace\OpenClassrooms\PayMyBuddy\src\main\resources\templates
+-->
+		
+
+			<div class="bg-img" style="
+				border: 1px solid black;
+				background-image: url('img/ImagePayMyBuddy.png');
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				height: 200px;
+			"></div>		
+
+
+			
+		
+		
+	</main>
+    
 </body>
+  
 </html>

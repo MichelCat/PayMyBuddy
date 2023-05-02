@@ -10,9 +10,15 @@ use PayMyBuddyProd;
 
 -- Table of customers
 create table customer (
-	id_customer int PRIMARY KEY AUTO_INCREMENT,			-- Customer ID
-	customer_email varchar(50) NOT NULL,				-- Customer email
-	customer_password varchar(50) NOT NULL,				-- Customer password
+	id_customer int PRIMARY KEY AUTO_INCREMENT,					-- Customer ID
+	customer_email varchar(100) NOT NULL,						-- Customer email
+	customer_password varchar(50) NOT NULL,						-- Customer password
+	customer_first_name varchar(50) NOT NULL default '',		-- Customer first name
+	customer_last_name varchar(50) NOT NULL default '',			-- Customer last name
+	customer_address_1 varchar(100) NOT NULL default '',		-- Address 1 customer
+	customer_address_2 varchar(100) NOT NULL default '',		-- Address 2 customer
+	customer_zip_code varchar(50) NOT NULL default '',			-- Customer zip code
+	customer_city varchar(50) NOT NULL default '',				-- Customer city
 	constraint uc_customer_email UNIQUE KEY (customer_email)
 );
 
@@ -29,7 +35,7 @@ create table buddy (
 -- Customer balances table
 create table customer_account(
 	account_id_customer int PRIMARY KEY,				-- Customer account ID
-	account_balance float,								-- Account balance
+	account_balance float NOT NULL,						-- Account balance
 	constraint fk_customer_account_customer FOREIGN KEY (account_id_customer) REFERENCES customer (id_customer)
 );
 
@@ -39,9 +45,9 @@ create table bank_transaction (
 	transaction_id_debit int NOT NULL,						-- Debit customer ID
 	transaction_id_credit int NOT NULL,						-- Credit customer ID
 	transaction_date timestamp(6) NOT NULL,					-- Transaction date
-	transaction_description varchar(50),					-- Transaction description
-	transaction_amount float,								-- Transaction amount
-	transaction_levy float,									-- Transaction levy
+	transaction_description varchar(50) NOT NULL,			-- Transaction description
+	transaction_amount float NOT NULL,						-- Transaction amount
+	transaction_levy float NOT NULL,						-- Transaction levy
 	constraint fk_bank_transaction_customer_debit FOREIGN KEY (transaction_id_debit) REFERENCES customer (id_customer),
 	constraint fk_bank_transaction_customer_credit FOREIGN KEY (transaction_id_credit) REFERENCES customer (id_customer)
 );
@@ -68,9 +74,9 @@ create table transaction_log (
 	log_id_debit int NOT NULL,							-- Debit customer ID
 	log_id_credit int NOT NULL,							-- Credit customer ID
 	log_date timestamp(6) NOT NULL,						-- Log date
-	log_description varchar(50),						-- Log description
-	log_amount float,									-- Log amount
-	log_levy float,										-- Log levy
+	log_description varchar(50) NOT NULL,				-- Log description
+	log_amount float NOT NULL,							-- Log amount
+	log_levy float NOT NULL,							-- Log levy
 	constraint fk_transaction_log_customer_debit FOREIGN KEY (log_id_debit) REFERENCES customer (id_customer),
 	constraint fk_transaction_log_customer_credit FOREIGN KEY (log_id_credit) REFERENCES customer (id_customer)
 );
@@ -78,7 +84,7 @@ create table transaction_log (
 -- Transaction parameter
 create table transaction_parameter (
 	id_parameter int PRIMARY KEY AUTO_INCREMENT,		-- Transaction parameter ID
-	levy_rate float										-- Levy rate
+	levy_rate float NOT NULL							-- Levy rate
 );
 
 -- -----------------------------------------------------------------------------
@@ -90,17 +96,17 @@ use PayMyBuddyProd;
 
 start transaction;
 
-insert into customer (customer_email, customer_password) values
-('Guto@gmail.com', 'motPasseGuto')
-, ('hayley@gmail.com', 'motPasseHayley')
-, ('clara@gmail.com', 'motPasseClara')
-, ('smith@gmail.com', 'motPasseSmith')
-, ('alex@gmail.com', 'motPasseAlex')
-, ('bill@gmail.com', 'motPasseBill')
-, ('dave@gmail.com', 'motPasseDave')
-, ('dan@gmail.com', 'motPasseDan');
+insert into customer (customer_email, customer_password, customer_first_name, customer_last_name, customer_address_1, customer_address_2, customer_zip_code, customer_city) values
+('guto@gmail.com', 'motPasseGuto', 'guto', 'name guto', 'adresse 1 guto', 'adresse 2 guto', '68007', 'ville 68007')
+, ('hayley@gmail.com', 'motPasseHayley', 'hayley', 'name hayley', 'adresse 1 hayley', 'adresse 2 hayley', '68000', 'ville 68000')
+, ('clara@gmail.com', 'motPasseClara', 'clara', 'name clara', 'adresse 1 clara', 'adresse 2 clara', '68001', 'ville 68001')
+, ('smith@gmail.com', 'motPasseSmith', 'smith', 'name smith', 'adresse 1 smith', 'adresse 2 smith', '68002', 'ville 68002')
+, ('alex@gmail.com', 'motPasseAlex', 'alex', 'name alex', 'adresse 1 alex', 'adresse 2 alex', '68003', 'ville 68003')
+, ('bill@gmail.com', 'motPasseBill', 'bill', 'name bill', 'adresse 1 bill', 'adresse 2 bill', '68004', 'ville 68004')
+, ('dave@gmail.com', 'motPasseDave', 'dave', 'name dave', 'adresse 1 dave', 'adresse 2 dave', '68005', 'ville 68005')
+, ('dan@gmail.com', 'motPasseDan', 'dan', 'name dan', 'adresse 1 dan', 'adresse 2 dan', '68006', 'ville 68006');
 
-set @idGuto=(select id_customer from customer where customer_email='Guto@gmail.com');
+set @idGuto=(select id_customer from customer where customer_email='guto@gmail.com');
 set @idHayley=(select id_customer from customer where customer_email='hayley@gmail.com');
 set @idClara=(select id_customer from customer where customer_email='clara@gmail.com');
 set @idSmith=(select id_customer from customer where customer_email='smith@gmail.com');
@@ -168,9 +174,15 @@ use PayMyBuddyTest;
 
 -- Table of customers
 create table customer (
-	id_customer int PRIMARY KEY AUTO_INCREMENT,			-- Customer ID
-	customer_email varchar(50) NOT NULL,				-- Customer email
-	customer_password varchar(50) NOT NULL,				-- Customer password
+	id_customer int PRIMARY KEY AUTO_INCREMENT,					-- Customer ID
+	customer_email varchar(100) NOT NULL,						-- Customer email
+	customer_password varchar(50) NOT NULL,						-- Customer password
+	customer_first_name varchar(50) NOT NULL default '',		-- Customer first name
+	customer_last_name varchar(50) NOT NULL default '',			-- Customer last name
+	customer_address_1 varchar(100) NOT NULL default '',		-- Address 1 customer
+	customer_address_2 varchar(100) NOT NULL default '',		-- Address 2 customer
+	customer_zip_code varchar(50) NOT NULL default '',			-- Customer zip code
+	customer_city varchar(50) NOT NULL default '',				-- Customer city
 	constraint uc_customer_email UNIQUE KEY (customer_email)
 );
 
@@ -187,7 +199,7 @@ create table buddy (
 -- Customer balances table
 create table customer_account(
 	account_id_customer int PRIMARY KEY,				-- Customer account ID
-	account_balance float,								-- Account balance
+	account_balance float NOT NULL,						-- Account balance
 	constraint fk_customer_account_customer FOREIGN KEY (account_id_customer) REFERENCES customer (id_customer)
 );
 
@@ -197,9 +209,9 @@ create table bank_transaction (
 	transaction_id_debit int NOT NULL,						-- Debit customer ID
 	transaction_id_credit int NOT NULL,						-- Credit customer ID
 	transaction_date timestamp(6) NOT NULL,					-- Transaction date
-	transaction_description varchar(50),					-- Transaction description
-	transaction_amount float,								-- Transaction amount
-	transaction_levy float,									-- Transaction levy
+	transaction_description varchar(50) NOT NULL,			-- Transaction description
+	transaction_amount float NOT NULL,						-- Transaction amount
+	transaction_levy float NOT NULL,						-- Transaction levy
 	constraint fk_bank_transaction_customer_debit FOREIGN KEY (transaction_id_debit) REFERENCES customer (id_customer),
 	constraint fk_bank_transaction_customer_credit FOREIGN KEY (transaction_id_credit) REFERENCES customer (id_customer)
 );
@@ -226,9 +238,9 @@ create table transaction_log (
 	log_id_debit int NOT NULL,							-- Debit customer ID
 	log_id_credit int NOT NULL,							-- Credit customer ID
 	log_date timestamp(6) NOT NULL,						-- Log date
-	log_description varchar(50),						-- Log description
-	log_amount float,									-- Log amount
-	log_levy float,										-- Log levy
+	log_description varchar(50) NOT NULL,				-- Log description
+	log_amount float NOT NULL,							-- Log amount
+	log_levy float NOT NULL,							-- Log levy
 	constraint fk_transaction_log_customer_debit FOREIGN KEY (log_id_debit) REFERENCES customer (id_customer),
 	constraint fk_transaction_log_customer_credit FOREIGN KEY (log_id_credit) REFERENCES customer (id_customer)
 );
@@ -236,5 +248,5 @@ create table transaction_log (
 -- Transaction parameter
 create table transaction_parameter (
 	id_parameter int PRIMARY KEY AUTO_INCREMENT,		-- Transaction parameter ID
-	levy_rate float										-- Levy rate
+	levy_rate float NOT NULL							-- Levy rate
 );

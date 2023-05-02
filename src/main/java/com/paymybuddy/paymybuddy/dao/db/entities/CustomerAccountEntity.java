@@ -38,7 +38,6 @@ public class CustomerAccountEntity {
    * Account balance
    */
   @PositiveOrZero(message = "Account balance must be a positive number or zero")
-//  @Digits(integer=9, fraction=2)
   @Column(name = "account_balance")
   Float balance;
 }

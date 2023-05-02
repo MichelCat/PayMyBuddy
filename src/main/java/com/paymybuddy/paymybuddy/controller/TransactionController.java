@@ -34,24 +34,23 @@ public class TransactionController {
                             , RedirectAttributes redirectAttributes) {
     model.addAttribute("module", "transactions");
     
-    int id=1;
-    model.addAttribute("idUtilisateur", id);
+    int idUser=1;
     
     // Pagination
     int currentPage = page.orElse(1);
     int pageSize = size.orElse(3);
-    Page<Transaction> transactionPage = transactionBussiness.getTransactionsById(id, currentPage, pageSize);
+    Page<Transaction> transactionPage = transactionBussiness.getTransactionsById(idUser, currentPage, pageSize);
     model.addAttribute("transactionPage", transactionPage);
     
-    List<Buddy> buddies = buddyBussiness.getBuddiesById(id);
+    List<Buddy> buddies = buddyBussiness.getBuddiesById(idUser);
     model.addAttribute("buddies", buddies);
     
     Transaction transaction = new Transaction();
-    transaction.setIdDebit(id);
+    transaction.setIdDebit(idUser);
     model.addAttribute("newTransaction", transaction);
 
     Buddy buddy = new Buddy();
-    buddy.setIdUser(id);
+    buddy.setIdUser(idUser);
     model.addAttribute("newBuddy", buddy);
     
     return "transactions";

@@ -18,4 +18,7 @@ public interface BuddyDao extends JpaRepository<BuddyEntity, Integer> {
 
   public List<BuddyEntity> findByCustomerUser(Optional<CustomerEntity> customerEntity);
   
+  public BuddyEntity findByCustomerUserAndCustomerBuddy(Optional<CustomerEntity> customerUser
+                                                      , Optional<CustomerEntity> customerBuddy);
+  
 }

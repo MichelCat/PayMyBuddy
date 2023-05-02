@@ -11,15 +11,15 @@
 			<div class="row bg-light">
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">Home</a></li>
+						<li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
 						<li class="breadcrumb-item active" aria-current="page">Transfer</li>
 					</ol>
 				</nav>	
 			</div>
-			
-		    <div th:replace="~{fragments/transactions-pay}"></div>
-		    <div th:replace="~{fragments/transactions-detail}"></div>
 		</div>
+		
+	    <div th:replace="~{fragments/transactions-pay}"></div>
+	    <div th:replace="~{fragments/transactions-detail}"></div>
 		
 		<div th:replace="~{fragments/add-connection}"></div>
 		<div th:replace="~{fragments/send-money}"></div>

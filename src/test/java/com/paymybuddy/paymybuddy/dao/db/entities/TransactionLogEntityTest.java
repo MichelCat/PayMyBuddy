@@ -27,8 +27,8 @@ public class TransactionLogEntityTest {
   // -----------------------------------------------------------------------------------------------
   // Method setLogDate
   // -----------------------------------------------------------------------------------------------
-  @Test
-  void setLogDate_Normal() {
-    assertThat(1).isEqualTo(1);
-  }
+//  @Test
+//  void setLogDate_Normal() {
+//    assertThat(1).isEqualTo(1);
+//  }
 }

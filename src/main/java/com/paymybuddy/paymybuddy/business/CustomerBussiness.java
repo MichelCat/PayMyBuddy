@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paymybuddy.paymybuddy.controller.model.Customer;
+import com.paymybuddy.paymybuddy.controller.model.User;
+import com.paymybuddy.paymybuddy.controller.utils.UserUtils;
 import com.paymybuddy.paymybuddy.dao.db.CustomerDao;
 import com.paymybuddy.paymybuddy.dao.db.entities.BuddyEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
@@ -14,6 +15,8 @@ public class CustomerBussiness {
 
   @Autowired
   private CustomerDao customerDao;
+  @Autowired
+  private UserUtils userUtils;
 
   public CustomerEntity getCusomerByEmail(String email) {
     return customerDao.findByEmail(email);
@@ -23,22 +26,14 @@ public class CustomerBussiness {
     return customerDao.findById(id).get().getBuddyEntityUsers();
   }
   
-  public List<Customer> getAllBuddiesCustomerById(Integer id) {
-    List<Customer> customers = new ArrayList<>();
+  public List<User> getAllBuddiesCustomerById(Integer id) {
+    List<User> users = new ArrayList<>();
     
     List<BuddyEntity> buddyEntities = getBuddyEntitiesById(id);
     buddyEntities.forEach(b -> {
-      customers.add(from(b.getCustomerBuddy()));
+      users.add(userUtils.fromCustomerEntityToUser(b.getCustomerBuddy()));
     });
-    return customers;
-  }
-  
-  public Customer from(CustomerEntity customerEntity) {
-    Customer customer = new Customer();
-    customer.setId(customerEntity.getId());
-    customer.setEmail(customerEntity.getEmail());
-    customer.setPassword(customerEntity.getPassword());
-    return customer;
+    return users;
   }
   
   public CustomerEntity save(CustomerEntity customerEntity) {

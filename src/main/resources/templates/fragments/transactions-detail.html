@@ -46,15 +46,27 @@
 				</li>
 			</th:block>
 			
+			<!-- Beginning ... -->
+			<li th:if="${transactionPage.number > 2}" class="page-item disabled">
+				<span class="page-link">...</span>
+			</li>
+			
 			<!-- Current page -->
-		    <th:block th:each="i: ${#numbers.sequence(0, transactionPage.totalPages - 1)}">
-				<li th:if="${transactionPage.number == i}" class="page-item active" aria-current="page">
-					<a class="page-link" href="#">[[${i}+1]]</a>
-				</li>
-		        <li th:unless="${transactionPage.number == i}" class="page-item">
-		             <a class="page-link" th:href="@{/transactions(page=${i+1},size=${transactionPage.size})}">[[${i}+1]]</a>
-		        </li>
-		    </th:block>
+			<th:block th:each="i: ${#numbers.sequence(0, transactionPage.totalPages - 1)}">
+				<th:block th:if="${transactionPage.number - 2 <= i && i <= transactionPage.number + 2}">
+					<li th:if="${transactionPage.number == i}" class="page-item active" aria-current="page">
+						<a class="page-link">[[${i}+1]]</a>
+					</li>
+					<li th:unless="${transactionPage.number == i}" class="page-item">
+						<a class="page-link" th:href="@{/transactions(page=${i+1},size=${transactionPage.size})}">[[${i}+1]]</a>
+					</li>
+				</th:block>
+			</th:block>
+					    
+			<!-- End ... -->
+			<li th:if="${transactionPage.totalPages - 3 > transactionPage.number}" class="page-item disabled">
+				<span class="page-link">...</span>
+			</li>
 		    
 			<!-- Next page -->
 			<th:block>

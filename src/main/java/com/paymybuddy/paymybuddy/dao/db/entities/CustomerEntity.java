@@ -14,6 +14,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -55,6 +56,42 @@ public class CustomerEntity {
   @NotBlank(message = "Customer password is required")
   @Column(name = "customer_password")
   String password;
+  /**
+  * Customer first name
+  */
+  @NotNull(message = "Customer first name may not be null")
+  @Column(name = "customer_first_name")
+  String firstName;
+  /**
+  * Customer last name
+  */
+  @NotNull(message = "Customer last name may not be null")
+  @Column(name = "customer_last_name")
+  String lastName;
+  /**
+  * Address 1 customer
+  */
+  @NotNull(message = "Address 1 customer may not be null")
+  @Column(name = "customer_address_1")
+  String address1;
+  /**
+  * Address 2 customer
+  */
+  @NotNull(message = "Address 2 customer may not be null")
+  @Column(name = "customer_address_2")
+  String address2;
+  /**
+  * Customer zip code
+  */
+  @NotNull(message = "Customer zip code may not be null")
+  @Column(name = "customer_zip_code")
+  String zipCode;
+  /**
+  * Customer city
+  */
+  @NotNull(message = "Customer city may not be null")
+  @Column(name = "customer_city")
+  String city;
   
   /**
    * CustomerEntity [1..1] to TransactionLogEntity [0..n], debit relationship
