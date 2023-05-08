@@ -62,11 +62,39 @@ public class ProfileBussiness {
   @Transactional(rollbackFor = Exception.class)
   public User updateUser(User user) throws MyException {
     // User does not exist
-    if (customerDao.existsById(user.getId()) == false) {
-      throw new MyException("throw.UserNotExist");
+    CustomerEntity customerEntity = customerDao.findById(user.getId())
+        .orElseThrow(() -> new MyException("throw.UserNotExist"));
+    
+    // Customer first name
+    if(user.getFirstName() != null) {
+      customerEntity.setFirstName(user.getFirstName());
+    }
+
+    // Customer last name
+    if(user.getLastName() != null) {
+      customerEntity.setLastName(user.getLastName());
+    }
+
+    // Address 1 customer
+    if(user.getAddress1() != null) {
+      customerEntity.setAddress1(user.getAddress1());
+    }
+
+    // Address 2 customer
+    if(user.getAddress2() != null) {
+      customerEntity.setAddress2(user.getAddress2());
+    }
+
+    // Customer zip code
+    if(user.getZipCode() != null) {
+      customerEntity.setZipCode(user.getZipCode());
+    }
+
+    // Customer city
+    if(user.getCity() != null) {
+      customerEntity.setCity(user.getCity());
     }
     
-    CustomerEntity customerEntity = userUtils.fromUserToCustomerEntity(user);
     return userUtils.fromCustomerEntityToUser(customerDao.save(customerEntity));
   }
   
@@ -78,11 +106,45 @@ public class ProfileBussiness {
    */
   @Transactional(rollbackFor = Exception.class)
   public BankAccount updateBankAccount(BankAccount bankAccount) throws MyException {
-    CustomerEntity customerEntity = customerDao.findById(bankAccount.getIdCustomer())
-        .orElseThrow(() -> new MyException("throw.UserNotExist"));
+    // The bank account does not exist
+    BankAccountEntity bankAccountEntity = bankAccountDao.findById(bankAccount.getIdCustomer())
+        .orElseThrow(() -> new MyException("throw.BankAccountNotExist"));
     
-    BankAccountEntity bankAccountEntity = bankAccountUtils.fromBankAccountToBankAccountEntity(
-                                            bankAccount, customerEntity);
+    // Name of the bank
+    if(bankAccount.getBankName() != null) {
+      bankAccountEntity.setBankName(bankAccount.getBankName());
+    }
+
+    // Bank code
+    if(bankAccount.getBankCode() != null) {
+      bankAccountEntity.setBankCode(bankAccount.getBankCode());
+    }
+
+    // Branch code
+    if(bankAccount.getBranchCode() != null) {
+      bankAccountEntity.setBranchCode(bankAccount.getBranchCode());
+    }
+
+    // Account number
+    if(bankAccount.getAccountNumber() != null) {
+      bankAccountEntity.setAccountNumber(bankAccount.getAccountNumber());
+    }
+
+    // Bank key
+    if(bankAccount.getRib() != null) {
+      bankAccountEntity.setRib(bankAccount.getRib());
+    }
+
+    // IBAN
+    if(bankAccount.getIban() != null) {
+      bankAccountEntity.setIban(bankAccount.getIban());
+    }
+
+    // BIC code
+    if(bankAccount.getBic() != null) {
+      bankAccountEntity.setBic(bankAccount.getBic());
+    }
+    
     bankAccountEntity = bankAccountDao.save(bankAccountEntity);
     return bankAccountUtils.fromBankAccountEntityToBankAccount(bankAccountEntity);
   }

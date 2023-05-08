@@ -1,70 +1,68 @@
 <!-- Identity -->
 
-<section class="mt-2">
-	<div class="container">
-		<div class="row">
-			<p class="fw-bold">Personal information</p>
-		</div>
+<section class="container my-3">
+	<div class="row">
+		<p class="fw-bold">Personal information</p>
+	</div>
+	
+	<div class="row gy-4 mt-0 bg-light">
+		<!-- Formulaire -->
+		<form class="row" th:action="@{/profile-identity}" th:object="${user}" th:method="put">
+			<input type="hidden" id="id" th:field="*{id}" />
+			<input type="hidden" id="idConnection" th:field="*{connection}" />
+			<input type="hidden" id="idEmail" th:field="*{email}" />
+			<input type="hidden" id="idPassword" th:field="*{password}" />
 		
-		<div class="row gy-4 mt-0 bg-light">
-			<!-- Formulaire -->
-			<form class="row" th:action="@{/profile-identity}" th:object="${user}" th:method="put">
-				<input type="hidden" id="id" th:field="*{id}" />
-				<input type="hidden" id="idConnection" th:field="*{connection}" />
-				<input type="hidden" id="idEmail" th:field="*{email}" />
-				<input type="hidden" id="idPassword" th:field="*{password}" />
+			<div class="row">
+				<div class="col-6">
+					<label for=idFirstName class="form-label">First name</label>
+					<input type="text" class="form-control" th:maxlength="50"
+								id="idFirstName" th:field="*{firstName}" />
+				</div>
+				<div class="col-6">
+					<label for=idLastName class="form-label">Last name</label>
+					<input type="text" class="form-control" th:maxlength="50"
+								id="idLastName" th:field="*{lastName}" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<label for=idAddress1 class="form-label">Adress 1</label>
+					<input type="text" class="form-control" th:maxlength="100"
+								id="idAddress1" th:field="*{address1}" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<label for=idAddress2 class="form-label">Adress 2</label>
+					<input type="text" class="form-control" th:maxlength="100"
+								id="idAddress2" th:field="*{address2}" />
+				</div>
+			</div>
+			<div class="row my-1">
+				<div class="col-6">
+					<label for=idZipCode class="form-label">Zip code</label>
+					<input type="text" class="form-control" th:maxlength="50"
+								id="idZipCode" th:field="*{zipCode}" />
+				</div>
+				<div class="col-6">
+					<label for=idCity class="form-label">City</label>
+					<input type="text" class="form-control" th:maxlength="50"
+								id="idCity" th:field="*{city}" />
+				</div>
+			</div>
 			
-				<div class="row">
-					<div class="col-6">
-						<label for=idFirstName class="form-label">First name</label>
-						<input type="text" class="form-control" th:maxlength="50"
-									id="idFirstName" th:field="*{firstName}" />
-					</div>
-					<div class="col-6">
-						<label for=idLastName class="form-label">Last name</label>
-						<input type="text" class="form-control" th:maxlength="50"
-									id="idLastName" th:field="*{lastName}" />
-					</div>
+		    <div class="row my-2 text-center">
+		    	<div class="col">
+					<button type="submit" class="btn btn-primary">Send</button>
 				</div>
-				<div class="row">
-					<div class="col-12">
-						<label for=idAddress1 class="form-label">Adress 1</label>
-						<input type="text" class="form-control" th:maxlength="100"
-									id="idAddress1" th:field="*{address1}" />
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-12">
-						<label for=idAddress2 class="form-label">Adress 2</label>
-						<input type="text" class="form-control" th:maxlength="100"
-									id="idAddress2" th:field="*{address2}" />
-					</div>
-				</div>
-				<div class="row my-1">
-					<div class="col-6">
-						<label for=idZipCode class="form-label">Zip code</label>
-						<input type="text" class="form-control" th:maxlength="50"
-									id="idZipCode" th:field="*{zipCode}" />
-					</div>
-					<div class="col-6">
-						<label for=idCity class="form-label">City</label>
-						<input type="text" class="form-control" th:maxlength="50"
-									id="idCity" th:field="*{city}" />
-					</div>
-				</div>
-				
-			    <div class="row my-2 text-center">
-			    	<div class="col">
-						<button type="submit" class="btn btn-primary">Send</button>
-					</div>
-				</div>
-			</form>
-			
-		    <div class="row">
-				<div th:if="${identityErrorMessage}">
-					<div class="alert alert-danger" role="alert">
-						<p th:if="${identityErrorMessage}" th:text="${identityErrorMessage}"></p>
-					</div>
+			</div>
+		</form>
+		
+	    <div class="row">
+			<div th:if="${identityErrorMessage}">
+				<div class="alert alert-danger" role="alert">
+					<p th:if="${identityErrorMessage}" th:text="${identityErrorMessage}"></p>
 				</div>
 			</div>
 		</div>
