@@ -2,7 +2,7 @@
 
 <div class="modal fade" id="modalAddConnection" tabindex="-1"
 		aria-labelledby="addConnectionLabel" aria-hidden="true">
-	<form th:action="@{/add-connection}" th:object="${newBuddy}" method="post">
+	<form th:action="@{/add-connection}" th:object="${newBuddy}" th:method="post">
 	    <div class="modal-dialog">
 	        <div class="modal-content">
 	            <div class="modal-header">
@@ -15,7 +15,8 @@
 	            
 					<div class="mb-3">
 						<label for="idBuddyEmail" class="form-label">Email</label>
-				        <input type="email" required class="form-control" id="idBuddyEmail" placeholder="Email" th:field="*{email}">
+				        <input type="email" required class="form-control" th:maxlength="100"
+				        		id="idBuddyEmail" placeholder="Email" th:field="*{email}" />
 					</div>
 					
 					<div class="mb-3">

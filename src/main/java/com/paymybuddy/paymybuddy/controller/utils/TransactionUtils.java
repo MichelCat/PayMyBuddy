@@ -37,8 +37,8 @@ public class TransactionUtils {
    * Conversion Transaction to BankTransactionEntity
    * 
    * @param transaction Transaction object
-   * @param customerDebit CustomerEntity object
-   * @param customerCredit CustomerEntity object
+   * @param customerDebit CustomerEntity debit object
+   * @param customerCredit CustomerEntity credit object
    * @return BankTransactionEntity
    */
   public BankTransactionEntity fromTransactionToBankTransactionEntity(Transaction transaction

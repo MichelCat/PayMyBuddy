@@ -60,7 +60,7 @@ create table bank_account (
 	bank_code varchar(5) NOT NULL,						-- Bank code
 	bank_branch_code varchar(5) NOT NULL,				-- Branch code
 	bank_account_number varchar(11) NOT NULL,			-- Account number
-	bank_rib_key varchar(11) NOT NULL,					-- Bank key
+	bank_rib_key varchar(2) NOT NULL,					-- Bank key
 	bank_iban varchar(34) NOT NULL,						-- IBAN
 	bank_bic varchar(11) NOT NULL,						-- BIC code
 	constraint uc_bank_account_account UNIQUE KEY (bank_code, bank_branch_code, bank_account_number, bank_rib_key),
@@ -84,7 +84,9 @@ create table transaction_log (
 -- Transaction parameter
 create table transaction_parameter (
 	id_parameter int PRIMARY KEY AUTO_INCREMENT,		-- Transaction parameter ID
-	levy_rate float NOT NULL							-- Levy rate
+    effective_date date NOT NULL,						-- Effective date
+	levy_rate float NOT NULL,							-- Levy rate
+	constraint uc_transaction_parameter_effective_date UNIQUE KEY (effective_date)
 );
 
 -- -----------------------------------------------------------------------------
@@ -158,7 +160,10 @@ insert into bank_account (bank_id_customer, bank_name, bank_code, bank_branch_co
 , (@idDave, 'Banque de France', '30007', '00799', '12345678906', '88', 'FR7630001007941234567890191', 'BDFEFR5L')
 , (@idDan, 'Banque de France', '30008', '00800', '12345678906', '88', 'FR7630001007941234567890192', 'BDFEFR5L');
 
-insert into transaction_parameter (levy_rate) values (0.005);
+insert into transaction_parameter (effective_date, levy_rate) values
+( DATE_ADD(CURRENT_DATE(), INTERVAL -2 MONTH), 0.001)
+, ( DATE_ADD(CURRENT_DATE(), INTERVAL -1 MONTH), 0.002)
+, ( CURRENT_DATE(), 0.005);
 
 commit;
 
@@ -224,7 +229,7 @@ create table bank_account (
 	bank_code varchar(5) NOT NULL,						-- Bank code
 	bank_branch_code varchar(5) NOT NULL,				-- Branch code
 	bank_account_number varchar(11) NOT NULL,			-- Account number
-	bank_rib_key varchar(11) NOT NULL,					-- Bank key
+	bank_rib_key varchar(2) NOT NULL,					-- Bank key
 	bank_iban varchar(34) NOT NULL,						-- IBAN
 	bank_bic varchar(11) NOT NULL,						-- BIC code
 	constraint uc_bank_account_account UNIQUE KEY (bank_code, bank_branch_code, bank_account_number, bank_rib_key),
@@ -248,5 +253,7 @@ create table transaction_log (
 -- Transaction parameter
 create table transaction_parameter (
 	id_parameter int PRIMARY KEY AUTO_INCREMENT,		-- Transaction parameter ID
-	levy_rate float NOT NULL							-- Levy rate
+    effective_date date NOT NULL,						-- Effective date
+	levy_rate float NOT NULL,							-- Levy rate
+	constraint uc_transaction_parameter_effective_date UNIQUE KEY (effective_date)
 );

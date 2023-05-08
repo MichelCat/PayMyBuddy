@@ -21,4 +21,16 @@ public interface BuddyDao extends JpaRepository<BuddyEntity, Integer> {
   public BuddyEntity findByCustomerUserAndCustomerBuddy(Optional<CustomerEntity> customerUser
                                                       , Optional<CustomerEntity> customerBuddy);
   
+//  @Query(value = "select"
+//                + " buddy.id_buddy as id"
+//                + " , buddy.buddy_id_user as idUser"
+//                + " , buddy.buddy_id_buddy as idBuddy"
+//                + " , customer.customer_email as email"
+//                + " , buddy.buddy_connection as connection"
+//                + " from buddy"
+//                + " inner join customer on customer.id_customer = buddy.id_buddy"
+//                + " where buddy.buddy_id_user = :id"
+//  , nativeQuery = true)
+//  List<Buddy> findBuddyById(@Param("id") Integer id);
+  
 }

@@ -1,12 +1,13 @@
 package com.paymybuddy.paymybuddy.controller.model;
 
+import java.sql.Date;
 import java.util.Objects;
 import org.springframework.validation.annotation.Validated;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Buddy is business model
+ * TransactionParameter is business model
  * 
  * @author MC
  * @version 1.0
@@ -14,31 +15,20 @@ import lombok.Setter;
 @Validated
 @Getter
 @Setter
-public class Buddy {
+public class TransactionParameter {
   /**
-   * Buddy ID
+   * Transaction parameter ID
    */
   Integer id;
   
   /**
-   * User ID
+   * Levy rate
    */
-  Integer idUser;
-  
+  Float levyRate;
   /**
-   * Friend ID
+   * Effective date
    */
-  Integer idBuddy;
-  
-  /**
-   * Customer email
-   */
-  String email;
-  
-  /**
-   * Connection name
-   */
-  String connection;
+  Date effectiveDate;
   
   /**
    * Compare two objects
@@ -54,13 +44,11 @@ public class Buddy {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    var buddy = (Buddy) o;
+    var transactionParameter = (TransactionParameter) o;
     return
-    // Objects.equals(this.id, buddy.id) &&
-    Objects.equals(this.idUser, buddy.idUser)
-      && Objects.equals(this.idBuddy, buddy.idBuddy)
-      && Objects.equals(this.email, buddy.email)
-      && Objects.equals(this.connection, buddy.connection);
+    // Objects.equals(this.id, transactionParameter.id) &&
+    Objects.equals(this.levyRate, transactionParameter.levyRate)
+      && Objects.equals(this.effectiveDate, transactionParameter.effectiveDate);
   }
 
   /**
@@ -70,6 +58,6 @@ public class Buddy {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(id, idUser, idBuddy, email, connection);
+    return Objects.hash(id, levyRate, effectiveDate);
   }
 }

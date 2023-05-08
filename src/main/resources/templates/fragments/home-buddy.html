@@ -1,0 +1,22 @@
+<!-- Buddies -->
+<div class="table-responsive">
+	<table class="table table-striped table-sm table-hover caption-top text-center table-bordered mb-0">
+		<caption class="fw-bold">List of buddies</caption>
+		
+		<!-- Buddies title -->
+		<thead class="bg-success text-white">
+			<tr>
+				<th scope="col" class="fw-normal">Connection</th>
+				<th scope="col" class="fw-normal">Email</th>
+			</tr>
+		</thead>
+		
+		<!-- Buddies detail -->
+		<tbody class="bg-white text-black">
+			<tr th:each="buddy: ${buddies}">
+				<td th:text="${buddy.connection}" />
+				<td th:text="${buddy.email}" />						
+			</tr>
+		</tbody>
+	</table>
+</div>

@@ -1,0 +1,22 @@
+<!-- Transaction parameter -->
+<div class="table-responsive">
+	<table class="table table-striped table-sm table-hover caption-top text-center table-bordered mb-0">
+		<caption class="fw-bold">List of levy rates</caption>
+		
+		<!-- Levy rates title -->
+		<thead class="bg-success text-white">
+			<tr>
+				<th scope="col" class="fw-normal">Effective date</th>
+				<th scope="col" class="fw-normal">Levy rate</th>
+			</tr>
+		</thead>
+		
+		<!-- Levy rates detail -->
+		<tbody class="bg-white text-black">
+			<tr th:each="levy: ${transactionParameters}">
+				<td th:text="${#dates.format(levy.effectiveDate, 'dd/MM/yyyy')}" />
+				<td th:text="${levy.levyRate * 100 + '%'}" />						
+			</tr>
+		</tbody>
+	</table>
+</div>

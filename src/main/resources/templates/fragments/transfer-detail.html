@@ -39,7 +39,7 @@
 			<!-- Previous page -->
 			<th:block>
 				<li th:if="${transactionPage.hasPrevious()}" class="page-item">
-					<a class="page-link" th:href="@{/transactions(page=${transactionPage.number},size=${transactionPage.size})}">&laquo;</a>
+					<a class="page-link" th:href="@{/transfer(page=${transactionPage.number},size=${transactionPage.size})}">&laquo;</a>
 				</li>
 				<li th:unless="${transactionPage.hasPrevious()}" class="page-item disabled">
 					<span class="page-link">&laquo;</span>
@@ -58,7 +58,7 @@
 						<a class="page-link">[[${i}+1]]</a>
 					</li>
 					<li th:unless="${transactionPage.number == i}" class="page-item">
-						<a class="page-link" th:href="@{/transactions(page=${i+1},size=${transactionPage.size})}">[[${i}+1]]</a>
+						<a class="page-link" th:href="@{/transfer(page=${i+1},size=${transactionPage.size})}">[[${i}+1]]</a>
 					</li>
 				</th:block>
 			</th:block>
@@ -71,7 +71,7 @@
 			<!-- Next page -->
 			<th:block>
 				<li th:if="${transactionPage.hasNext()}" class="page-item">
-					<a class="page-link" th:href="@{/transactions(page=${transactionPage.number+2},size=${transactionPage.size})}">&raquo;</a>
+					<a class="page-link" th:href="@{/transfer(page=${transactionPage.number+2},size=${transactionPage.size})}">&raquo;</a>
 				</li>
 				<li th:unless="${transactionPage.hasNext()}" class="page-item disabled">
 					<span class="page-link">&raquo;</span>

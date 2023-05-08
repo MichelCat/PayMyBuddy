@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Buddy is business model
+ * CustomerAccount is business model
  * 
  * @author MC
  * @version 1.0
@@ -14,31 +14,18 @@ import lombok.Setter;
 @Validated
 @Getter
 @Setter
-public class Buddy {
+public class CustomerAccount {
+
   /**
-   * Buddy ID
+   * Customer account ID
    */
-  Integer id;
+  Integer idCustomer;
   
   /**
-   * User ID
+   * Account balance
    */
-  Integer idUser;
+  Float balance;
   
-  /**
-   * Friend ID
-   */
-  Integer idBuddy;
-  
-  /**
-   * Customer email
-   */
-  String email;
-  
-  /**
-   * Connection name
-   */
-  String connection;
   
   /**
    * Compare two objects
@@ -54,13 +41,10 @@ public class Buddy {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    var buddy = (Buddy) o;
+    var customerAccount = (CustomerAccount) o;
     return
-    // Objects.equals(this.id, buddy.id) &&
-    Objects.equals(this.idUser, buddy.idUser)
-      && Objects.equals(this.idBuddy, buddy.idBuddy)
-      && Objects.equals(this.email, buddy.email)
-      && Objects.equals(this.connection, buddy.connection);
+    Objects.equals(this.idCustomer, customerAccount.idCustomer)
+      && Objects.equals(this.balance, customerAccount.balance);
   }
 
   /**
@@ -70,6 +54,6 @@ public class Buddy {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(id, idUser, idBuddy, email, connection);
+    return Objects.hash(idCustomer, balance);
   }
 }

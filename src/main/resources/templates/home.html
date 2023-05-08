@@ -17,66 +17,35 @@
 			</div>
 		</div>
 		
-		
-		
-<!--
-			<div class="position-relative">
-				<h4 class="z-index-1 position-relative">Background image with .obj-fit-cover</h4>
-				<img class="bg obj-fit-cover" src="img/ImagePayMyBuddy.png" alt="Pay My Buddy">
-			</div>
-		
-		
-			<div class="bg-image" style="background-image: url('img/ImagePayMyBuddy.png')"></div>
-			
-			
-			<div
-			  class="bg-image d-flex justify-content-center align-items-center"
-			  style="
-			    background-image: url('img/ImagePayMyBuddy.png');
-			    height: 100vh;
-			  ">
-			  <h1 class="text-white">Page title</h1>
-			</div>
-			
+		<div class="bg-image"
+				style="background-image: url('img/ImagePayMyBuddy.png');
+						height: 100vh;">
+			<div class="mask h-100" style="background-color: rgba(255, 255, 255, 0.9);">
+				<div class="d-flex justify-content-center align-items-start">
+				
+					<div class="container">
+						<div class="row">
+							<div class="col-6">
+				    			<div th:replace="~{fragments/home-account-balance}"></div>
+							</div>
+							<div class="col-6">
+								<div th:replace="~{fragments/home-last-transaction}"></div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-6">
+				    			<div th:replace="~{fragments/home-transaction-parameter}"></div>
+							</div>
+							<div class="col-6">
+								<div th:replace="~{fragments/home-buddy}"></div>
+							</div>
+						</div>
+					</div>
 					
-			<div class="bg-image bg-size-half bg-position-top" style="background-image: url('img/ImagePayMyBuddy.png')"></div>
-			
-			 
-			<div class="bg-img" style="
-				border: 1px solid black;
-				background-image: url('img/ImagePayMyBuddy.png');
-				background-size: cover;
-				background-position: center;
-				background-repeat: no-repeat;
-				height: 200px;
-			"></div>		
-	
-
-	<img class="bg-img" src="img/ImagePayMyBuddy.png" alt="Pay My Buddy">
-	
-	<img src="images/ImagePayMyBuddy.png" class="rounded mx-auto d-block" alt="Pay My Buddy">
-
-<img src="images/ImagePayMyBuddy.png" class="img-fluid img-thumbnail" alt="Pay My Buddy">
-
-
-D:\eclipse-workspace\OpenClassrooms\PayMyBuddy\src\main\java\com\paymybuddy\paymybuddy
-D:\eclipse-workspace\OpenClassrooms\PayMyBuddy\src\main\resources\static\images
-D:\eclipse-workspace\OpenClassrooms\PayMyBuddy\src\main\resources\templates
--->
-		
-
-			<div class="bg-img" style="
-				border: 1px solid black;
-				background-image: url('img/ImagePayMyBuddy.png');
-				background-size: cover;
-				background-position: center;
-				background-repeat: no-repeat;
-				height: 200px;
-			"></div>		
-
-
-			
-		
+				</div>
+			</div>
+		</div>
 		
 	</main>
     

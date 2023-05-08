@@ -83,8 +83,8 @@ public class User {
     }
     var user = (User) o;
     return
-    // Objects.equals(this.id, user.id) &&
-    Objects.equals(this.connection, user.connection)
+    Objects.equals(this.id, user.id)
+      && Objects.equals(this.connection, user.connection)
       && Objects.equals(this.email, user.email)
       && Objects.equals(this.password, user.password)
       && Objects.equals(this.firstName, user.firstName)

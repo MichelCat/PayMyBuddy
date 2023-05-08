@@ -65,13 +65,13 @@ public class Transaction {
     }
     var transaction = (Transaction) o;
     return
-    // Objects.equals(this.id, transaction.id) &&
-    Objects.equals(this.idDebit, transaction.idDebit)
-    && Objects.equals(this.idCredit, transaction.idCredit)
-    && Objects.equals(this.transactionDate, transaction.transactionDate)
-    && Objects.equals(this.description, transaction.description)
-    && Objects.equals(this.amount, transaction.amount)
-    && Objects.equals(this.levy, transaction.levy);
+    Objects.equals(this.id, transaction.id)
+      && Objects.equals(this.idDebit, transaction.idDebit)
+      && Objects.equals(this.idCredit, transaction.idCredit)
+      && Objects.equals(this.transactionDate, transaction.transactionDate)
+      && Objects.equals(this.description, transaction.description)
+      && Objects.equals(this.amount, transaction.amount)
+      && Objects.equals(this.levy, transaction.levy);
   }
 
   /**

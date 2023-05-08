@@ -22,6 +22,7 @@ public class UserUtils {
   public User fromCustomerEntityToUser(CustomerEntity customerEntity) {
     User user = new User();
     user.setId(customerEntity.getId());
+    user.setConnection("");
     user.setEmail(customerEntity.getEmail());
     user.setPassword(customerEntity.getPassword());
     user.setFirstName(customerEntity.getFirstName());
@@ -33,6 +34,12 @@ public class UserUtils {
     return user;
   }
   
+  /**
+   * Conversion User to CustomerEntity
+   * 
+   * @param user User object
+   * @return CustomerEntity
+   */
   public CustomerEntity fromUserToCustomerEntity(User user) {
     CustomerEntity customerEntity = new CustomerEntity();
     customerEntity.setId(user.getId());

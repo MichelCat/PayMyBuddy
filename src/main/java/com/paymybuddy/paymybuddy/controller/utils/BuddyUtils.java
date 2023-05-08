@@ -17,12 +17,12 @@ import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
 public class BuddyUtils {
   
   /**
-   * Conversion BuddyEntity list to FireStation list
+   * Conversion BuddyEntity list to Buddy list
    * 
    * @param buddyEntities BuddyEntity list
    * @return Buddy list
    */
-  public List<Buddy> conversionListFireStationEntityToFireStation(List<BuddyEntity> buddyEntities) {
+  public List<Buddy> fromListBuddyEntityToListBuddy(List<BuddyEntity> buddyEntities) {
     List<Buddy> buddies = new ArrayList<>();
     buddyEntities.forEach(e -> {
       buddies.add(fromBuddyEntityToBuddy(e));

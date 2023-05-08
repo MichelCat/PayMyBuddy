@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -58,5 +59,6 @@ public class BuddyEntity {
    */
   @NotBlank(message = "Connection name is required")
   @Column(name = "buddy_connection")
+  @Size(max = 50)
   String connection;
 }

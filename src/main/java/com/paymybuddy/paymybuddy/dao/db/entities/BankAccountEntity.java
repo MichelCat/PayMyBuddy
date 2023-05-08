@@ -9,7 +9,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -25,7 +27,11 @@ import lombok.ToString;
  */
 @Data
 @Entity
-@Table(name = "bank_account")
+@Table(name = "bank_account"
+      , uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "bank_code", "bank_branch_code", "bank_account_number", "bank_rib_key" })
+        , @UniqueConstraint(columnNames = { "bank_iban", "bank_bic" })
+      })
 @FieldDefaults(level=AccessLevel.PRIVATE)
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"bankName", "bankCode", "branchCode", "accountNumber", "rib", "iban", "bic"})
@@ -49,41 +55,48 @@ public class BankAccountEntity {
    */
   @NotBlank(message = "Name of the bank is required")
   @Column(name = "bank_name")
+  @Size(max = 50)
   String bankName;
   /**
    * Bank code
    */
   @NotBlank(message = "Bank code is required")
   @Column(name = "bank_code")
+  @Size(max = 5)
   String bankCode;
   /**
    * Branch code
    */
   @NotBlank(message = "Branch code is required")
   @Column(name = "bank_branch_code")
+  @Size(max = 5)
   String branchCode;
   /**
    * Account number
    */
   @NotBlank(message = "Account number is required")
   @Column(name = "bank_account_number")
+  @Size(max = 11)
   String accountNumber;
   /**
    * Bank key
    */
   @NotBlank(message = "Bank key is required")
   @Column(name = "bank_rib_key")
+  @Size(max = 2)
   String rib;
   /**
    * IBAN
    */
   @NotBlank(message = "IBAN is required")
   @Column(name = "bank_iban")
+  @Size(max = 34)
   String iban;
   /**
    * BIC code
    */
   @NotBlank(message = "BIC code is required")
   @Column(name = "bank_bic")
+  @Size(max = 11)
   String bic;
 }

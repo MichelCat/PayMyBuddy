@@ -34,6 +34,13 @@ public class BankAccountUtils {
     return bankAccount;
   }
   
+  /**
+   * Conversion BankAccount to BankAccountEntity
+   * 
+   * @param bankAccount BankAccount object
+   * @param custome CustomerEntity user sobject
+   * @return BankAccountEntity
+   */
   public BankAccountEntity fromBankAccountToBankAccountEntity(BankAccount bankAccount
                         , CustomerEntity custome) {
     BankAccountEntity bankAccountEntity = new BankAccountEntity();
@@ -48,6 +55,4 @@ public class BankAccountUtils {
     bankAccountEntity.setBic(bankAccount.getBic());
     return bankAccountEntity;
   }
-  
-  
 }
