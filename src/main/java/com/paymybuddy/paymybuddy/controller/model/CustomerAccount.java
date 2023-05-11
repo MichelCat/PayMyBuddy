@@ -2,8 +2,9 @@ package com.paymybuddy.paymybuddy.controller.model;
 
 import java.util.Objects;
 import org.springframework.validation.annotation.Validated;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 /**
  * CustomerAccount is business model
@@ -12,8 +13,8 @@ import lombok.Setter;
  * @version 1.0
  */
 @Validated
-@Getter
-@Setter
+@Data
+@FieldDefaults(level=AccessLevel.PRIVATE)
 public class CustomerAccount {
 
   /**

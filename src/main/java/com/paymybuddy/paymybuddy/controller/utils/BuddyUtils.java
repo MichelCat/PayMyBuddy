@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import com.paymybuddy.paymybuddy.controller.model.Buddy;
 import com.paymybuddy.paymybuddy.dao.db.entities.BuddyEntity;
-import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
 
 /**
  * BuddyUtils is an Buddy object conversion utility class
@@ -54,13 +53,11 @@ public class BuddyUtils {
    * @param customerBuddy CustomerEntity object
    * @return BuddyEntity
    */
-  public BuddyEntity fromBuddyToBuddyEntity(Buddy buddy
-                                            , CustomerEntity customerUser
-                                            , CustomerEntity customerBuddy) {
+  public BuddyEntity fromBuddyToBuddyEntity(Buddy buddy) {
     BuddyEntity buddyEntity = new BuddyEntity();
     buddyEntity.setId(buddy.getId());
-    buddyEntity.setCustomerUser(customerUser);
-    buddyEntity.setCustomerBuddy(customerBuddy);
+    buddyEntity.setCustomerUser(null);
+    buddyEntity.setCustomerBuddy(null);
     buddyEntity.setConnection(buddy.getConnection());
     return buddyEntity;
   }

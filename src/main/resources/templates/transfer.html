@@ -1,3 +1,10 @@
+<!--
+/**
+ * transfer
+ * @description Bank transaction management page
+ */
+-->
+
 <!DOCTYPE html>
 <html lang="en"
 	xmlns:th="http://www.thymeleaf.org"
@@ -18,10 +25,16 @@
 			</div>
 		</div>
 		
+		<!-- Send Money -->
 	    <div th:replace="~{fragments/transfer-pay}"></div>
+	    
+		<!-- My Transactions -->
 	    <div th:replace="~{fragments/transfer-detail}"></div>
 		
+		<!-- Modal add connection -->
 		<div th:replace="~{fragments/add-connection}"></div>
+		
+		<!-- Modal send money -->
 		<div th:replace="~{fragments/send-money}"></div>
 	</main>
     

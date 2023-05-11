@@ -7,14 +7,14 @@
 	
 	<div class="row gy-4 mt-0 bg-light">
 		<!-- Formulaire -->
-		<form class="row" th:action="@{/profile-bank-account}" th:object="${bankAccount}" th:method="put">
+		<form class="row" th:action="@{/profile-bank-account}" th:object="${bankAccount}" th:method="POST">
 			<input type="hidden" id="id" th:field="*{id}" />
 			<input type="hidden" id="idCustomer" th:field="*{idCustomer}" />
 		
 		    <div class="row my-2">
 		    	<div class="col">
 					<label for=idBankName class="form-label">Name of the bank</label>
-					<input type="text" class="form-control" required th:maxlength="50"
+					<input type="text" required class="form-control" th:maxlength="50"
 						id="idBankName" th:field="*{bankName}" />
 				</div>
 			</div>
@@ -73,13 +73,5 @@
 				</div>
 			</div>
 		</form>
-		
-	    <div class="row">
-			<div th:if="${bankAccountErrorMessage}">
-				<div class="alert alert-danger" role="alert">
-					<p th:if="${bankAccountErrorMessage}" th:text="${bankAccountErrorMessage}"></p>
-				</div>
-			</div>
-		</div>
 	</div>
 </section>

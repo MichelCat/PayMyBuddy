@@ -11,6 +11,9 @@
 	    		data-bs-toggle="modal" data-bs-target="#modalAddConnection">Add Connection</button>
 		</div>
 	</div>
+	
+	<!-- Error message -->
+	<div th:replace="~{fragments/error-message}"></div>
 
 	<!-- Payment -->
     <div class="row bg-light p-4">
@@ -36,14 +39,6 @@
 			<div>
 				<button type="button" class="btn btn-success bg-gradient px-5"
 					data-bs-toggle="modal" data-bs-target="#modalSendMoney">Pay</button>
-			</div>
-		</div>
-	</div>
-	
-    <div class="row">
-		<div th:if="${errorMessage}">
-			<div class="alert alert-danger" role="alert">
-				<p th:if="${errorMessage}" th:text="${errorMessage}"></p>
 			</div>
 		</div>
 	</div>

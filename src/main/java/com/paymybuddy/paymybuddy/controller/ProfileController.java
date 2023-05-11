@@ -5,7 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.paymybuddy.paymybuddy.business.ProfileBussiness;
 import com.paymybuddy.paymybuddy.controller.model.BankAccount;
@@ -57,22 +58,22 @@ public class ProfileController {
    * 
    * @return View 
    */
-  @PutMapping("/profile-identity")
-  public String putProfileIdentity(@ModelAttribute User user
+  @PatchMapping("/profile-identity")
+  public String patchProfileIdentity(@ModelAttribute User user
                                   , Model model
                                   , RedirectAttributes redirectAttributes) {
     try {
       // Editing customer information
       user = profileBussiness.updateUser(user);
     } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("identityErrorMessage", e.getMessage());
+      redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }
     return "redirect:/profile";
   }
 
 
   /**
-   * Update - Update an existing bank account
+   * Create - Add/Update a bank account
    * 
    * @param bankAccount The bank account object updated
    * @param model Model object
@@ -80,15 +81,15 @@ public class ProfileController {
    * 
    * @return View 
    */
-  @PutMapping("/profile-bank-account")
-  public String putProfileBankAccount(@ModelAttribute BankAccount bankAccount
+  @PostMapping("/profile-bank-account")
+  public String postProfileBankAccount(@ModelAttribute BankAccount bankAccount
                                       , Model model
                                       , RedirectAttributes redirectAttributes) {
     try {
       // Editing bank account information
-      bankAccount = profileBussiness.updateBankAccount(bankAccount);
+      bankAccount = profileBussiness.saveBankAccount(bankAccount);
     } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("bankAccountErrorMessage", e.getMessage());
+      redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }
     return "redirect:/profile";
   }

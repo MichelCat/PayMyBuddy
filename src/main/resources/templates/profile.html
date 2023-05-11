@@ -1,3 +1,10 @@
+<!--
+/**
+ * profile
+ * @description Customer profile page
+ */
+-->
+
 <!DOCTYPE html>
 <html lang="en"
 	xmlns:th="http://www.thymeleaf.org"
@@ -18,7 +25,13 @@
 			</div>
 		</div>
 		
+		<!-- Bank account -->
 	    <div th:replace="~{fragments/profile-bank-account}"></div>
+	    
+		<!-- Error message -->
+		<div th:replace="~{fragments/error-message}"></div>
+	    
+		<!-- Identity -->
 	    <div th:replace="~{fragments/profile-identify}"></div>
 	</main>
     

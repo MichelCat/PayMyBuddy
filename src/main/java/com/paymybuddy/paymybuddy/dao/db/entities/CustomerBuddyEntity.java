@@ -1,46 +1,36 @@
-package com.paymybuddy.paymybuddy.controller.model;
+package com.paymybuddy.paymybuddy.dao.db.entities;
 
 import java.util.Objects;
-import org.springframework.validation.annotation.Validated;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 /**
- * Buddy is business model
+ * CustomerBuddyEntity is Entity model. Link the BuddyEntity model with CustomerEntity
  * 
  * @author MC
  * @version 1.0
  */
-@Validated
 @Data
 @FieldDefaults(level=AccessLevel.PRIVATE)
-public class Buddy {
-  /**
-   * Buddy ID
-   */
-  Integer id;
-  
+public class CustomerBuddyEntity {
   /**
    * User ID
    */
   Integer idUser;
-  
   /**
    * Friend ID
    */
   Integer idBuddy;
-  
   /**
-   * Customer email
-   */
-  String email;
-  
-  /**
-   * Connection name
+   * User connection
    */
   String connection;
-  
+  /**
+   * User email
+   */
+  String email;
+
   /**
    * Compare two objects
    * 
@@ -55,15 +45,14 @@ public class Buddy {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    var buddy = (Buddy) o;
+    var customerBuddyEntity = (CustomerBuddyEntity) o;
     return
-    // Objects.equals(this.id, buddy.id) &&
-    Objects.equals(this.idUser, buddy.idUser)
-      && Objects.equals(this.idBuddy, buddy.idBuddy)
-      && Objects.equals(this.email, buddy.email)
-      && Objects.equals(this.connection, buddy.connection);
+    Objects.equals(this.idUser, customerBuddyEntity.idUser)
+    && Objects.equals(this.idBuddy, customerBuddyEntity.idBuddy)
+    && Objects.equals(this.connection, customerBuddyEntity.connection)
+    && Objects.equals(this.email, customerBuddyEntity.email);
   }
-
+ 
   /**
    * Get the hash code for the object of class Method
    * 
@@ -71,6 +60,6 @@ public class Buddy {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(id, idUser, idBuddy, email, connection);
+    return Objects.hash(idUser, idBuddy, connection, email);
   }
 }

@@ -33,7 +33,7 @@ import lombok.ToString;
         , @UniqueConstraint(columnNames = { "bank_iban", "bank_bic" })
       })
 @FieldDefaults(level=AccessLevel.PRIVATE)
-@NoArgsConstructor
+//@NoArgsConstructor
 @EqualsAndHashCode(of = {"bankName", "bankCode", "branchCode", "accountNumber", "rib", "iban", "bic"})
 @ToString
 public class BankAccountEntity {
@@ -99,4 +99,16 @@ public class BankAccountEntity {
   @Column(name = "bank_bic")
   @Size(max = 11)
   String bic;
+  
+  public BankAccountEntity() {
+    id = 0;
+    customer = null;
+    bankName = "";
+    bankCode = "";
+    branchCode = "";
+    accountNumber = "";
+    rib = "";
+    iban = "";
+    bic = "";
+  }
 }

@@ -15,6 +15,7 @@ import com.paymybuddy.paymybuddy.controller.model.Buddy;
 import com.paymybuddy.paymybuddy.controller.model.Transaction;
 import com.paymybuddy.paymybuddy.controller.utils.BuddyUtils;
 import com.paymybuddy.paymybuddy.controller.utils.TransactionLogUtils;
+import com.paymybuddy.paymybuddy.controller.utils.TransactionParameterUtils;
 import com.paymybuddy.paymybuddy.controller.utils.TransactionUtils;
 import com.paymybuddy.paymybuddy.dao.db.BankTransactionDao;
 import com.paymybuddy.paymybuddy.dao.db.BuddyDao;
@@ -25,6 +26,7 @@ import com.paymybuddy.paymybuddy.dao.db.CustomerAccountDao;
 import com.paymybuddy.paymybuddy.dao.db.entities.BankTransactionEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.BuddyEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.TransactionLogEntity;
+import com.paymybuddy.paymybuddy.dao.db.entities.TransactionParameterEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerAccountEntity;
 import org.springframework.data.domain.PageImpl;
@@ -49,6 +51,8 @@ public class TransferBussiness {
   @Autowired
   private TransactionParameterDao transactionParameterDao;
   @Autowired
+  private TransactionParameterUtils transactionParameterUtils;
+  @Autowired
   private BuddyDao buddyDao;
   @Autowired
   private TransactionUtils transactionUtils;
@@ -69,10 +73,10 @@ public class TransferBussiness {
     List<Transaction> transactions = new ArrayList<>();
     Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
     
-    Optional<CustomerEntity> customerEntity = customerDao.findById(id);
+    Optional<CustomerEntity> optCustomerEntity = customerDao.findById(id);
     
     // Buddy list
-    List<BuddyEntity> buddyEntities = buddyDao.findByCustomerUser(customerEntity);
+    List<BuddyEntity> buddyEntities = buddyDao.findByCustomerUser(optCustomerEntity);
     
     // Customer transactions
     Page<BankTransactionEntity> bankTransactionEntities = bankTransactionDao.findByIdNative(id, pageable);
@@ -109,9 +113,9 @@ public class TransferBussiness {
    * @return List of user's buddies
    */
   public List<Buddy> getBuddiesById(Integer id) {
-    Optional<CustomerEntity> customerEntity = customerDao.findById(id);
+    Optional<CustomerEntity> optCustomerEntity = customerDao.findById(id);
     
-    List<BuddyEntity> buddyEntities = buddyDao.findByCustomerUser(customerEntity);
+    List<BuddyEntity> buddyEntities = buddyDao.findByCustomerUser(optCustomerEntity);
     return buddyUtils.fromListBuddyEntityToListBuddy(buddyEntities);
   }
   
@@ -126,38 +130,48 @@ public class TransferBussiness {
   public Transaction addTransaction(Transaction transaction) throws MyException {
     // Transaction amount
     Float transactionAmount = transaction.getAmount();
+    
     // Transaction levy
-    Float levyRate = transactionParameterDao.findFirstByOrderByEffectiveDateDesc().getLevyRate();
-    Float transactionLevy = transactionAmount * levyRate;
+    TransactionParameterEntity transactionParameterEntity = transactionParameterDao.findFirstByOrderByEffectiveDateDesc()
+        .orElseThrow(() -> new MyException("throw.TransactionParameterNotExist"));
+    Float transactionLevy = transactionParameterUtils.roundLevy(transactionAmount * transactionParameterEntity.getLevyRate());
+    
     // Transaction date
     long currentTimeMillis = System.currentTimeMillis();
     Timestamp currentTimestamp = new Timestamp(currentTimeMillis);
+    
     // Debit Customer ID
-    CustomerEntity customerDebit = customerDao.findById(transaction.getIdDebit()).get();
+    CustomerEntity customerDebit = customerDao.findById(transaction.getIdDebit())
+        .orElseThrow(() -> new MyException("throw.DebtorUserNotExist", transaction.getIdDebit()));
+    
     // Credit Customer ID
-    CustomerEntity customerCredit = customerDao.findById(transaction.getIdCredit()).get();
+    CustomerEntity customerCredit = customerDao.findById(transaction.getIdCredit())
+        .orElseThrow(() -> new MyException("throw.CreditUserNotExist", transaction.getIdCredit()));
     
     // Customer account debit
-    CustomerAccountEntity customerAccountDebit = customerAccountDao.findById(customerDebit.getId()).get();
-    Float balance =customerAccountDebit.getBalance() - transactionAmount - transactionLevy;
+    CustomerAccountEntity customerAccountDebit = customerAccountDao.findById(customerDebit.getId())
+        .orElseThrow(() -> new MyException("throw.DebtorAccountNotExist"));
+    Float balance = customerAccountDebit.getBalance() - transactionAmount - transactionLevy;
     if (balance < 0) {
-      throw new MyException("throw.InsufficientMoneyInAccount");
+      throw new MyException("throw.InsufficientMoneyInAccount", customerAccountDebit.getBalance());
     }
     customerAccountDebit.setBalance(balance);
     customerAccountDao.save(customerAccountDebit);
     
     // Customer account credit
-    CustomerAccountEntity customerAccountCredit = customerAccountDao.findById(customerDebit.getId()).get();
+    CustomerAccountEntity customerAccountCredit = customerAccountDao.findById(customerCredit.getId())
+        .orElseThrow(() -> new MyException("throw.CreditAccountNotExist"));
     customerAccountCredit.setBalance(customerAccountCredit.getBalance() + transactionAmount);
     customerAccountDao.save(customerAccountCredit);
     
     // Transaction
-    transaction.setTransactionDate(currentTimestamp);
-    transaction.setAmount(transactionAmount);
-    transaction.setLevy(transactionLevy);
-    BankTransactionEntity bankTransactionEntity = transactionUtils.fromTransactionToBankTransactionEntity(
-                                                    transaction, customerDebit, customerCredit);
-    bankTransactionEntity = bankTransactionDao.save(bankTransactionEntity); 
+    BankTransactionEntity bankTransactionEntity = transactionUtils.fromTransactionToBankTransactionEntity(transaction);
+    bankTransactionEntity.setCustomerDebit(customerDebit);
+    bankTransactionEntity.setCustomerCredit(customerCredit);
+    bankTransactionEntity.setTransactionDate(currentTimestamp);
+    bankTransactionEntity.setAmount(transactionAmount);
+    bankTransactionEntity.setLevy(transactionLevy);
+    bankTransactionEntity = bankTransactionDao.save(bankTransactionEntity);
     
     // Transaction log
     TransactionLogEntity transactionLogEntity = transactionLogUtils.fromBankTransactionEntityToTransactionLogEntity(bankTransactionEntity);
@@ -176,22 +190,23 @@ public class TransferBussiness {
   @Transactional(rollbackFor = Exception.class)
   public Buddy addBuddy(Buddy buddy) throws MyException {
     // Unknown email
-    CustomerEntity customerBuddy = customerDao.findByEmail(buddy.getEmail());
-    if (customerBuddy == null) {
-      throw new MyException("throw.UnknownEmail");
+    Optional<CustomerEntity> optCustomerBuddy = customerDao.findByEmail(buddy.getEmail());
+    if (optCustomerBuddy.isEmpty()) {
+      throw new MyException("throw.UnknownEmail", buddy.getEmail());
     }
-    buddy.setIdBuddy(customerBuddy.getId());
+    
+    // Customer user
+    Optional<CustomerEntity> optCustomerUser = customerDao.findById(buddy.getIdUser());
     
     // Buddy already present
-    if (buddyDao.findByCustomerUserAndCustomerBuddy(
-                  customerDao.findById(buddy.getIdUser())
-                  , customerDao.findById(customerBuddy.getId())) != null) {
-      throw new MyException("throw.BuddyAlreadyPresent");
+    Optional<BuddyEntity> optBuddyEntity = buddyDao.findByCustomerUserAndCustomerBuddy(optCustomerUser, optCustomerBuddy);
+    if (optBuddyEntity.isEmpty() == false) {
+      throw new MyException("throw.ConnectionAlreadyPresent", optBuddyEntity.get().getConnection());
     }
     
-    BuddyEntity buddyEntity = buddyUtils.fromBuddyToBuddyEntity(buddy
-                                      , customerDao.findById(buddy.getIdUser()).get()
-                                      , customerDao.findById(customerBuddy.getId()).get());
-    return buddyUtils.fromBuddyEntityToBuddy(buddyDao.save(buddyEntity));
+    BuddyEntity newBuddyEntity = buddyUtils.fromBuddyToBuddyEntity(buddy);
+    newBuddyEntity.setCustomerUser(optCustomerUser.get());
+    newBuddyEntity.setCustomerBuddy(optCustomerBuddy.get());
+    return buddyUtils.fromBuddyEntityToBuddy(buddyDao.save(newBuddyEntity));
   }
 }

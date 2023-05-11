@@ -1,6 +1,5 @@
 package com.paymybuddy.paymybuddy.business;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,20 +8,20 @@ import com.paymybuddy.paymybuddy.controller.model.Buddy;
 import com.paymybuddy.paymybuddy.controller.model.CustomerAccount;
 import com.paymybuddy.paymybuddy.controller.model.Transaction;
 import com.paymybuddy.paymybuddy.controller.model.TransactionParameter;
-import com.paymybuddy.paymybuddy.controller.utils.BuddyUtils;
 import com.paymybuddy.paymybuddy.controller.utils.CustomerAccountUtils;
+import com.paymybuddy.paymybuddy.controller.utils.CustomerBuddyUtils;
 import com.paymybuddy.paymybuddy.controller.utils.TransactionParameterUtils;
 import com.paymybuddy.paymybuddy.controller.utils.TransactionUtils;
 import com.paymybuddy.paymybuddy.dao.db.BankTransactionDao;
-import com.paymybuddy.paymybuddy.dao.db.BuddyDao;
 import com.paymybuddy.paymybuddy.dao.db.CustomerAccountDao;
 import com.paymybuddy.paymybuddy.dao.db.CustomerDao;
 import com.paymybuddy.paymybuddy.dao.db.TransactionParameterDao;
+import com.paymybuddy.paymybuddy.dao.db.CustomerBuddyDao;
 import com.paymybuddy.paymybuddy.dao.db.entities.BankTransactionEntity;
-import com.paymybuddy.paymybuddy.dao.db.entities.BuddyEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerAccountEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.TransactionParameterEntity;
+import com.paymybuddy.paymybuddy.dao.db.entities.CustomerBuddyEntity;
 
 /**
  * HomeBussiness is the home page processing service
@@ -48,9 +47,9 @@ public class HomeBussiness {
   @Autowired
   private CustomerDao customerDao;
   @Autowired
-  private BuddyDao buddyDao;
+  private CustomerBuddyDao customerBuddyDao;
   @Autowired
-  private BuddyUtils buddyUtils;
+  private CustomerBuddyUtils customerBuddyUtils;
 
   /**
    * Find the list of transaction parameters
@@ -69,8 +68,8 @@ public class HomeBussiness {
    * @return Customer account information
    */
   public CustomerAccount getCustomerAccountById(final Integer id) {
-    CustomerAccountEntity customerAccountEntity = customerAccountDao.findById(id).get();
-    return customerAccountUtils.fromCustomerAccountEntityToCustomerAccount(customerAccountEntity);
+    Optional<CustomerAccountEntity> optCustomerAccountEntity = customerAccountDao.findById(id);
+    return customerAccountUtils.fromCustomerAccountEntityToCustomerAccount(optCustomerAccountEntity.get());
   }
   
   /**
@@ -80,10 +79,12 @@ public class HomeBussiness {
    * @return Last transaction
    */
   public Transaction getLastTransactionById(final Integer id) {
-    CustomerEntity customerEntity = customerDao.findById(id).get();
-    BankTransactionEntity bankTransactionEntity = bankTransactionDao.findFirstByCustomerDebitOrCustomerCreditOrderByTransactionDateDesc(
-                                                    customerEntity, customerEntity);
-    return transactionUtils.fromBankTransactionEntityToTransaction(bankTransactionEntity);
+    Optional<CustomerEntity> optCustomerEntity = customerDao.findById(id);
+    
+    Optional<BankTransactionEntity> optBankTransactionEntity
+                              = bankTransactionDao.findFirstByCustomerDebitOrCustomerCreditOrderByTransactionDateDesc(
+                                   optCustomerEntity, optCustomerEntity);
+    return transactionUtils.fromBankTransactionEntityToTransaction(optBankTransactionEntity.get());
   }
   
   /**
@@ -93,17 +94,7 @@ public class HomeBussiness {
    * @return List of user's buddies
    */
   public List<Buddy> getBuddiesById(Integer id) {
-    
-    // Buddy list
-    Optional<CustomerEntity> customerEntity = customerDao.findById(id);
-    List<BuddyEntity> buddyEntities = buddyDao.findByCustomerUser(customerEntity);
-    List<Buddy> buddies = buddyUtils.fromListBuddyEntityToListBuddy(buddyEntities);
-    
-    // Add connection name
-    buddies.forEach(b -> {
-      Optional<CustomerEntity> customerBuddy = customerDao.findById(b.getIdBuddy());
-      b.setEmail(customerBuddy.get().getEmail());
-    });
-    return buddies;
+    List<CustomerBuddyEntity> customerBuddyEntities = customerBuddyDao.findCustomerBuddyById(id);
+    return customerBuddyUtils.fromListCustomerBuddyEntityToListBuddy(customerBuddyEntities);
   }
 }

@@ -1,3 +1,10 @@
+<!--
+/**
+ * home
+ * @description Home page
+ */
+-->
+
 <!DOCTYPE html>
 <html lang="en"
 	xmlns:th="http://www.thymeleaf.org"
@@ -26,18 +33,22 @@
 					<div class="container">
 						<div class="row my-3">
 							<div class="col-6">
+								<!-- Account Balance -->
 				    			<div th:replace="~{fragments/home-account-balance}"></div>
 							</div>
 							<div class="col-6">
+								<!-- Last transaction -->
 								<div th:replace="~{fragments/home-last-transaction}"></div>
 							</div>
 						</div>
 						
 						<div class="row my-3">
 							<div class="col-6">
+								<!-- Transaction parameter -->
 				    			<div th:replace="~{fragments/home-transaction-parameter}"></div>
 							</div>
 							<div class="col-6">
+								<!-- Buddies -->
 								<div th:replace="~{fragments/home-buddy}"></div>
 							</div>
 						</div>

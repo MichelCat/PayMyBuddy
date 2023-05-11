@@ -3,7 +3,6 @@ package com.paymybuddy.paymybuddy.controller.utils;
 import org.springframework.stereotype.Service;
 import com.paymybuddy.paymybuddy.controller.model.Transaction;
 import com.paymybuddy.paymybuddy.dao.db.entities.BankTransactionEntity;
-import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
 
 /**
  * TransactionUtils is an Transaction object conversion utility class
@@ -41,13 +40,11 @@ public class TransactionUtils {
    * @param customerCredit CustomerEntity credit object
    * @return BankTransactionEntity
    */
-  public BankTransactionEntity fromTransactionToBankTransactionEntity(Transaction transaction
-                                , CustomerEntity customerDebit
-                                , CustomerEntity customerCredit) {
+  public BankTransactionEntity fromTransactionToBankTransactionEntity(Transaction transaction) {
     BankTransactionEntity bankTransactionEntity = new BankTransactionEntity();
     bankTransactionEntity.setId(transaction.getId());
-    bankTransactionEntity.setCustomerDebit(customerDebit);
-    bankTransactionEntity.setCustomerCredit(customerCredit);
+    bankTransactionEntity.setCustomerDebit(null);
+    bankTransactionEntity.setCustomerCredit(null);
     bankTransactionEntity.setTransactionDate(transaction.getTransactionDate());
     bankTransactionEntity.setDescription(transaction.getDescription());
     bankTransactionEntity.setAmount(transaction.getAmount());

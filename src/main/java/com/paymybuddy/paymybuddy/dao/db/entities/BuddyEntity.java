@@ -29,7 +29,7 @@ import lombok.ToString;
 @Table(name = "buddy")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"customerUser", "customerBuddy"})
+@EqualsAndHashCode(of = {"customerUser", "customerBuddy", "connection"})
 @ToString
 public class BuddyEntity {
   /**
