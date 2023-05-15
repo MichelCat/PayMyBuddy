@@ -29,9 +29,10 @@ public class CustomerBuddyDaoImpl implements CustomerBuddyDao {
                                                   + " buddy.buddy_id_user as idUser"
                                                   + " , buddy.buddy_id_buddy as idBuddy"
                                                   + " , buddy.buddy_connection as connection"
-                                                  + " , customer.customer_email as email"
+                                                  + " , user.user_email as email"
                                                   + " from buddy"
                                                   + " inner join customer on customer.id_customer = buddy.id_buddy"
+                                                  + " inner join user on user.id_user = customer.customer_id_user"
                                                   + " where buddy.buddy_id_user = :id");
     query.setParameter("id", id);
     List<Object[]> results = query.getResultList();

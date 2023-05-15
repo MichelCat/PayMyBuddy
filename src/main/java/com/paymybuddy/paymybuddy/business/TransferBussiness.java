@@ -27,6 +27,8 @@ import com.paymybuddy.paymybuddy.dao.db.entities.BankTransactionEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.BuddyEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.TransactionLogEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.TransactionParameterEntity;
+import com.paymybuddy.paymybuddy.dao.user.PaymybuddyUserDao;
+import com.paymybuddy.paymybuddy.dao.user.entities.PaymybuddyAppUser;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerAccountEntity;
 import org.springframework.data.domain.PageImpl;
@@ -60,6 +62,8 @@ public class TransferBussiness {
   private TransactionLogUtils transactionLogUtils;
   @Autowired
   private BuddyUtils buddyUtils;
+  @Autowired
+  private PaymybuddyUserDao paymybuddyUserDao;
 
   /**
    * Searching the User's Paginated Transaction List
@@ -190,13 +194,16 @@ public class TransferBussiness {
   @Transactional(rollbackFor = Exception.class)
   public Buddy addBuddy(Buddy buddy) throws MyException {
     // Unknown email
-    Optional<CustomerEntity> optCustomerBuddy = customerDao.findByEmail(buddy.getEmail());
-    if (optCustomerBuddy.isEmpty()) {
+    Optional<PaymybuddyAppUser> optPaymybuddyAppUser = paymybuddyUserDao.findByUsername(buddy.getEmail());
+    if (optPaymybuddyAppUser.isEmpty()) {
       throw new MyException("throw.UnknownEmail", buddy.getEmail());
     }
     
     // Customer user
     Optional<CustomerEntity> optCustomerUser = customerDao.findById(buddy.getIdUser());
+    
+    // Customer user
+    Optional<CustomerEntity> optCustomerBuddy = customerDao.findByPaymybuddyAppUser(optPaymybuddyAppUser);
     
     // Buddy already present
     Optional<BuddyEntity> optBuddyEntity = buddyDao.findByCustomerUserAndCustomerBuddy(optCustomerUser, optCustomerBuddy);

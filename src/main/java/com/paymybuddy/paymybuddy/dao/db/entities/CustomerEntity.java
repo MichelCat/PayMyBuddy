@@ -2,6 +2,7 @@ package com.paymybuddy.paymybuddy.dao.db.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.paymybuddy.paymybuddy.dao.user.entities.PaymybuddyAppUser;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,8 +34,8 @@ import lombok.ToString;
 @Entity
 @Table(name = "customer")
 @FieldDefaults(level=AccessLevel.PRIVATE)
-@NoArgsConstructor
-@EqualsAndHashCode(of = {"email"})
+//@NoArgsConstructor
+@EqualsAndHashCode(of = {"firstName", "lastName", "address1", "address2", "zipCode", "city"})
 @ToString
 public class CustomerEntity {
   /**
@@ -44,21 +45,29 @@ public class CustomerEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id_customer")
   Integer id;
+  
   /**
-   * Customer email
+   * User ID. PaymybuddyAppUser [1..1] to CustomerEntity [0..1]
    */
-  @Email(message = "Email should be valid")
-  @Column(name = "customer_email", unique=true)
-  @Size(max = 100)
-  String email;
-  /**
-   * Customer password
-   */
-  @ToString.Exclude
-  @NotBlank(message = "Customer password is required")
-  @Column(name = "customer_password")
-  @Size(max = 50)
-  String password;
+  @OneToOne 
+  @JoinColumn( name="customerIdUser", nullable=false )
+  private PaymybuddyAppUser paymybuddyAppUser;
+  
+//  /**
+//   * Customer email
+//   */
+//  @Email(message = "Email should be valid")
+//  @Column(name = "customer_email", unique=true)
+//  @Size(max = 100)
+//  String email;
+//  /**
+//   * Customer password
+//   */
+//  @ToString.Exclude
+//  @NotBlank(message = "Customer password is required")
+//  @Column(name = "customer_password")
+//  @Size(max = 50)
+//  String password;
   /**
   * Customer first name
   */
@@ -154,4 +163,15 @@ public class CustomerEntity {
   @OneToMany( targetEntity=BuddyEntity.class, mappedBy="customerBuddy"
           , cascade = CascadeType.ALL )
   private List<BuddyEntity> BuddyEntityBuddy = new ArrayList<>();
+  
+  public CustomerEntity() {
+    id = 0;
+    paymybuddyAppUser = null;
+    firstName = "";
+    lastName = "";
+    address1 = "";
+    address2 = "";
+    zipCode = "";
+    city = "";
+  }
 }

@@ -8,18 +8,30 @@ drop database if exists PayMyBuddyProd;
 create database PayMyBuddyProd;
 use PayMyBuddyProd;
 
+-- Table of users
+create table user (
+	id_user int PRIMARY KEY AUTO_INCREMENT,						-- User ID
+	user_email varchar(254) NOT NULL,							-- Email used to authenticate the user
+	user_password varchar(100) NOT NULL,						-- Password used to authenticate the user
+    user_role smallint,											-- User role
+	user_expired boolean,										-- User account expired
+	user_locked boolean,										-- User locked
+	user_credentia_expired boolean,								-- User credentials (password) expired
+	user_enabled boolean,										-- Activated user
+	constraint uc_user_email UNIQUE KEY (user_email)
+);
+
 -- Table of customers
 create table customer (
 	id_customer int PRIMARY KEY AUTO_INCREMENT,					-- Customer ID
-	customer_email varchar(100) NOT NULL,						-- Customer email
-	customer_password varchar(50) NOT NULL,						-- Customer password
+	customer_id_user int NOT NULL,								-- User ID
 	customer_first_name varchar(50) NOT NULL default '',		-- Customer first name
 	customer_last_name varchar(50) NOT NULL default '',			-- Customer last name
 	customer_address_1 varchar(100) NOT NULL default '',		-- Address 1 customer
 	customer_address_2 varchar(100) NOT NULL default '',		-- Address 2 customer
 	customer_zip_code varchar(50) NOT NULL default '',			-- Customer zip code
 	customer_city varchar(50) NOT NULL default '',				-- Customer city
-	constraint uc_customer_email UNIQUE KEY (customer_email)
+	constraint fk_customer_user FOREIGN KEY (customer_id_user) REFERENCES user (id_user)
 );
 
 -- Buddy relationship join table
@@ -68,7 +80,7 @@ create table bank_account (
 	constraint fk_bank_account_customer FOREIGN KEY (bank_id_customer) REFERENCES customer (id_customer)
 );
 
--- Customer transaction log
+-- Table of customer transaction log
 create table transaction_log (
 	id_log int PRIMARY KEY AUTO_INCREMENT,				-- Log ID
 	log_id_debit int NOT NULL,							-- Debit customer ID
@@ -81,12 +93,21 @@ create table transaction_log (
 	constraint fk_transaction_log_customer_credit FOREIGN KEY (log_id_credit) REFERENCES customer (id_customer)
 );
 
--- Transaction parameter
+-- Table of transaction parameter
 create table transaction_parameter (
 	id_parameter int PRIMARY KEY AUTO_INCREMENT,		-- Transaction parameter ID
     effective_date date NOT NULL,						-- Effective date
 	levy_rate float NOT NULL,							-- Levy rate
 	constraint uc_transaction_parameter_effective_date UNIQUE KEY (effective_date)
+);
+
+-- Message table
+create table message (
+	id_message int PRIMARY KEY AUTO_INCREMENT,				-- Message ID
+	message_id_customer int NOT NULL,						-- Message customer ID
+	message_subject varchar(100) NOT NULL,					-- Subject
+	message_detail varchar(500) NOT NULL,					-- Detail
+	constraint fk_message_customer FOREIGN KEY (message_id_customer) REFERENCES customer (id_customer)
 );
 
 -- -----------------------------------------------------------------------------
@@ -98,24 +119,34 @@ use PayMyBuddyProd;
 
 start transaction;
 
-insert into customer (customer_email, customer_password, customer_first_name, customer_last_name, customer_address_1, customer_address_2, customer_zip_code, customer_city) values
-('guto@gmail.com', 'motPasseGuto', 'guto', 'name guto', 'adresse 1 guto', 'adresse 2 guto', '68007', 'ville 68007')
-, ('hayley@gmail.com', 'motPasseHayley', 'hayley', 'name hayley', 'adresse 1 hayley', 'adresse 2 hayley', '68000', 'ville 68000')
-, ('clara@gmail.com', 'motPasseClara', 'clara', 'name clara', 'adresse 1 clara', 'adresse 2 clara', '68001', 'ville 68001')
-, ('smith@gmail.com', 'motPasseSmith', 'smith', 'name smith', 'adresse 1 smith', 'adresse 2 smith', '68002', 'ville 68002')
-, ('alex@gmail.com', 'motPasseAlex', 'alex', 'name alex', 'adresse 1 alex', 'adresse 2 alex', '68003', 'ville 68003')
-, ('bill@gmail.com', 'motPasseBill', 'bill', 'name bill', 'adresse 1 bill', 'adresse 2 bill', '68004', 'ville 68004')
-, ('dave@gmail.com', 'motPasseDave', 'dave', 'name dave', 'adresse 1 dave', 'adresse 2 dave', '68005', 'ville 68005')
-, ('dan@gmail.com', 'motPasseDan', 'dan', 'name dan', 'adresse 1 dan', 'adresse 2 dan', '68006', 'ville 68006');
+insert into user (user_email, user_password, user_role, user_expired, user_locked, user_credentia_expired, user_enabled) values
+('guto@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
+, ('hayley@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
+, ('clara@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
+, ('smith@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
+, ('alex@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
+, ('bill@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
+, ('dave@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
+, ('dan@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true);
 
-set @idGuto=(select id_customer from customer where customer_email='guto@gmail.com');
-set @idHayley=(select id_customer from customer where customer_email='hayley@gmail.com');
-set @idClara=(select id_customer from customer where customer_email='clara@gmail.com');
-set @idSmith=(select id_customer from customer where customer_email='smith@gmail.com');
-set @idAlex=(select id_customer from customer where customer_email='alex@gmail.com');
-set @idBill=(select id_customer from customer where customer_email='bill@gmail.com');
-set @idDave=(select id_customer from customer where customer_email='dave@gmail.com');
-set @idDan=(select id_customer from customer where customer_email='dan@gmail.com');
+set @idGuto=(select id_user from user where user_email='guto@gmail.com');
+set @idHayley=(select id_user from user where user_email='hayley@gmail.com');
+set @idClara=(select id_user from user where user_email='clara@gmail.com');
+set @idSmith=(select id_user from user where user_email='smith@gmail.com');
+set @idAlex=(select id_user from user where user_email='alex@gmail.com');
+set @idBill=(select id_user from user where user_email='bill@gmail.com');
+set @idDave=(select id_user from user where user_email='dave@gmail.com');
+set @idDan=(select id_user from user where user_email='dan@gmail.com');
+
+insert into customer (customer_id_user, customer_first_name, customer_last_name, customer_address_1, customer_address_2, customer_zip_code, customer_city) values
+(@idGuto, 'guto', 'name guto', 'adresse 1 guto', 'adresse 2 guto', '68007', 'ville 68007')
+, (@idHayley, 'hayley', 'name hayley', 'adresse 1 hayley', 'adresse 2 hayley', '68000', 'ville 68000')
+, (@idClara, 'clara', 'name clara', 'adresse 1 clara', 'adresse 2 clara', '68001', 'ville 68001')
+, (@idSmith, 'smith', 'name smith', 'adresse 1 smith', 'adresse 2 smith', '68002', 'ville 68002')
+, (@idAlex, 'alex', 'name alex', 'adresse 1 alex', 'adresse 2 alex', '68003', 'ville 68003')
+, (@idBill, 'bill', 'name bill', 'adresse 1 bill', 'adresse 2 bill', '68004', 'ville 68004')
+, (@idDave, 'dave', 'name dave', 'adresse 1 dave', 'adresse 2 dave', '68005', 'ville 68005')
+, (@idDan, 'dan', 'name dan', 'adresse 1 dan', 'adresse 2 dan', '68006', 'ville 68006');
 
 insert into buddy (buddy_id_user, buddy_id_buddy, buddy_connection) values
 (@idGuto, @idHayley, 'Hayley')
@@ -177,18 +208,30 @@ drop database if exists PayMyBuddyTest;
 create database PayMyBuddyTest;
 use PayMyBuddyTest;
 
+-- Table of users
+create table user (
+	id_user int PRIMARY KEY AUTO_INCREMENT,						-- User ID
+	user_email varchar(254) NOT NULL,							-- Email used to authenticate the user
+	user_password varchar(100) NOT NULL,						-- Password used to authenticate the user
+    user_role smallint,											-- User role
+	user_expired boolean,										-- User account expired
+	user_locked boolean,										-- User locked
+	user_credentia_expired boolean,								-- User credentials (password) expired
+	user_enabled boolean,										-- Activated user
+	constraint uc_user_email UNIQUE KEY (user_email)
+);
+
 -- Table of customers
 create table customer (
 	id_customer int PRIMARY KEY AUTO_INCREMENT,					-- Customer ID
-	customer_email varchar(100) NOT NULL,						-- Customer email
-	customer_password varchar(50) NOT NULL,						-- Customer password
+	customer_id_user int NOT NULL,								-- User ID
 	customer_first_name varchar(50) NOT NULL default '',		-- Customer first name
 	customer_last_name varchar(50) NOT NULL default '',			-- Customer last name
 	customer_address_1 varchar(100) NOT NULL default '',		-- Address 1 customer
 	customer_address_2 varchar(100) NOT NULL default '',		-- Address 2 customer
 	customer_zip_code varchar(50) NOT NULL default '',			-- Customer zip code
 	customer_city varchar(50) NOT NULL default '',				-- Customer city
-	constraint uc_customer_email UNIQUE KEY (customer_email)
+	constraint fk_customer_user FOREIGN KEY (customer_id_user) REFERENCES user (id_user)
 );
 
 -- Buddy relationship join table
@@ -237,7 +280,7 @@ create table bank_account (
 	constraint fk_bank_account_customer FOREIGN KEY (bank_id_customer) REFERENCES customer (id_customer)
 );
 
--- Customer transaction log
+-- Table of customer transaction log
 create table transaction_log (
 	id_log int PRIMARY KEY AUTO_INCREMENT,				-- Log ID
 	log_id_debit int NOT NULL,							-- Debit customer ID
@@ -250,10 +293,19 @@ create table transaction_log (
 	constraint fk_transaction_log_customer_credit FOREIGN KEY (log_id_credit) REFERENCES customer (id_customer)
 );
 
--- Transaction parameter
+-- Table of transaction parameter
 create table transaction_parameter (
 	id_parameter int PRIMARY KEY AUTO_INCREMENT,		-- Transaction parameter ID
     effective_date date NOT NULL,						-- Effective date
 	levy_rate float NOT NULL,							-- Levy rate
 	constraint uc_transaction_parameter_effective_date UNIQUE KEY (effective_date)
+);
+
+-- Message table
+create table message (
+	id_message int PRIMARY KEY AUTO_INCREMENT,				-- Message ID
+	message_id_customer int NOT NULL,						-- Message customer ID
+	message_subject varchar(100) NOT NULL,					-- Subject
+	message_detail varchar(500) NOT NULL,					-- Detail
+	constraint fk_message_customer FOREIGN KEY (message_id_customer) REFERENCES customer (id_customer)
 );

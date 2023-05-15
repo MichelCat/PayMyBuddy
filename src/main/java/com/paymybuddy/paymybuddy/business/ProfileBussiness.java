@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.paymybuddy.paymybuddy.Exception.MyException;
 import com.paymybuddy.paymybuddy.controller.model.BankAccount;
-import com.paymybuddy.paymybuddy.controller.model.User;
+import com.paymybuddy.paymybuddy.controller.model.Customer;
 import com.paymybuddy.paymybuddy.controller.utils.BankAccountUtils;
-import com.paymybuddy.paymybuddy.controller.utils.UserUtils;
+import com.paymybuddy.paymybuddy.controller.utils.CustomerUtils;
 import com.paymybuddy.paymybuddy.dao.db.BankAccountDao;
 import com.paymybuddy.paymybuddy.dao.db.CustomerDao;
 import com.paymybuddy.paymybuddy.dao.db.entities.BankAccountEntity;
@@ -26,7 +26,7 @@ public class ProfileBussiness {
   @Autowired
   private CustomerDao customerDao;
   @Autowired
-  private UserUtils userUtils;
+  private CustomerUtils customerUtils;
   @Autowired
   private BankAccountDao bankAccountDao;
   @Autowired
@@ -38,9 +38,9 @@ public class ProfileBussiness {
    * @param id User ID
    * @return Customer information
    */
-  public User getUserById(final Integer id) {
+  public Customer getUserById(final Integer id) {
     Optional<CustomerEntity> optCustomerEntity = customerDao.findById(id);
-    return userUtils.fromCustomerEntityToUser(optCustomerEntity.get());
+    return customerUtils.fromCustomerEntityToUser(optCustomerEntity.get());
   }
   
   /**
@@ -64,22 +64,22 @@ public class ProfileBussiness {
   /**
    * Update an existing user
    * 
-   * @param user The user object updated
+   * @param customer The user object updated
    * @return New modified customer record
    */
   @Transactional(rollbackFor = Exception.class)
-  public User updateUser(User user) throws MyException {
+  public Customer updateUser(Customer customer) throws MyException {
     // User does not exist
-    CustomerEntity customerEntity = customerDao.findById(user.getId())
-        .orElseThrow(() -> new MyException("throw.UserNotExist", user.getId()));
+    CustomerEntity customerEntity = customerDao.findById(customer.getId())
+        .orElseThrow(() -> new MyException("throw.CustomerNotExist", customer.getId()));
     
-    customerEntity.setFirstName(user.getFirstName());
-    customerEntity.setLastName(user.getLastName());
-    customerEntity.setAddress1(user.getAddress1());
-    customerEntity.setAddress2(user.getAddress2());
-    customerEntity.setZipCode(user.getZipCode());
-    customerEntity.setCity(user.getCity());
-    return userUtils.fromCustomerEntityToUser(customerDao.save(customerEntity));
+    customerEntity.setFirstName(customer.getFirstName());
+    customerEntity.setLastName(customer.getLastName());
+    customerEntity.setAddress1(customer.getAddress1());
+    customerEntity.setAddress2(customer.getAddress2());
+    customerEntity.setZipCode(customer.getZipCode());
+    customerEntity.setCity(customer.getCity());
+    return customerUtils.fromCustomerEntityToUser(customerDao.save(customerEntity));
   }
   
   /**
@@ -98,7 +98,7 @@ public class ProfileBussiness {
      
       // User does not exist
       CustomerEntity customerEntity = customerDao.findById(bankAccount.getIdCustomer())
-          .orElseThrow(() -> new MyException("throw.UserNotExist", bankAccount.getIdCustomer()));
+          .orElseThrow(() -> new MyException("throw.CustomerNotExist", bankAccount.getIdCustomer()));
       
       bankAccountEntity = new BankAccountEntity();
       bankAccountEntity.setCustomer(customerEntity);

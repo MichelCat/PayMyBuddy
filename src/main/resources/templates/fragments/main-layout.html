@@ -1,14 +1,37 @@
 <!-- Main layout -->
 
 <!DOCTYPE html>
+<!--
 <html lang="en"
 	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+-->
+<html lang="en"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+	
 	
     <head th:replace="~{fragments/header :: header}">
 <body>
 
+	<h2>
+		<div sec:authorize="isAuthenticated()">
+<!--
+			Vous êtes authentifié : <span th:text="${#authentification.getPrincipal()}"></span>
+-->
+			<span sec:authentication="name">Bob</span>
+		</div>
+	</h2>
+
+<!--
+<div class="container-fluid">
+-->
     <div th:replace="~{fragments/menu :: menu}"></div>
+<!--
+</div>    
+-->
     
     <main class="container" id="mainContent">
         <div layout:fragment="content"></div>

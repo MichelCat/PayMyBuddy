@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.paymybuddy.paymybuddy.business.ProfileBussiness;
 import com.paymybuddy.paymybuddy.controller.model.BankAccount;
-import com.paymybuddy.paymybuddy.controller.model.User;
+import com.paymybuddy.paymybuddy.controller.model.Customer;
 
 /**
  * ProfileController is the Endpoint of the profile page
@@ -42,8 +42,8 @@ public class ProfileController {
     model.addAttribute("bankAccount", bankAccount);
 
     // Find customer information
-    User user = profileBussiness.getUserById(idUser);
-    model.addAttribute("user", user);
+    Customer customer = profileBussiness.getUserById(idUser);
+    model.addAttribute("user", customer);
     
     return "profile";
   }
@@ -52,19 +52,19 @@ public class ProfileController {
   /**
    * Update - Update an existing user
    * 
-   * @param user The user object updated
+   * @param customer The user object updated
    * @param model Model object
    * @param redirectAttributes RedirectAttributes object
    * 
    * @return View 
    */
   @PatchMapping("/profile-identity")
-  public String patchProfileIdentity(@ModelAttribute User user
+  public String patchProfileIdentity(@ModelAttribute Customer customer
                                   , Model model
                                   , RedirectAttributes redirectAttributes) {
     try {
       // Editing customer information
-      user = profileBussiness.updateUser(user);
+      customer = profileBussiness.updateUser(customer);
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }
