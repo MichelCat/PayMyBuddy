@@ -14,17 +14,7 @@
 <body>
   
 	<main layout:fragment="content">
-		<div class="container">
-			<div class="row bg-light">
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Profile</li>
-					</ol>
-				</nav>	
-			</div>
-		</div>
-		
+	
 		<!-- Bank account -->
 	    <div th:replace="~{fragments/profile-bank-account}"></div>
 	    
@@ -33,6 +23,7 @@
 	    
 		<!-- Identity -->
 	    <div th:replace="~{fragments/profile-identify}"></div>
+	    
 	</main>
     
 </body>

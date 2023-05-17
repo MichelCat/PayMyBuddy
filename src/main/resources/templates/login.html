@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	
-	<head th:replace="fragments/header :: header">
+	<head th:replace="fragments/header">
     
 <body class="text-center vh-100">
   
@@ -17,6 +17,12 @@
 				    
 					<!-- Error message -->
 					<div th:replace="~{fragments/error-message}"></div>
+					
+					<div class="row">
+						<div th:if="${logout}" class="alert alert-info" role="alert">
+							<p>Vous êtes bien déconnecté.</p>
+						</div>
+					</div>
 				
 					<form th:action="@{/login}" th:object="${user}" th:method="POST">
 						<div class="mb-3 input-group form-group">

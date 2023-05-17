@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.paymybuddy.paymybuddy.Exception.MessagePropertieFormat;
 import com.paymybuddy.paymybuddy.Exception.MyException;
 import com.paymybuddy.paymybuddy.controller.model.Register;
@@ -37,6 +38,7 @@ public class PaymybuddyAppUserBusiness implements UserDetailsService {
   }
 
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 //    return paymybuddyUserDao.findByUsername(username)
 //        .orElseThrow( () -> new UsernameNotFoundException("Utilisateur non trouvé"));
@@ -57,6 +59,7 @@ public class PaymybuddyAppUserBusiness implements UserDetailsService {
    * @param register New user to add
    * @throws MyException Exception message 
    */
+  @Transactional(rollbackFor = Exception.class)
   public void addUser(Register register) throws MyException {
     Optional<PaymybuddyAppUser> optPaymybuddyAppUser = paymybuddyUserDao.findByUsername(register.getEmail());
     if (optPaymybuddyAppUser.isEmpty() == false) {

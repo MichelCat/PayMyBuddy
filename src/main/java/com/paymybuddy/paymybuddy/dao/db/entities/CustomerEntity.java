@@ -152,6 +152,13 @@ public class CustomerEntity {
   private CustomerAccountEntity customerAccountEntity;
   
   /**
+   * CustomerEntity [1..1] to CustomerMessageEntity [0..n]
+   */
+  @OneToMany( targetEntity=CustomerMessageEntity.class, mappedBy="customer"
+            , cascade = CascadeType.ALL )
+  private List<CustomerMessageEntity> CustomerMessageEntities = new ArrayList<>();
+  
+  /**
    * CustomerEntity [1..1] to BuddyEntity [0..n], customer relationship
    */
   @OneToMany( targetEntity=BuddyEntity.class, mappedBy="customerUser"

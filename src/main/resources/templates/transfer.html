@@ -14,17 +14,7 @@
 <body>
   
 	<main layout:fragment="content">
-		<div class="container">
-			<div class="row bg-light">
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Transfer</li>
-					</ol>
-				</nav>	
-			</div>
-		</div>
-		
+	
 		<!-- Send Money -->
 	    <div th:replace="~{fragments/transfer-pay}"></div>
 	    
@@ -36,6 +26,7 @@
 		
 		<!-- Modal send money -->
 		<div th:replace="~{fragments/send-money}"></div>
+		
 	</main>
     
 </body>

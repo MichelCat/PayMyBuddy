@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -17,7 +16,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class PaymybuddySecurityConfiguration {
   
   private static final String[] AUTH_WHITELIST = {
-      "/registrer/**","/home", "/transfer", "/profile", "/contact"  };
+      "/registrer/**","/home", "/transfer", "/profile", "/contact", "/settings" };
   
   
   @Bean
@@ -27,6 +26,7 @@ public class PaymybuddySecurityConfiguration {
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
                               .requestMatchers(AUTH_WHITELIST).authenticated()
+//                              .requestMatchers("/settings/**").hasRole("ADMIN")
                               .anyRequest().permitAll()
         );
       
@@ -34,12 +34,11 @@ public class PaymybuddySecurityConfiguration {
         .formLogin(a -> a.loginPage("/login")
            .loginProcessingUrl("/login")
            .defaultSuccessUrl("/home")
-           .failureUrl("/login-error.html")
+           .failureUrl("/login-error")
            .permitAll());
-    
-    http
-        .logout(a -> a.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-            .permitAll());
+
+      http
+              .logout(withDefaults());
 
     return http.build();
   }

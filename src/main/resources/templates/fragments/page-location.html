@@ -1,0 +1,38 @@
+<!-- Page location -->
+
+<div class="row bg-light">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+		
+			<!-- Home page -->
+			<th:block th:if="${#strings.equals(module, 'home')}">
+				<li class="breadcrumb-item active" aria-current="Home">Home</li>
+			</th:block>
+			
+			<!-- Transfer page -->
+			<th:block th:if="${#strings.equals(module, 'transfer')}">
+				<li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Transfer</li>
+			</th:block>
+		
+			<!-- Profile page -->
+			<th:block th:if="${#strings.equals(module, 'profile')}">
+				<li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Profile</li>
+			</th:block>
+		
+			<!-- Contact page -->
+			<th:block th:if="${#strings.equals(module, 'contact')}">
+				<li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Contact</li>
+			</th:block>
+		
+			<!-- Settings page -->
+			<th:block th:if="${#strings.equals(module, 'settings')}">
+				<li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Settings</li>
+			</th:block>
+				
+		</ol>
+	</nav>
+</div>

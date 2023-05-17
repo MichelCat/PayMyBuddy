@@ -1,11 +1,13 @@
 package com.paymybuddy.paymybuddy.controller;
 
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.paymybuddy.paymybuddy.controller.model.Register;
 import com.paymybuddy.paymybuddy.business.PaymybuddyAppUserBusiness;
@@ -28,13 +30,18 @@ public class UserController {
    * 
    * @param model Model object
    * @param redirectAttributes RedirectAttributes object
+   * @param params Parameter list
    * @return View 
   */
   @GetMapping("/login")
   public String getLogin(Model model
-                        , RedirectAttributes redirectAttributes) {
+                        , RedirectAttributes redirectAttributes
+                        , @RequestParam Map<String,String> params) {
     model.addAttribute("module", "login");
     
+    if (params.containsKey("logout")) {
+      model.addAttribute("logout", true);
+    }
     // User record exists
     PaymybuddyAppUser paymybuddyAppUser = new PaymybuddyAppUser();
     model.addAttribute("user", paymybuddyAppUser);
@@ -48,7 +55,7 @@ public class UserController {
    * @param redirectAttributes RedirectAttributes object
    * @return View 
   */
-  @GetMapping("/login-error.html")
+  @GetMapping("/login-error")
   public String getLoginError(Model model
                             , RedirectAttributes redirectAttributes) {
     redirectAttributes.addFlashAttribute("errorMessage", "Wrong user or password");
@@ -96,19 +103,7 @@ public class UserController {
    }
    return "redirect:/home";
   }
-    
   
-  /**
-   * Read - Get Logout Page Attributes
-   * 
-   * @param model Model object
-   * @return View 
-   */
-  @GetMapping("/logout")
-  public String getLogout(Model model) {
-    model.addAttribute("module", "logout");
-    return "logout";
-  }
   
   
   @GetMapping("/403")
