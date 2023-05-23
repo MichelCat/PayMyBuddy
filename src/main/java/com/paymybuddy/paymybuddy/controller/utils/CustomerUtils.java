@@ -23,8 +23,6 @@ public class CustomerUtils {
     Customer customer = new Customer();
     customer.setId(customerEntity.getId());
     customer.setConnection("");
-//    customer.setEmail(customerEntity.getEmail());
-//    customer.setPassword(customerEntity.getPassword());
     customer.setFirstName(customerEntity.getFirstName());
     customer.setLastName(customerEntity.getLastName());
     customer.setAddress1(customerEntity.getAddress1());
@@ -43,14 +41,30 @@ public class CustomerUtils {
   public CustomerEntity fromUserToCustomerEntity(Customer customer) {
     CustomerEntity customerEntity = new CustomerEntity();
     customerEntity.setId(customer.getId());
-//    customerEntity.setEmail(customer.getEmail());
-//    customerEntity.setPassword(customer.getPassword());
     customerEntity.setFirstName(customer.getFirstName());
     customerEntity.setLastName(customer.getLastName());
     customerEntity.setAddress1(customer.getAddress1());
     customerEntity.setAddress2(customer.getAddress2());
     customerEntity.setZipCode(customer.getZipCode());
     customerEntity.setCity(customer.getCity());
+    return customerEntity;
+  }
+  
+  /**
+   * Conversion Object[] to CustomerEntity
+   * 
+   * @param object Object[] object
+   * @return CustomerEntity
+   */
+  public CustomerEntity fromObjectToCustomerEntity(Object[] object) {
+    CustomerEntity customerEntity = new CustomerEntity();
+    customerEntity.setId((Integer)object[0]);
+    customerEntity.setFirstName((String)object[1]);
+    customerEntity.setLastName((String)object[2]);
+    customerEntity.setAddress1((String)object[3]);
+    customerEntity.setAddress2((String)object[4]);
+    customerEntity.setZipCode((String)object[5]);
+    customerEntity.setCity((String)object[6]);
     return customerEntity;
   }
 }

@@ -30,6 +30,10 @@ public class TransactionParameter {
    * Effective date
    */
   Date effectiveDate;
+  /**
+   * Contact email
+   */
+  String contactEmail;
   
   /**
    * Compare two objects
@@ -49,7 +53,8 @@ public class TransactionParameter {
     return
     // Objects.equals(this.id, transactionParameter.id) &&
     Objects.equals(this.levyRate, transactionParameter.levyRate)
-      && Objects.equals(this.effectiveDate, transactionParameter.effectiveDate);
+      && Objects.equals(this.effectiveDate, transactionParameter.effectiveDate)
+      && Objects.equals(this.contactEmail, transactionParameter.contactEmail);
   }
 
   /**
@@ -59,6 +64,6 @@ public class TransactionParameter {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(id, levyRate, effectiveDate);
+    return Objects.hash(id, levyRate, effectiveDate, contactEmail);
   }
 }

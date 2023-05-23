@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -27,11 +26,7 @@ import lombok.ToString;
  */
 @Data
 @Entity
-@Table(name = "bank_account"
-      , uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "bank_code", "bank_branch_code", "bank_account_number", "bank_rib_key" })
-        , @UniqueConstraint(columnNames = { "bank_iban", "bank_bic" })
-      })
+@Table(name = "bank_account")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 //@NoArgsConstructor
 @EqualsAndHashCode(of = {"bankName", "bankCode", "branchCode", "accountNumber", "rib", "iban", "bic"})

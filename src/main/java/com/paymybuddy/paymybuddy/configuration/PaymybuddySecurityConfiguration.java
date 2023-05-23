@@ -8,16 +8,12 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
+import com.paymybuddy.paymybuddy.dao.user.entities.AppUserRole;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
 public class PaymybuddySecurityConfiguration {
-  
-  private static final String[] AUTH_WHITELIST = {
-      "/registrer/**","/home", "/transfer", "/profile", "/contact", "/settings" };
-  
   
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -25,20 +21,21 @@ public class PaymybuddySecurityConfiguration {
         .cors(withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
-                              .requestMatchers(AUTH_WHITELIST).authenticated()
-//                              .requestMatchers("/settings/**").hasRole("ADMIN")
-                              .anyRequest().permitAll()
+            .requestMatchers("/default").authenticated()
+            .requestMatchers("/admin/**").hasAuthority(AppUserRole.ADMIN_ROLE.name())
+            .requestMatchers("/user/**").hasAuthority(AppUserRole.USER_ROLE.name())
+            .anyRequest().permitAll()
         );
       
     http
         .formLogin(a -> a.loginPage("/login")
            .loginProcessingUrl("/login")
-           .defaultSuccessUrl("/home")
+           .defaultSuccessUrl("/default")
            .failureUrl("/login-error")
            .permitAll());
 
       http
-              .logout(withDefaults());
+            .logout(withDefaults());
 
     return http.build();
   }

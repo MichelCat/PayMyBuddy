@@ -8,12 +8,6 @@ styles.css
 /* Navigation */
 
 .nav-link:hover {
-	background-color: gray;
+	background-color: rgb(192, 192, 192);
 	color: white;
 }	
-
-/* --------------------------------------------------- */
-.breadcrumb-item > a { 
-    text-decoration-line: none;
-}
-                 

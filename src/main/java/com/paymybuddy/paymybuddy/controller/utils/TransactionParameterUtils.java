@@ -42,6 +42,7 @@ public class TransactionParameterUtils {
     transactionParameter.setId(transactionParameterEntity.getId());
     transactionParameter.setLevyRate(transactionParameterEntity.getLevyRate());
     transactionParameter.setEffectiveDate(transactionParameterEntity.getEffectiveDate());
+    transactionParameter.setContactEmail(transactionParameterEntity.getContactEmail());
     return transactionParameter;
   }
   

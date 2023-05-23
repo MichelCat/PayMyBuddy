@@ -3,7 +3,6 @@ package com.paymybuddy.paymybuddy.controller.utils;
 import org.springframework.stereotype.Service;
 import com.paymybuddy.paymybuddy.controller.model.BankAccount;
 import com.paymybuddy.paymybuddy.dao.db.entities.BankAccountEntity;
-import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
 
 /**
  * BankAccountUtils is an BankAccount object conversion utility class
@@ -38,14 +37,12 @@ public class BankAccountUtils {
    * Conversion BankAccount to BankAccountEntity
    * 
    * @param bankAccount BankAccount object
-   * @param custome CustomerEntity user sobject
    * @return BankAccountEntity
    */
-  public BankAccountEntity fromBankAccountToBankAccountEntity(BankAccount bankAccount
-                        , CustomerEntity custome) {
+  public BankAccountEntity fromBankAccountToBankAccountEntity(BankAccount bankAccount) {
     BankAccountEntity bankAccountEntity = new BankAccountEntity();
     bankAccountEntity.setId(bankAccount.getId());
-    bankAccountEntity.setCustomer(custome);
+    bankAccountEntity.setCustomer(null);
     bankAccountEntity.setBankName(bankAccount.getBankName());
     bankAccountEntity.setBankCode(bankAccount.getBankCode());
     bankAccountEntity.setBranchCode(bankAccount.getBranchCode());

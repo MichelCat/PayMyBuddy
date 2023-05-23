@@ -1,6 +1,7 @@
 package com.paymybuddy.paymybuddy.dao.db.entities;
 
 import java.sql.Timestamp;
+import com.paymybuddy.paymybuddy.dao.user.entities.AppUserEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,7 +33,7 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "customer_message")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"customer", "messageDate", "subject", "message_detail"})
+@EqualsAndHashCode(of = {"customerSender", "customerRecipient", "messageDate", "subject", "message_detail"})
 @ToString
 public class CustomerMessageEntity {
   /**
@@ -43,11 +44,17 @@ public class CustomerMessageEntity {
   @Column(name = "id_message")
   Integer id;
   /**
-   * Message customer ID
+   * Email sender ID
    */
   @ManyToOne( cascade = { CascadeType.PERSIST, CascadeType.MERGE } )
-  @JoinColumn(name="message_id_customer", nullable=false)
-  private CustomerEntity customer;
+  @JoinColumn(name="message_id_sender", nullable=false)
+  private AppUserEntity appUserEntitySender;
+  /**
+   * Email recipient ID
+   */
+  @ManyToOne( cascade = { CascadeType.PERSIST, CascadeType.MERGE } )
+  @JoinColumn(name="message_id_recipient", nullable=false)
+  private AppUserEntity appUserEntityRecipient;
   /**
    * Message date
    */

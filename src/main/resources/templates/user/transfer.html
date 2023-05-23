@@ -15,6 +15,9 @@
   
 	<main layout:fragment="content">
 	
+		<!-- Error message -->
+		<div th:replace="~{fragments/error-message}"></div>
+	
 		<!-- Send Money -->
 	    <div th:replace="~{fragments/transfer-pay}"></div>
 	    
@@ -22,10 +25,10 @@
 	    <div th:replace="~{fragments/transfer-detail}"></div>
 		
 		<!-- Modal add connection -->
-		<div th:replace="~{fragments/add-connection}"></div>
+		<div th:replace="~{fragments/transfer-add-connection}"></div>
 		
 		<!-- Modal send money -->
-		<div th:replace="~{fragments/send-money}"></div>
+		<div th:replace="~{fragments/transfer-send-money}"></div>
 		
 	</main>
     

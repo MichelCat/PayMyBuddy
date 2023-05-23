@@ -1,0 +1,59 @@
+<!--
+/**
+ * contact-messaging
+ * @description Messaging
+ */
+-->
+
+<div class="container my-3">
+	<!-- Send message -->
+    <div class="row d-flex justify-content-between">
+    	<div class="col-3">
+	    	<button class="btn btn-primary w-100"
+	    		data-bs-toggle="modal" data-bs-target="#modalSendMessage">Send message</button>
+		</div>
+	</div>
+
+	<!-- Payment -->
+    <div class="row bg-light p-4">
+		<div class="table-responsive">
+			<table class="table table-striped table-sm table-hover caption-top text-center border mb-0">
+				
+				<!-- Title -->
+				<thead class="bg-success text-white">
+					<tr>
+						<th scope="col" class="fw-normal">Object</th>
+						<th scope="col" class="fw-normal">Date</th>
+					</tr>
+					<tr>
+						<th scope="col" class="fw-normal">De</th>
+						<th scope="col" class="fw-normal">A</th>
+					</tr>
+				</thead>
+				
+				<!-- Detail -->
+				<tbody>
+					<tr th:if="${customerMessages.empty}">
+						<td colspan="3">Aucun mail</td>
+					</tr>
+					
+					<th:block th:each="customerMessage, itemStat : ${customerMessages}">
+						<tr>
+							<td th:text="${customerMessage.subject}" />
+							<td th:text="${#dates.format(customerMessage.messageDate, 'dd/MM/yyyy hh:mm a')}" />
+						</tr>
+						<tr>
+							<td th:text="${customerMessage.emailSender}" />
+							<td th:text="${customerMessage.emailRecipient}" />
+						</tr>
+						<tr>
+							<td colspan="2">
+								<textarea readonly class="form-control" th:text="${customerMessage.detail}"></textarea>
+							</td>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

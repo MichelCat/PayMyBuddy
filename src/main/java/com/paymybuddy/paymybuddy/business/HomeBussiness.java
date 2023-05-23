@@ -1,17 +1,19 @@
 package com.paymybuddy.paymybuddy.business;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.paymybuddy.paymybuddy.Exception.MyException;
 import com.paymybuddy.paymybuddy.controller.model.Buddy;
 import com.paymybuddy.paymybuddy.controller.model.CustomerAccount;
-import com.paymybuddy.paymybuddy.controller.model.Transaction;
+import com.paymybuddy.paymybuddy.controller.model.BankTransaction;
 import com.paymybuddy.paymybuddy.controller.model.TransactionParameter;
 import com.paymybuddy.paymybuddy.controller.utils.CustomerAccountUtils;
 import com.paymybuddy.paymybuddy.controller.utils.CustomerBuddyUtils;
 import com.paymybuddy.paymybuddy.controller.utils.TransactionParameterUtils;
-import com.paymybuddy.paymybuddy.controller.utils.TransactionUtils;
+import com.paymybuddy.paymybuddy.controller.utils.BankTransactionUtils;
 import com.paymybuddy.paymybuddy.dao.db.BankTransactionDao;
 import com.paymybuddy.paymybuddy.dao.db.CustomerAccountDao;
 import com.paymybuddy.paymybuddy.dao.db.CustomerDao;
@@ -43,13 +45,26 @@ public class HomeBussiness {
   @Autowired
   private BankTransactionDao bankTransactionDao;
   @Autowired
-  private TransactionUtils transactionUtils;
+  private BankTransactionUtils bankTransactionUtils;
   @Autowired
   private CustomerDao customerDao;
   @Autowired
   private CustomerBuddyDao customerBuddyDao;
   @Autowired
   private CustomerBuddyUtils customerBuddyUtils;
+  
+  /**
+   * Find customer ID
+   * 
+   * @param username Email
+   * @return Customer ID
+   */
+  public Integer getCustomerId(final String username) throws MyException {
+    // User does not exist
+    CustomerEntity customerEntity = customerDao.findByUsername(username)
+        .orElseThrow(() -> new MyException("throw.CustomerNotExist", username));
+    return customerEntity.getId();
+  }
 
   /**
    * Find the list of transaction parameters
@@ -76,15 +91,15 @@ public class HomeBussiness {
    * Last transaction
    * 
    * @param id User ID
-   * @return Last transaction
+   * @return List of last transaction
    */
-  public Transaction getLastTransactionById(final Integer id) {
+  public List<BankTransaction> getLastTransactionById(final Integer id) {
     Optional<CustomerEntity> optCustomerEntity = customerDao.findById(id);
     
-    Optional<BankTransactionEntity> optBankTransactionEntity
-                              = bankTransactionDao.findFirstByCustomerDebitOrCustomerCreditOrderByTransactionDateDesc(
+    List<BankTransactionEntity> bankTransactionEntities
+                              = bankTransactionDao.findFirst2ByCustomerDebitOrCustomerCreditOrderByTransactionDateDesc(
                                    optCustomerEntity, optCustomerEntity);
-    return transactionUtils.fromBankTransactionEntityToTransaction(optBankTransactionEntity.get());
+    return bankTransactionUtils.fromListBankTransactionEntityToListBankTransaction(bankTransactionEntities);
   }
   
   /**

@@ -26,18 +26,6 @@ public class Customer {
    * User connection
    */
   String connection;
-  
-//  /**
-//   * User email
-//   */
-//  String email;
-//  
-//  /**
-//   * User password
-//   */
-//  @ToString.Exclude
-//  String password;
-  
   /**
   * Customer first name
   */
@@ -86,8 +74,6 @@ public class Customer {
     return
     Objects.equals(this.id, user.id)
       && Objects.equals(this.connection, user.connection)
-//      && Objects.equals(this.email, user.email)
-//      && Objects.equals(this.password, user.password)
       && Objects.equals(this.firstName, user.firstName)
       && Objects.equals(this.lastName, user.lastName)
       && Objects.equals(this.address1, user.address1)
@@ -103,15 +89,12 @@ public class Customer {
    */
   @Override
   public int hashCode() {
-//    return Objects.hash(id, connection, email, password, firstName, lastName, address1, address2, zipCode, city);
     return Objects.hash(id, connection, firstName, lastName, address1, address2, zipCode, city);
   }
   
   public Customer() {
     id = 0;
     connection = "";
-//    email = "";
-//    password = "";
     firstName = "";
     lastName = "";
     address1 = "";

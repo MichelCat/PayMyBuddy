@@ -1,4 +1,9 @@
-<!-- My Transactions -->
+<!--
+/**
+ * transfer-detail
+ * @description My Transactions
+ */
+-->
 
 <div class="container my-3">
 	<!-- Transaction table -->
@@ -22,11 +27,11 @@
 					<tr th:if="${transactionPage.content.empty}">
 						<td colspan="3">No transaction in database</td>
 					</tr>
-					<tr th:each="transaction: ${transactionPage.content}">
-						<th scope="row" style="display:none" th:text="${transaction.id}" />
-						<td th:text="${transaction.connection}" />
-						<td th:text="${transaction.description}" />
-						<td th:text="${transaction.amount + '€'}" />						
+					<tr th:each="bankTransaction: ${transactionPage.content}">
+						<th scope="row" style="display:none" th:text="${bankTransaction.id}" />
+						<td th:text="${bankTransaction.connection}" />
+						<td th:text="${bankTransaction.description}" />
+						<td th:text="${bankTransaction.amount + '€'}" />						
 					</tr>
 				</tbody>
 			</table>
@@ -40,7 +45,7 @@
 				<!-- Previous page -->
 				<th:block>
 					<li th:if="${transactionPage.hasPrevious()}" class="page-item">
-						<a class="page-link" th:href="@{/transfer(page=${transactionPage.number},size=${transactionPage.size})}">&laquo;</a>
+						<a class="page-link" th:href="@{/user/transfer(page=${transactionPage.number},size=${transactionPage.size})}">&laquo;</a>
 					</li>
 					<li th:unless="${transactionPage.hasPrevious()}" class="page-item disabled">
 						<span class="page-link">&laquo;</span>
@@ -59,7 +64,7 @@
 							<a class="page-link">[[${i}+1]]</a>
 						</li>
 						<li th:unless="${transactionPage.number == i}" class="page-item">
-							<a class="page-link" th:href="@{/transfer(page=${i+1},size=${transactionPage.size})}">[[${i}+1]]</a>
+							<a class="page-link" th:href="@{/user/transfer(page=${i+1},size=${transactionPage.size})}">[[${i}+1]]</a>
 						</li>
 					</th:block>
 				</th:block>
@@ -72,7 +77,7 @@
 				<!-- Next page -->
 				<th:block>
 					<li th:if="${transactionPage.hasNext()}" class="page-item">
-						<a class="page-link" th:href="@{/transfer(page=${transactionPage.number+2},size=${transactionPage.size})}">&raquo;</a>
+						<a class="page-link" th:href="@{/user/transfer(page=${transactionPage.number+2},size=${transactionPage.size})}">&raquo;</a>
 					</li>
 					<li th:unless="${transactionPage.hasNext()}" class="page-item disabled">
 						<span class="page-link">&raquo;</span>

@@ -1,4 +1,9 @@
-<!-- Bank account -->
+<!--
+/**
+ * profile-bank-account
+ * @description Bank account
+ */
+-->
 
 <section class="container my-3">
 	<div class="row">
@@ -7,9 +12,8 @@
 	
 	<div class="row gy-4 mt-0 bg-light">
 		<!-- Formulaire -->
-		<form class="row" th:action="@{/profile-bank-account}" th:object="${bankAccount}" th:method="POST">
+		<form class="row" th:action="@{/user/profile-bank-account}" th:object="${bankAccount}" th:method="POST">
 			<input type="hidden" id="id" th:field="*{id}" />
-			<input type="hidden" id="idCustomer" th:field="*{idCustomer}" />
 		
 		    <div class="row my-2">
 		    	<div class="col">

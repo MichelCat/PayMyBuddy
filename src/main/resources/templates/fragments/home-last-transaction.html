@@ -1,4 +1,9 @@
-<!-- Last transaction -->
+<!--
+/**
+ * home-last-transaction
+ * @description Last transaction
+ */
+-->
 
 <div class="table-responsive">
 	<table class="table table-striped table-sm table-hover caption-top text-center table-bordered mb-0">
@@ -15,10 +20,10 @@
 		
 		<!-- Transaction detail -->
 		<tbody class="bg-white text-black">
-			<tr>
-				<td th:text="${#dates.format(transaction.transactionDate, 'dd/MM/yyyy')}" />
-				<td th:text="${transaction.description}" />
-				<td th:text="${transaction.amount + '€'}" />						
+			<tr th:each="bankTransaction: ${bankTransactions}">
+				<td th:text="${#dates.format(bankTransaction.transactionDate, 'dd/MM/yyyy')}" />
+				<td th:text="${bankTransaction.description}" />
+				<td th:text="${bankTransaction.amount + '€'}" />						
 			</tr>
 		</tbody>
 	</table>

@@ -1,12 +1,11 @@
-<!-- Main layout -->
+<!--
+/**
+ * main-layout
+ * @description Main layout
+ */
+-->
 
 <!DOCTYPE html>
-<!--
-<html lang="en"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
--->
 <html lang="en"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -15,47 +14,6 @@
 	
     <head th:replace="~{fragments/header}">
 <body>
-
-	<h2>
-		<div sec:authorize="isAuthenticated()">
-		
-<span sec:authentication="name"></span>
-Roles: <span sec:authentication="principal.authorities"></span>
- 		
-<div sec:authorize="isAuthenticated()">
-  This content is only shown to authenticated users.
-</div>
-<div sec:authorize="hasRole('ROLE_ADMIN')">
-  This content is only shown to administrators.
-</div>
-<div sec:authorize="hasRole('ROLE_USER')">
-  This content is only shown to users.
-</div>
-
-<!--
-
-<div th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
-  USER section
-</div>
-
-<div th:if="${param.query != null}">
-    <p th:text="${param.query }"></p>
-</div>
-
-
-<p th:text="${#authentication.name}" />
-<p th:text="${#authentication.authorities}" />
-<p th:text="${#authentication.principal}" />
-<p th:text="${#authentication.credentials}" />
-<p th:text="${#authentication.details}" />
--->
-
-
-
-			
-		</div>
-	</h2>
-	
 	
 	<div class="container-fluid">
 		<header>
@@ -75,8 +33,8 @@ Roles: <span sec:authentication="principal.authorities"></span>
 			<!-- Menu -->
 		    <div th:replace="~{fragments/menu}"></div>
 		    
-			<!-- Page location -->
-		    <div th:replace="~{fragments/page-location}"></div>
+			<!-- Navigational hierarchy -->
+		    <div th:replace="~{fragments/navigational-hierarchy}"></div>
 		</header>
 	</div>    
     

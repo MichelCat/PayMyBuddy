@@ -9,16 +9,19 @@ create database PayMyBuddyProd;
 use PayMyBuddyProd;
 
 -- Table of users
-create table user (
+create table app_user (
 	id_user int PRIMARY KEY AUTO_INCREMENT,						-- User ID
 	user_email varchar(254) NOT NULL,							-- Email used to authenticate the user
 	user_password varchar(100) NOT NULL,						-- Password used to authenticate the user
-    user_role smallint,											-- User role
+    user_role varchar(20),										-- User role
 	user_expired boolean,										-- User account expired
 	user_locked boolean,										-- User locked
 	user_credentia_expired boolean,								-- User credentials (password) expired
 	user_enabled boolean,										-- Activated user
-	constraint uc_user_email UNIQUE KEY (user_email)
+	user_email_validation_key binary(18),						-- Email validation key (36 characters)
+	user_valid_email_end_date datetime,							-- Valid email end date
+	constraint uc_user_email UNIQUE KEY (user_email),
+	constraint uc_user_email_validation_key UNIQUE KEY (user_email_validation_key)
 );
 
 -- Table of customers
@@ -31,7 +34,7 @@ create table customer (
 	customer_address_2 varchar(100) NOT NULL default '',		-- Address 2 customer
 	customer_zip_code varchar(50) NOT NULL default '',			-- Customer zip code
 	customer_city varchar(50) NOT NULL default '',				-- Customer city
-	constraint fk_customer_user FOREIGN KEY (customer_id_user) REFERENCES user (id_user)
+	constraint fk_customer_user FOREIGN KEY (customer_id_user) REFERENCES app_user (id_user)
 );
 
 -- Buddy relationship join table
@@ -75,8 +78,6 @@ create table bank_account (
 	bank_rib_key varchar(2) NOT NULL,					-- Bank key
 	bank_iban varchar(34) NOT NULL,						-- IBAN
 	bank_bic varchar(11) NOT NULL,						-- BIC code
-	constraint uc_bank_account_account UNIQUE KEY (bank_code, bank_branch_code, bank_account_number, bank_rib_key),
-	constraint uc_bank_account_iban UNIQUE KEY (bank_iban, bank_bic),
 	constraint fk_bank_account_customer FOREIGN KEY (bank_id_customer) REFERENCES customer (id_customer)
 );
 
@@ -98,16 +99,20 @@ create table transaction_parameter (
 	id_parameter int PRIMARY KEY AUTO_INCREMENT,		-- Transaction parameter ID
     effective_date date NOT NULL,						-- Effective date
 	levy_rate float NOT NULL,							-- Levy rate
+	contact_email varchar(254) NOT NULL,				-- Contact email
 	constraint uc_transaction_parameter_effective_date UNIQUE KEY (effective_date)
 );
 
--- Message table
-create table message (
+-- Customer message table
+create table customer_message (
 	id_message int PRIMARY KEY AUTO_INCREMENT,				-- Message ID
-	message_id_customer int NOT NULL,						-- Message customer ID
+	message_id_sender int NOT NULL,							-- Email sender ID
+	message_id_recipient int NOT NULL,						-- Email recipient ID
+	message_date timestamp(6) NOT NULL,						-- Message date
 	message_subject varchar(100) NOT NULL,					-- Subject
 	message_detail varchar(500) NOT NULL,					-- Detail
-	constraint fk_message_customer FOREIGN KEY (message_id_customer) REFERENCES customer (id_customer)
+	constraint fk_message_customer_sender FOREIGN KEY (message_id_sender) REFERENCES app_user (id_user),
+	constraint fk_message_customer_recipient FOREIGN KEY (message_id_recipient) REFERENCES app_user (id_user)
 );
 
 -- -----------------------------------------------------------------------------
@@ -119,24 +124,26 @@ use PayMyBuddyProd;
 
 start transaction;
 
-insert into user (user_email, user_password, user_role, user_expired, user_locked, user_credentia_expired, user_enabled) values
-('guto@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
-, ('hayley@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
-, ('clara@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
-, ('smith@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
-, ('alex@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
-, ('bill@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
-, ('dave@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true)
-, ('dan@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 1, false, false, false, true);
+insert into app_user (user_email, user_password, user_role, user_expired, user_locked, user_credentia_expired, user_enabled) values
+('guto@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 'USER_ROLE', false, false, false, true)
+, ('hayley@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 'USER_ROLE', false, false, false, true)
+, ('clara@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 'USER_ROLE', false, false, false, true)
+, ('smith@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 'USER_ROLE', false, false, false, true)
+, ('alex@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 'USER_ROLE', false, false, false, true)
+, ('bill@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 'USER_ROLE', false, false, false, true)
+, ('dave@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 'USER_ROLE', false, false, false, true)
+, ('dan@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 'USER_ROLE', false, false, false, true)
+, ('admin@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 'ADMIN_ROLE', false, false, false, true)
+, ('contact@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 'ADMIN_ROLE', false, false, false, true);
 
-set @idGuto=(select id_user from user where user_email='guto@gmail.com');
-set @idHayley=(select id_user from user where user_email='hayley@gmail.com');
-set @idClara=(select id_user from user where user_email='clara@gmail.com');
-set @idSmith=(select id_user from user where user_email='smith@gmail.com');
-set @idAlex=(select id_user from user where user_email='alex@gmail.com');
-set @idBill=(select id_user from user where user_email='bill@gmail.com');
-set @idDave=(select id_user from user where user_email='dave@gmail.com');
-set @idDan=(select id_user from user where user_email='dan@gmail.com');
+set @idGuto=(select id_user from app_user where user_email='guto@gmail.com');
+set @idHayley=(select id_user from app_user where user_email='hayley@gmail.com');
+set @idClara=(select id_user from app_user where user_email='clara@gmail.com');
+set @idSmith=(select id_user from app_user where user_email='smith@gmail.com');
+set @idAlex=(select id_user from app_user where user_email='alex@gmail.com');
+set @idBill=(select id_user from app_user where user_email='bill@gmail.com');
+set @idDave=(select id_user from app_user where user_email='dave@gmail.com');
+set @idDan=(select id_user from app_user where user_email='dan@gmail.com');
 
 insert into customer (customer_id_user, customer_first_name, customer_last_name, customer_address_1, customer_address_2, customer_zip_code, customer_city) values
 (@idGuto, 'guto', 'name guto', 'adresse 1 guto', 'adresse 2 guto', '68007', 'ville 68007')
@@ -191,10 +198,10 @@ insert into bank_account (bank_id_customer, bank_name, bank_code, bank_branch_co
 , (@idDave, 'Banque de France', '30007', '00799', '12345678906', '88', 'FR7630001007941234567890191', 'BDFEFR5L')
 , (@idDan, 'Banque de France', '30008', '00800', '12345678906', '88', 'FR7630001007941234567890192', 'BDFEFR5L');
 
-insert into transaction_parameter (effective_date, levy_rate) values
-( DATE_ADD(CURRENT_DATE(), INTERVAL -2 MONTH), 0.001)
-, ( DATE_ADD(CURRENT_DATE(), INTERVAL -1 MONTH), 0.002)
-, ( CURRENT_DATE(), 0.005);
+insert into transaction_parameter (effective_date, levy_rate, contact_email) values
+( DATE_ADD(CURRENT_DATE(), INTERVAL -2 MONTH), 0.001, 'contact@gmail.com')
+, ( DATE_ADD(CURRENT_DATE(), INTERVAL -1 MONTH), 0.002, 'contact@gmail.com')
+, ( CURRENT_DATE(), 0.005, 'contact@gmail.com');
 
 commit;
 
@@ -209,16 +216,19 @@ create database PayMyBuddyTest;
 use PayMyBuddyTest;
 
 -- Table of users
-create table user (
+create table app_user (
 	id_user int PRIMARY KEY AUTO_INCREMENT,						-- User ID
 	user_email varchar(254) NOT NULL,							-- Email used to authenticate the user
 	user_password varchar(100) NOT NULL,						-- Password used to authenticate the user
-    user_role smallint,											-- User role
+    user_role varchar(20),										-- User role
 	user_expired boolean,										-- User account expired
 	user_locked boolean,										-- User locked
 	user_credentia_expired boolean,								-- User credentials (password) expired
 	user_enabled boolean,										-- Activated user
-	constraint uc_user_email UNIQUE KEY (user_email)
+	user_email_validation_key binary(18),						-- Email validation key (36 characters)
+	user_valid_email_end_date datetime,							-- Valid email end date
+	constraint uc_user_email UNIQUE KEY (user_email),
+	constraint uc_user_email_validation_key UNIQUE KEY (user_email_validation_key)
 );
 
 -- Table of customers
@@ -231,7 +241,7 @@ create table customer (
 	customer_address_2 varchar(100) NOT NULL default '',		-- Address 2 customer
 	customer_zip_code varchar(50) NOT NULL default '',			-- Customer zip code
 	customer_city varchar(50) NOT NULL default '',				-- Customer city
-	constraint fk_customer_user FOREIGN KEY (customer_id_user) REFERENCES user (id_user)
+	constraint fk_customer_user FOREIGN KEY (customer_id_user) REFERENCES app_user (id_user)
 );
 
 -- Buddy relationship join table
@@ -275,8 +285,6 @@ create table bank_account (
 	bank_rib_key varchar(2) NOT NULL,					-- Bank key
 	bank_iban varchar(34) NOT NULL,						-- IBAN
 	bank_bic varchar(11) NOT NULL,						-- BIC code
-	constraint uc_bank_account_account UNIQUE KEY (bank_code, bank_branch_code, bank_account_number, bank_rib_key),
-	constraint uc_bank_account_iban UNIQUE KEY (bank_iban, bank_bic),
 	constraint fk_bank_account_customer FOREIGN KEY (bank_id_customer) REFERENCES customer (id_customer)
 );
 
@@ -298,14 +306,18 @@ create table transaction_parameter (
 	id_parameter int PRIMARY KEY AUTO_INCREMENT,		-- Transaction parameter ID
     effective_date date NOT NULL,						-- Effective date
 	levy_rate float NOT NULL,							-- Levy rate
+	contact_email varchar(254) NOT NULL,				-- Contact email
 	constraint uc_transaction_parameter_effective_date UNIQUE KEY (effective_date)
 );
 
--- Message table
-create table message (
+-- Customer message table
+create table customer_message (
 	id_message int PRIMARY KEY AUTO_INCREMENT,				-- Message ID
-	message_id_customer int NOT NULL,						-- Message customer ID
+	message_id_sender int NOT NULL,							-- Email sender ID
+	message_id_recipient int NOT NULL,						-- Email recipient ID
+	message_date timestamp(6) NOT NULL,						-- Message date
 	message_subject varchar(100) NOT NULL,					-- Subject
 	message_detail varchar(500) NOT NULL,					-- Detail
-	constraint fk_message_customer FOREIGN KEY (message_id_customer) REFERENCES customer (id_customer)
+	constraint fk_message_customer_sender FOREIGN KEY (message_id_sender) REFERENCES app_user (id_user),
+	constraint fk_message_customer_recipient FOREIGN KEY (message_id_recipient) REFERENCES app_user (id_user)
 );

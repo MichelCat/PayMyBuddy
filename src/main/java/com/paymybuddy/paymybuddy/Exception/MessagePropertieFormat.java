@@ -5,7 +5,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class MessagePropertieFormat {
-  private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("lang/messages", Locale.ENGLISH);
+  private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("lang/messages", Locale.FRENCH);
 
   public static String getMessage(String messsage, Object... parameters) {
     try {

@@ -1,5 +1,6 @@
 package com.paymybuddy.paymybuddy.dao.db;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,6 @@ public interface BankTransactionDao extends JpaRepository<BankTransactionEntity,
       , nativeQuery = true)
   Page<BankTransactionEntity> findByIdNative(@Param("id") Integer id, Pageable pageable);
   
-  public Optional<BankTransactionEntity> findFirstByCustomerDebitOrCustomerCreditOrderByTransactionDateDesc(
+  List<BankTransactionEntity> findFirst2ByCustomerDebitOrCustomerCreditOrderByTransactionDateDesc(
                                             Optional<CustomerEntity> customerDebit, Optional<CustomerEntity> customerCredit);
 }

@@ -1,0 +1,53 @@
+<!--
+/**
+ * navigational-hierarchy
+ * @description Navigational hierarchy
+ */
+-->
+
+<div class="row bg-light">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb" th:with="pageName=${#ctx.springRequestContext.requestUri}">
+
+			<!-- USER_ROLE -->
+			<th:block th:if="${#authorization.expression('hasAuthority(''USER_ROLE'')')}">
+				<!-- Home page -->
+				<th:block th:if="${pageName == '/user/home'}">
+					<li class="breadcrumb-item active" aria-current="Home">Home</li>
+				</th:block>
+				
+				<!-- Transfer page -->
+				<th:block th:if="${pageName == '/user/transfer'}">
+					<li class="breadcrumb-item"><a th:href="@{/user/home}">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Transfer</li>
+				</th:block>
+			
+				<!-- Profile page -->
+				<th:block th:if="${pageName == '/user/profile'}">
+					<li class="breadcrumb-item"><a th:href="@{/user/home}">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Profile</li>
+				</th:block>
+			
+				<!-- Contact page -->
+				<th:block th:if="${pageName == '/user/contact'}">
+					<li class="breadcrumb-item"><a th:href="@{/user/home}">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Contact</li>
+				</th:block>
+			</th:block>
+				
+			<!-- ADMIN_ROLE -->
+			<th:block th:if="${#authorization.expression('hasAuthority(''ADMIN_ROLE'')')}">
+				<!-- Home page -->
+				<th:block th:if="${pageName == '/admin/home'}">
+					<li class="breadcrumb-item active" aria-current="Home">Home</li>
+				</th:block>
+			
+				<!-- Settings page -->
+				<th:block th:if="${pageName== '/admin/settings'}">
+					<li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Settings</li>
+				</th:block>
+			</th:block>
+		</ol>
+	</nav>
+</div>

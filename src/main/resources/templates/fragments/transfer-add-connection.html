@@ -1,8 +1,13 @@
-<!-- Modal add connection -->
+<!--
+/**
+ * transfer-add-connection
+ * @description Modal add connection
+ */
+-->
 
 <div class="modal fade" id="modalAddConnection" tabindex="-1"
 		aria-labelledby="addConnectionLabel" aria-hidden="true">
-	<form th:action="@{/add-connection}" th:object="${newBuddy}" th:method="POST">
+	<form th:action="@{/user/add-connection}" th:object="${newBuddy}" th:method="POST">
 	    <div class="modal-dialog">
 	        <div class="modal-content">
 	            <div class="modal-header">

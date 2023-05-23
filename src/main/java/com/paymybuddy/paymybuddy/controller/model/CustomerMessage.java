@@ -23,9 +23,23 @@ public class CustomerMessage {
    */
   Integer id;
   /**
-   * Message customer ID
-   */
-  Integer idCustomer;
+  * Email sender
+  */
+  String emailSender;
+        /**
+        * Email recipient
+        */
+        String emailRecipient;
+  
+        /**
+         * Email sender ID
+         */
+        long idUserSender;
+        /**
+         * Email recipient ID
+         */
+        long idUserRecipient;
+        
   /**
    * Message date
    */
@@ -56,7 +70,10 @@ public class CustomerMessage {
     var customerMessage = (CustomerMessage) o;
     return
     Objects.equals(this.id, customerMessage.id)
-      && Objects.equals(this.idCustomer, customerMessage.idCustomer)
+      && Objects.equals(this.emailSender, customerMessage.emailSender)
+      && Objects.equals(this.emailRecipient, customerMessage.emailRecipient)
+      && Objects.equals(this.idUserSender, customerMessage.idUserSender)
+      && Objects.equals(this.idUserRecipient, customerMessage.idUserRecipient)
       && Objects.equals(this.messageDate, customerMessage.messageDate)
       && Objects.equals(this.subject, customerMessage.subject)
       && Objects.equals(this.detail, customerMessage.detail);
@@ -69,12 +86,15 @@ public class CustomerMessage {
    */
   @Override
   public int hashCode() {
-    return Objects.hash(id, idCustomer, messageDate, subject, detail);
+    return Objects.hash(id, emailSender, emailRecipient, idUserSender, idUserRecipient, messageDate, subject, detail);
   }
   
   public CustomerMessage() {
     id = 0;
-    idCustomer = 0;
+    emailSender = "";
+    emailRecipient = "";
+    idUserSender = 0;
+    idUserRecipient = 0;
     messageDate = null;
     subject = "";
     detail = "";

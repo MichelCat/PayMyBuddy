@@ -1,4 +1,9 @@
-<!-- Menu -->
+<!--
+/**
+ * menu
+ * @description Menu
+ */
+-->
 
 <div class="row">
 	<nav class="navbar navbar-expand navbar-light">
@@ -9,27 +14,69 @@
 		
 		<!-- Right menu -->
 		<div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-			<ul class="navbar-nav">
-				<li class="nav-item">
-					<a class="nav-link" th:classappend="${#strings.equals(module, 'home') ? 'text-primary' : ''}"
-						th:href="@{/home}">Home</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" th:classappend="${#strings.equals(module, 'transfer') ? 'text-primary' : ''}"
-						th:href="@{/transfer}">Transfer</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" th:classappend="${#strings.equals(module, 'profile') ? 'text-primary' : ''}"
-						th:href="@{/profile}">Profile</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" th:classappend="${#strings.equals(module, 'contact') ? 'text-primary' : ''}"
-						th:href="@{/contact}">Contact</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" th:classappend="${#strings.equals(module, 'logout') ? 'text-primary' : ''}"
-						th:href="@{/logout}">Log off</a>
-				</li>
+			<ul class="navbar-nav" th:with="pageName=${#ctx.springRequestContext.requestUri}">
+			
+				<!-- USER_ROLE -->
+				<th:block th:if="${#authorization.expression('hasAuthority(''USER_ROLE'')')}">
+					<!-- Home page -->
+					<li class="nav-item">
+						<a class="nav-link" th:classappend="${pageName == '/user/home' ? 'text-primary' : ''}"
+							data-bs-toggle="tooltip" title="Dashboard"
+							th:href="@{/user/home}">Home</a>
+					</li>
+					
+					<!-- Transfer page -->
+					<li class="nav-item">
+						<a class="nav-link" th:classappend="${pageName == '/user/transfer' ? 'text-primary' : ''}"
+							data-bs-toggle="tooltip" title="Money transfer"
+							th:href="@{/user/transfer}">Transfer</a>
+					</li>
+					
+					<!-- Profile page -->
+					<li class="nav-item">
+						<a class="nav-link" th:classappend="${pageName == '/user/profile' ? 'text-primary' : ''}"
+							data-bs-toggle="tooltip" title="Customer profile"
+							th:href="@{/user/profile}">Profile</a>
+					</li>
+					
+					<!-- Contact page -->
+					<li class="nav-item">
+						<a class="nav-link" th:classappend="${pageName == '/user/contact' ? 'text-primary' : ''}"
+							data-bs-toggle="tooltip" title="Contact us"
+							th:href="@{/user/contact}">Contact</a>
+					</li>
+					
+					<!-- Log off -->
+					<li class="nav-item">
+						<a class="nav-link"
+							data-bs-toggle="tooltip" title="Release of Pay My Buddy"
+							th:href="@{/logout}">Log off</a>
+					</li>
+				</th:block>
+				
+				<!-- ADMIN_ROLE -->
+				<th:block th:if="${#authorization.expression('hasAuthority(''ADMIN_ROLE'')')}">
+					<!-- Home page -->
+					<li class="nav-item">
+						<a class="nav-link" th:classappend="${pageName == '/admin/home' ? 'text-primary' : ''}"
+							data-bs-toggle="tooltip" title="Dashboard"
+							th:href="@{/admin/home}">Home</a>
+					</li>
+				
+					<!-- Settings page -->
+					<li class="nav-item">
+						<a class="nav-link" th:classappend="${pageName == '/admin/settings' ? 'text-primary' : ''}"
+							data-bs-toggle="tooltip" title="Pay My Buddy application settings"
+							th:href="@{/admin/settings}">Settings</a>
+					</li>
+				
+					<!-- Log off -->
+					<li class="nav-item">
+						<a class="nav-link"
+							data-bs-toggle="tooltip" title="Release of Pay My Buddy"
+							th:href="@{/logout}">Log off</a>
+					</li>
+				</th:block>
 			</ul>
 		</div>
 	</nav>

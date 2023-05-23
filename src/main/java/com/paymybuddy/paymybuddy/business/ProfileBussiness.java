@@ -35,11 +35,11 @@ public class ProfileBussiness {
   /**
    * Find customer information
    * 
-   * @param id User ID
+   * @param username Email
    * @return Customer information
    */
-  public Customer getUserById(final Integer id) {
-    Optional<CustomerEntity> optCustomerEntity = customerDao.findById(id);
+  public Customer getCustomerByUsername(final String username) {
+    Optional<CustomerEntity> optCustomerEntity = customerDao.findByUsername(username);
     return customerUtils.fromCustomerEntityToUser(optCustomerEntity.get());
   }
   
@@ -68,10 +68,10 @@ public class ProfileBussiness {
    * @return New modified customer record
    */
   @Transactional(rollbackFor = Exception.class)
-  public Customer updateUser(Customer customer) throws MyException {
+  public Customer updateUser(Customer customer, String username) throws MyException {
     // User does not exist
-    CustomerEntity customerEntity = customerDao.findById(customer.getId())
-        .orElseThrow(() -> new MyException("throw.CustomerNotExist", customer.getId()));
+    CustomerEntity customerEntity = customerDao.findByUsername(username)
+        .orElseThrow(() -> new MyException("throw.CustomerNotExist", username));
     
     customerEntity.setFirstName(customer.getFirstName());
     customerEntity.setLastName(customer.getLastName());
@@ -89,7 +89,7 @@ public class ProfileBussiness {
    * @return New modified bank account record
    */
   @Transactional(rollbackFor = Exception.class)
-  public BankAccount saveBankAccount(BankAccount bankAccount) throws MyException {
+  public BankAccount saveBankAccount(BankAccount bankAccount, String username) throws MyException {
     BankAccountEntity bankAccountEntity = null;
         
     Optional<BankAccountEntity> optBankAccountEntity = bankAccountDao.findById(bankAccount.getId());
@@ -97,8 +97,8 @@ public class ProfileBussiness {
       // Bank account non-existent. Creation of the bank account.
      
       // User does not exist
-      CustomerEntity customerEntity = customerDao.findById(bankAccount.getIdCustomer())
-          .orElseThrow(() -> new MyException("throw.CustomerNotExist", bankAccount.getIdCustomer()));
+      CustomerEntity customerEntity = customerDao.findByUsername(username)
+          .orElseThrow(() -> new MyException("throw.CustomerNotExist", username));
       
       bankAccountEntity = new BankAccountEntity();
       bankAccountEntity.setCustomer(customerEntity);

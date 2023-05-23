@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 /**
- * Transaction is business model
+ * BankTransaction is business model
  * 
  * @author MC
  * @version 1.0
@@ -16,7 +16,7 @@ import lombok.experimental.FieldDefaults;
 @Validated
 @Data
 @FieldDefaults(level=AccessLevel.PRIVATE)
-public class Transaction {
+public class BankTransaction {
   /**
    * Bank transaction ID
    */
@@ -64,7 +64,7 @@ public class Transaction {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    var transaction = (Transaction) o;
+    var transaction = (BankTransaction) o;
     return
     Objects.equals(this.id, transaction.id)
       && Objects.equals(this.idDebit, transaction.idDebit)

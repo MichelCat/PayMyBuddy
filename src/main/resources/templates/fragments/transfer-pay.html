@@ -1,4 +1,9 @@
-<!-- Send Money -->
+<!--
+/**
+ * transfer-pay
+ * @description Send Money
+ */
+-->
 
 <div class="container my-3">
 	<!-- Add connection -->
@@ -11,15 +16,12 @@
 	    		data-bs-toggle="modal" data-bs-target="#modalAddConnection">Add Connection</button>
 		</div>
 	</div>
-	
-	<!-- Error message -->
-	<div th:replace="~{fragments/error-message}"></div>
 
 	<!-- Payment -->
     <div class="row bg-light p-4">
 		<div class="d-flex justify-content-center align-items-center">
 			<div>
-				<select class="dropdown" th:field="${newTransaction.idCredit}" id="idSendCredit">
+				<select class="dropdown" th:field="${newBankTransaction.idCredit}" id="idSendCredit">
 					<option value="">Select A Connection</option>
 					<option th:each="buddy : ${buddies}"
 						th:value="${buddy.idBuddy}"
@@ -32,7 +34,7 @@
 				<input type="number" class="form-control"
 					id="idSendAmount"
 					placeholder="0€"
-					th:field="${newTransaction.amount}"
+					th:field="${newBankTransaction.amount}"
 					min="0" />
 			</div>
 			

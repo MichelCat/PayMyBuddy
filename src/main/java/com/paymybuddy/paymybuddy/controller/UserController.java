@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.paymybuddy.paymybuddy.controller.model.Register;
-import com.paymybuddy.paymybuddy.business.PaymybuddyAppUserBusiness;
-import com.paymybuddy.paymybuddy.dao.user.entities.PaymybuddyAppUser;
+import com.paymybuddy.paymybuddy.Exception.MessagePropertieFormat;
+import com.paymybuddy.paymybuddy.business.AppUserBusiness;
+import com.paymybuddy.paymybuddy.dao.user.entities.AppUserEntity;
 
 /**
  * UserController is the Endpoint of for user pages
@@ -23,7 +24,7 @@ import com.paymybuddy.paymybuddy.dao.user.entities.PaymybuddyAppUser;
 public class UserController {
 
   @Autowired
-  private PaymybuddyAppUserBusiness paymybuddyAppUserBusiness;
+  private AppUserBusiness appUserBusiness;
   
   /**
    * Read - Get Login Page Attributes
@@ -37,14 +38,12 @@ public class UserController {
   public String getLogin(Model model
                         , RedirectAttributes redirectAttributes
                         , @RequestParam Map<String,String> params) {
-    model.addAttribute("module", "login");
-    
     if (params.containsKey("logout")) {
       model.addAttribute("logout", true);
     }
     // User record exists
-    PaymybuddyAppUser paymybuddyAppUser = new PaymybuddyAppUser();
-    model.addAttribute("user", paymybuddyAppUser);
+    AppUserEntity appUserEntity = new AppUserEntity();
+    model.addAttribute("user", appUserEntity);
     return "login";
   }
     
@@ -58,7 +57,7 @@ public class UserController {
   @GetMapping("/login-error")
   public String getLoginError(Model model
                             , RedirectAttributes redirectAttributes) {
-    redirectAttributes.addFlashAttribute("errorMessage", "Wrong user or password");
+    redirectAttributes.addFlashAttribute("errorMessage", MessagePropertieFormat.getMessage("throw.WrongUserPassword"));
     return "redirect:/login";
   }
   
@@ -73,8 +72,6 @@ public class UserController {
   @GetMapping("/register")
   public String getRegister(Model model
                         , RedirectAttributes redirectAttributes) {
-    model.addAttribute("module", "register");
-    
     // New user record
     Register register = new Register();
     model.addAttribute("user", register);
@@ -96,12 +93,12 @@ public class UserController {
                               , RedirectAttributes redirectAttributes) {    
    try {
       // Adding the new user
-      paymybuddyAppUserBusiness.addUser(register);
+      appUserBusiness.addCustomer(register);
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
       return "redirect:/register";
    }
-   return "redirect:/home";
+   return "redirect:/login";
   }
   
   

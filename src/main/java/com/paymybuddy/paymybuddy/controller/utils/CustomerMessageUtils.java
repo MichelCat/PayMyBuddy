@@ -1,5 +1,7 @@
 package com.paymybuddy.paymybuddy.controller.utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import com.paymybuddy.paymybuddy.controller.model.CustomerMessage;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerMessageEntity;
@@ -12,6 +14,20 @@ import com.paymybuddy.paymybuddy.dao.db.entities.CustomerMessageEntity;
  */
 @Service
 public class CustomerMessageUtils {
+  
+  /**
+   * Conversion CustomerMessageEntity list to CustomerMessage list
+   * 
+   * @param customerMessageEntities CustomerMessageEntity list
+   * @return CustomerMessage list
+   */
+  public List<CustomerMessage> fromListCustomerMessageEntityToListCustomerMessage(List<CustomerMessageEntity> customerMessageEntities) {
+    List<CustomerMessage> customerMessages = new ArrayList<>();
+    for (CustomerMessageEntity customerMessageEntity : customerMessageEntities) {
+      customerMessages.add(fromCustomerMessageEntityToCustomerMessage(customerMessageEntity));
+    }    
+    return customerMessages;
+  }
 
   /**
    * Conversion CustomerMessageEntity to CustomerMessage
@@ -22,7 +38,10 @@ public class CustomerMessageUtils {
   public CustomerMessage fromCustomerMessageEntityToCustomerMessage(CustomerMessageEntity customerMessageEntity) {
     CustomerMessage customerMessage = new CustomerMessage();
     customerMessage.setId(customerMessageEntity.getId());
-    customerMessage.setIdCustomer(null);
+    customerMessage.setEmailSender(null);
+    customerMessage.setEmailRecipient(null);
+    customerMessage.setIdUserSender(customerMessageEntity.getAppUserEntitySender().getId());
+    customerMessage.setIdUserRecipient(customerMessageEntity.getAppUserEntityRecipient().getId());
     customerMessage.setMessageDate(customerMessageEntity.getMessageDate());
     customerMessage.setSubject(customerMessageEntity.getSubject());
     customerMessage.setDetail(customerMessageEntity.getDetail());
@@ -38,7 +57,8 @@ public class CustomerMessageUtils {
   public CustomerMessageEntity fromCustomerMessageToCustomerMessageEntity(CustomerMessage customerMessage) {
     CustomerMessageEntity customerMessageEntity = new CustomerMessageEntity();
     customerMessageEntity.setId(customerMessage.getId());
-    customerMessageEntity.setCustomer(null);
+    customerMessageEntity.setAppUserEntitySender(null);
+    customerMessageEntity.setAppUserEntityRecipient(null);
     customerMessageEntity.setMessageDate(customerMessage.getMessageDate());
     customerMessageEntity.setSubject(customerMessage.getSubject());
     customerMessageEntity.setDetail(customerMessage.getDetail());

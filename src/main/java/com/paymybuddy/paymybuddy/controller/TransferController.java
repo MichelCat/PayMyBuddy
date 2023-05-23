@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.paymybuddy.paymybuddy.business.TransferBussiness;
 import com.paymybuddy.paymybuddy.controller.model.Buddy;
-import com.paymybuddy.paymybuddy.controller.model.Transaction;
+import com.paymybuddy.paymybuddy.controller.model.BankTransaction;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,63 +33,67 @@ public class TransferController {
    * 
    * @param page Current page
    * @param size Page size
+   * @param principal Currently logged in user
    * @param model Model object
    * @param redirectAttributes RedirectAttributes object
    * @return View 
    */
-  @GetMapping("/transfer")
+  @GetMapping("/user/transfer")
   public String getTransfer(@RequestParam("page") Optional<Integer> page 
-                            , @RequestParam("size") Optional<Integer> size      
+                            , @RequestParam("size") Optional<Integer> size
+                            , Principal principal
                             , Model model
                             , RedirectAttributes redirectAttributes) {
-    model.addAttribute("module", "transfer");
-    
-    int idUser=1;
-    
-    // Searching the User's Paginated Transaction List
-    int currentPage = page.orElse(1);
-    int pageSize = size.orElse(3);
-    Page<Transaction> transactionPage = transferBussiness.getTransactionsById(idUser, currentPage, pageSize);
-    model.addAttribute("transactionPage", transactionPage);
-    
-    // Search user's buddy list
-    List<Buddy> buddies = transferBussiness.getBuddiesById(idUser);
-    model.addAttribute("buddies", buddies);
-    
-    // New transaction record
-    Transaction transaction = new Transaction();
-    transaction.setIdDebit(idUser);
-    model.addAttribute("newTransaction", transaction);
+    try {
+      Integer idCustomer = transferBussiness.getCustomerId(principal.getName());
+      
+      // Searching the User's Paginated Transaction List
+      int currentPage = page.orElse(1);
+      int pageSize = size.orElse(3);
+      Page<BankTransaction> transactionPage = transferBussiness.getTransactionsById(idCustomer, currentPage, pageSize);
+      model.addAttribute("transactionPage", transactionPage);
+      
+      // Search user's buddy list
+      List<Buddy> buddies = transferBussiness.getBuddiesById(idCustomer);
+      model.addAttribute("buddies", buddies);
+      
+      // New BankTransaction record
+      BankTransaction bankTransaction = new BankTransaction();
+      model.addAttribute("newBankTransaction", bankTransaction);
 
-    // New buddy record
-    Buddy buddy = new Buddy();
-    buddy.setIdUser(idUser);
-    model.addAttribute("newBuddy", buddy);
-    
-    return "transfer";
+      // New buddy record
+      Buddy buddy = new Buddy();
+      model.addAttribute("newBuddy", buddy);
+      
+    } catch (Exception e) {
+      model.addAttribute("errorMessage", e.getMessage());
+    }
+    return "/user/transfer";
   }
   
 
   /**
-   * Create - Add a new transaction
+   * Create - Add a new BankTransaction
    * 
-   * @param transaction New transaction record
+   * @param bankTransaction New transaction record
+   * @param principal Currently logged in user
    * @param model Model object
    * @param redirectAttributes RedirectAttributes object
    * 
    * @return View 
    */
-  @PostMapping("/send-money")
-  public String postPayment(@ModelAttribute Transaction transaction
+  @PostMapping("/user/send-money")
+  public String postPayment(@ModelAttribute BankTransaction bankTransaction
+                            , Principal principal
                             , Model model
                             , RedirectAttributes redirectAttributes) {
     try {
-      // Adding the new transaction
-      transaction = transferBussiness.addTransaction(transaction);
+      // Adding the new BankTransaction
+      bankTransaction = transferBussiness.addTransaction(bankTransaction, principal.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }
-    return "redirect:/transfer";
+    return "redirect:/user/transfer";
   }
 
 
@@ -96,21 +101,23 @@ public class TransferController {
    * Create - Add a new connection
    * 
    * @param buddy New buddy record
+   * @param principal Currently logged in user
    * @param model Model object
    * @param redirectAttributes RedirectAttributes object
    * 
    * @return View 
    */
-  @PostMapping("/add-connection")
+  @PostMapping("/user/add-connection")
   public String postAddConnection(@ModelAttribute Buddy buddy
+                                  , Principal principal
                                   , Model model
                                   , RedirectAttributes redirectAttributes) {
     try {
       // Adding the new connection
-      buddy = transferBussiness.addBuddy(buddy);
+      buddy = transferBussiness.addBuddy(buddy, principal.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }
-    return "redirect:/transfer";
+    return "redirect:/user/transfer";
   }
 }

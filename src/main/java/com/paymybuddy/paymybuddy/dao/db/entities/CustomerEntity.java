@@ -2,7 +2,7 @@ package com.paymybuddy.paymybuddy.dao.db.entities;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.paymybuddy.paymybuddy.dao.user.entities.PaymybuddyAppUser;
+import com.paymybuddy.paymybuddy.dao.user.entities.AppUserEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,27 +47,12 @@ public class CustomerEntity {
   Integer id;
   
   /**
-   * User ID. PaymybuddyAppUser [1..1] to CustomerEntity [0..1]
+   * User ID. AppUserEntity [1..1] to CustomerEntity [0..1]
    */
   @OneToOne 
   @JoinColumn( name="customerIdUser", nullable=false )
-  private PaymybuddyAppUser paymybuddyAppUser;
+  private AppUserEntity appUserEntity;
   
-//  /**
-//   * Customer email
-//   */
-//  @Email(message = "Email should be valid")
-//  @Column(name = "customer_email", unique=true)
-//  @Size(max = 100)
-//  String email;
-//  /**
-//   * Customer password
-//   */
-//  @ToString.Exclude
-//  @NotBlank(message = "Customer password is required")
-//  @Column(name = "customer_password")
-//  @Size(max = 50)
-//  String password;
   /**
   * Customer first name
   */
@@ -152,28 +137,21 @@ public class CustomerEntity {
   private CustomerAccountEntity customerAccountEntity;
   
   /**
-   * CustomerEntity [1..1] to CustomerMessageEntity [0..n]
-   */
-  @OneToMany( targetEntity=CustomerMessageEntity.class, mappedBy="customer"
-            , cascade = CascadeType.ALL )
-  private List<CustomerMessageEntity> CustomerMessageEntities = new ArrayList<>();
-  
-  /**
    * CustomerEntity [1..1] to BuddyEntity [0..n], customer relationship
    */
   @OneToMany( targetEntity=BuddyEntity.class, mappedBy="customerUser"
           , cascade = CascadeType.ALL )
-  private List<BuddyEntity> BuddyEntityUsers = new ArrayList<>();
+  private List<BuddyEntity> buddyEntityUsers = new ArrayList<>();
   /**
    * CustomerEntity [1..1] to BuddyEntity [0..n], buddy relationship
    */
   @OneToMany( targetEntity=BuddyEntity.class, mappedBy="customerBuddy"
           , cascade = CascadeType.ALL )
-  private List<BuddyEntity> BuddyEntityBuddy = new ArrayList<>();
+  private List<BuddyEntity> buddyEntityBuddies = new ArrayList<>();
   
   public CustomerEntity() {
     id = 0;
-    paymybuddyAppUser = null;
+    appUserEntity = null;
     firstName = "";
     lastName = "";
     address1 = "";

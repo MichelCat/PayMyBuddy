@@ -1,5 +1,7 @@
 package com.paymybuddy.paymybuddy.controller;
 
+import java.security.Principal;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,44 +27,51 @@ public class ContactController {
   /**
    * Read - Get Contact Page Attributes
    * 
+   * @param principal Currently logged in user
    * @param model Model object
    * @param redirectAttributes RedirectAttributes object
    * @return View 
    */
-  @GetMapping("/contact")
-  public String getContact(Model model
-                      , RedirectAttributes redirectAttributes) {
-    model.addAttribute("module", "contact");
-    
-    int idUser=1;
-    
-    // New customer message record
-    CustomerMessage customerMessage = new CustomerMessage();
-    customerMessage.setIdCustomer(idUser);
-    model.addAttribute("newCustomerMessage", customerMessage);
-    
-    return "contact";
+  @GetMapping("/user/contact")
+  public String getContact(Principal principal
+                          , Model model
+                          , RedirectAttributes redirectAttributes) {
+    try {
+      // New customer message record
+      CustomerMessage customerMessage = new CustomerMessage();
+      model.addAttribute("newCustomerMessage", customerMessage);
+      
+      // List of customer messages
+      List<CustomerMessage> customerMessages = contactBussiness.getCustomerMessageById(principal.getName());
+      model.addAttribute("customerMessages", customerMessages);
+      
+    } catch (Exception e) {
+      model.addAttribute("errorMessage", e.getMessage());
+    }
+    return "/user/contact";
   }
 
   /**
    * Create - Add a new customer message
    * 
    * @param customerMessage New customer message record
+   * @param principal Currently logged in user
    * @param model Model object
    * @param redirectAttributes RedirectAttributes object
    * 
    * @return View 
    */
-  @PostMapping("/contact")
+  @PostMapping("/user/contact")
   public String postCustomerMessage(@ModelAttribute CustomerMessage customerMessage
-                            , Model model
-                            , RedirectAttributes redirectAttributes) {
+                                  , Principal principal
+                                  , Model model
+                                  , RedirectAttributes redirectAttributes) {
     try {
       // Adding the new transaction
-      customerMessage = contactBussiness.addCustomerMessage(customerMessage);
+      customerMessage = contactBussiness.addCustomerMessage(customerMessage, principal.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }
-    return "redirect:/contact";
+    return "redirect:/user/contact";
   }
 }
