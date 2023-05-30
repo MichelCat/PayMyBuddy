@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.paymybuddy.paymybuddy.business.TransferBussiness;
+import com.paymybuddy.paymybuddy.business.TransferBusiness;
 import com.paymybuddy.paymybuddy.controller.model.Buddy;
 import com.paymybuddy.paymybuddy.controller.model.BankTransaction;
 import java.security.Principal;
@@ -26,7 +26,7 @@ import java.util.Optional;
 public class TransferController {
 
   @Autowired
-  private TransferBussiness transferBussiness;
+  private TransferBusiness transferBusiness;
   
   /**
    * Read - Get Transfer Page Attributes
@@ -39,22 +39,22 @@ public class TransferController {
    * @return View 
    */
   @GetMapping("/user/transfer")
-  public String getTransfer(@RequestParam("page") Optional<Integer> page 
+  public String getTransfer(@RequestParam("page") Optional<Integer> pageNumber
                             , @RequestParam("size") Optional<Integer> size
                             , Principal principal
                             , Model model
                             , RedirectAttributes redirectAttributes) {
     try {
-      Integer idCustomer = transferBussiness.getCustomerId(principal.getName());
+      Integer idCustomer = transferBusiness.getCustomerId(principal.getName());
       
       // Searching the User's Paginated Transaction List
-      int currentPage = page.orElse(1);
+      int currentPage = pageNumber.orElse(1);
       int pageSize = size.orElse(3);
-      Page<BankTransaction> transactionPage = transferBussiness.getTransactionsById(idCustomer, currentPage, pageSize);
+      Page<BankTransaction> transactionPage = transferBusiness.getTransactionsById(idCustomer, currentPage, pageSize);
       model.addAttribute("transactionPage", transactionPage);
       
       // Search user's buddy list
-      List<Buddy> buddies = transferBussiness.getBuddiesById(idCustomer);
+      List<Buddy> buddies = transferBusiness.getBuddiesById(idCustomer);
       model.addAttribute("buddies", buddies);
       
       // New BankTransaction record
@@ -89,7 +89,7 @@ public class TransferController {
                             , RedirectAttributes redirectAttributes) {
     try {
       // Adding the new BankTransaction
-      bankTransaction = transferBussiness.addTransaction(bankTransaction, principal.getName());
+      bankTransaction = transferBusiness.addTransaction(bankTransaction, principal.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }
@@ -114,7 +114,7 @@ public class TransferController {
                                   , RedirectAttributes redirectAttributes) {
     try {
       // Adding the new connection
-      buddy = transferBussiness.addBuddy(buddy, principal.getName());
+      buddy = transferBusiness.addBuddy(buddy, principal.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }

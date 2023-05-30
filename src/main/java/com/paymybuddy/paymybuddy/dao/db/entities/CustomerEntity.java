@@ -13,7 +13,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -56,14 +55,14 @@ public class CustomerEntity {
   /**
   * Customer first name
   */
-  @NotNull(message = "Customer first name may not be null")
+  @NotBlank(message = "Customer first name is required")
   @Column(name = "customer_first_name")
   @Size(max = 50)
   String firstName;
   /**
   * Customer last name
   */
-  @NotNull(message = "Customer last name may not be null")
+  @NotBlank(message = "Customer last name is required")
   @Column(name = "customer_last_name")
   @Size(max = 50)
   String lastName;
@@ -133,7 +132,7 @@ public class CustomerEntity {
    * CustomerEntity [1..1] to CustomerAccountEntity [1..1]
    */
   @OneToOne( cascade = CascadeType.ALL ) 
-  @JoinColumn( name="idCustomer" )
+  @JoinColumn( name="idCustomer", nullable=false )
   private CustomerAccountEntity customerAccountEntity;
   
   /**

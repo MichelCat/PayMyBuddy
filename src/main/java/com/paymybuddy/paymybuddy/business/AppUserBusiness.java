@@ -48,16 +48,16 @@ public class AppUserBusiness implements UserDetailsService {
       throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.AccountNotActivated"));
     }
     // User account expired
-    if (appUserEntity.isAccountNonExpired()) {
-      
-    }
+    if (!appUserEntity.isAccountNonExpired()) {
+      throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.AccountExpired"));
+   }
     // User locked
-    if (appUserEntity.isAccountNonLocked()) {
-      
+    if (!appUserEntity.isAccountNonLocked()) {
+      throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.AccountLocked"));
     }
     // User credentials (password) expired
-    if (appUserEntity.isCredentialsNonExpired()) {
-      
+    if (!appUserEntity.isCredentialsNonExpired()) {
+      throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.PasswordExpired"));
     }
     
     return new org.springframework.security.core.userdetails.User(appUserEntity.getUsername(),

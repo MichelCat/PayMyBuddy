@@ -29,7 +29,7 @@ import lombok.ToString;
 @Table(name = "bank_account")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 //@NoArgsConstructor
-@EqualsAndHashCode(of = {"bankName", "bankCode", "branchCode", "accountNumber", "rib", "iban", "bic"})
+@EqualsAndHashCode(of = {"customer", "bankName", "bankCode", "branchCode", "accountNumber", "rib", "iban", "bic"})
 @ToString
 public class BankAccountEntity {
   /**

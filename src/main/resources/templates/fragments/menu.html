@@ -18,65 +18,14 @@
 			
 				<!-- USER_ROLE -->
 				<th:block th:if="${#authorization.expression('hasAuthority(''USER_ROLE'')')}">
-					<!-- Home page -->
-					<li class="nav-item">
-						<a class="nav-link" th:classappend="${pageName == '/user/home' ? 'text-primary' : ''}"
-							data-bs-toggle="tooltip" title="Dashboard"
-							th:href="@{/user/home}">Home</a>
-					</li>
-					
-					<!-- Transfer page -->
-					<li class="nav-item">
-						<a class="nav-link" th:classappend="${pageName == '/user/transfer' ? 'text-primary' : ''}"
-							data-bs-toggle="tooltip" title="Money transfer"
-							th:href="@{/user/transfer}">Transfer</a>
-					</li>
-					
-					<!-- Profile page -->
-					<li class="nav-item">
-						<a class="nav-link" th:classappend="${pageName == '/user/profile' ? 'text-primary' : ''}"
-							data-bs-toggle="tooltip" title="Customer profile"
-							th:href="@{/user/profile}">Profile</a>
-					</li>
-					
-					<!-- Contact page -->
-					<li class="nav-item">
-						<a class="nav-link" th:classappend="${pageName == '/user/contact' ? 'text-primary' : ''}"
-							data-bs-toggle="tooltip" title="Contact us"
-							th:href="@{/user/contact}">Contact</a>
-					</li>
-					
-					<!-- Log off -->
-					<li class="nav-item">
-						<a class="nav-link"
-							data-bs-toggle="tooltip" title="Release of Pay My Buddy"
-							th:href="@{/logout}">Log off</a>
-					</li>
+					<div th:replace="~{fragments/menu-user}"></div>
 				</th:block>
 				
 				<!-- ADMIN_ROLE -->
 				<th:block th:if="${#authorization.expression('hasAuthority(''ADMIN_ROLE'')')}">
-					<!-- Home page -->
-					<li class="nav-item">
-						<a class="nav-link" th:classappend="${pageName == '/admin/home' ? 'text-primary' : ''}"
-							data-bs-toggle="tooltip" title="Dashboard"
-							th:href="@{/admin/home}">Home</a>
-					</li>
-				
-					<!-- Settings page -->
-					<li class="nav-item">
-						<a class="nav-link" th:classappend="${pageName == '/admin/settings' ? 'text-primary' : ''}"
-							data-bs-toggle="tooltip" title="Pay My Buddy application settings"
-							th:href="@{/admin/settings}">Settings</a>
-					</li>
-				
-					<!-- Log off -->
-					<li class="nav-item">
-						<a class="nav-link"
-							data-bs-toggle="tooltip" title="Release of Pay My Buddy"
-							th:href="@{/logout}">Log off</a>
-					</li>
+					<div th:replace="~{fragments/menu-admin}"></div>
 				</th:block>
+				
 			</ul>
 		</div>
 	</nav>

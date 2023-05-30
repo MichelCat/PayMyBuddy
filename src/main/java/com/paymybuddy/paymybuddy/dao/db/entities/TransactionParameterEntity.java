@@ -10,6 +10,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -29,7 +31,7 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "transaction_parameter")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"id", "levyRate", "effectiveDate"})
+@EqualsAndHashCode(of = {"id", "levyRate", "effectiveDate", "contactEmail"})
 @ToString
 public class TransactionParameterEntity {
   /**
@@ -43,18 +45,22 @@ public class TransactionParameterEntity {
   /**
    * Levy rate
    */
+  @NotNull(message = "Levy rate cannot be null")
+  @PositiveOrZero
   @Column(name = "levy_rate")
   Float levyRate;
   /**
    * Effective date
    */
   @NotNull(message = "Effective date cannot be null")
+  @PastOrPresent
   @Column(name = "effective_date", unique=true)
   Date effectiveDate;
   /**
    * Contact email
    */
   @NotBlank(message = "Contact email is required")
+  @Email(message = "Contact email should be valid")
   @Column(name = "contact_email")
   @Size(max = 254)
   String contactEmail;

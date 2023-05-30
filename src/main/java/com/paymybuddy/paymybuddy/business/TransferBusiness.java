@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.paymybuddy.paymybuddy.Exception.MyException;
@@ -31,7 +32,6 @@ import com.paymybuddy.paymybuddy.dao.user.AppUserDao;
 import com.paymybuddy.paymybuddy.dao.user.entities.AppUserEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerAccountEntity;
-import org.springframework.data.domain.PageImpl;
 
 /**
  * TransferBussiness is the transfer page processing service
@@ -40,7 +40,7 @@ import org.springframework.data.domain.PageImpl;
  * @version 1.0
  */
 @Service
-public class TransferBussiness {
+public class TransferBusiness {
   
   @Autowired
   private BankTransactionDao bankTransactionDao;
@@ -87,7 +87,6 @@ public class TransferBussiness {
    * @return List of user's paginated transactions
    */
   public Page<BankTransaction> getTransactionsById(final Integer id, final int pageNumber, final int pageSize) {
-    List<BankTransaction> bankTransactions = new ArrayList<>();
     Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
     
     Optional<CustomerEntity> optCustomerEntity = customerDao.findById(id);
@@ -96,7 +95,11 @@ public class TransferBussiness {
     List<BuddyEntity> buddyEntities = buddyDao.findByCustomerUser(optCustomerEntity);
     
     // Customer transactions
-    Page<BankTransactionEntity> bankTransactionEntities = bankTransactionDao.findByIdNative(id, pageable);
+    Page<BankTransactionEntity> bankTransactionEntities
+                                    = bankTransactionDao.findByCustomerDebitOrCustomerCreditOrderByTransactionDateDesc(
+                                          optCustomerEntity, optCustomerEntity, pageable);
+    
+    List<BankTransaction> bankTransactions = new ArrayList<>();
     bankTransactionEntities.getContent().forEach(b -> {
       BankTransaction bankTransaction = bankTransactionUtils.fromBankTransactionEntityToBankTransaction(b);
       

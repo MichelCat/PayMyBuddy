@@ -18,7 +18,7 @@ create table app_user (
 	user_locked boolean,										-- User locked
 	user_credentia_expired boolean,								-- User credentials (password) expired
 	user_enabled boolean,										-- Activated user
-	user_email_validation_key binary(18),						-- Email validation key (36 characters)
+	user_email_validation_key varchar(36),						-- Email validation key
 	user_valid_email_end_date datetime,							-- Valid email end date
 	constraint uc_user_email UNIQUE KEY (user_email),
 	constraint uc_user_email_validation_key UNIQUE KEY (user_email_validation_key)
@@ -146,14 +146,14 @@ set @idDave=(select id_user from app_user where user_email='dave@gmail.com');
 set @idDan=(select id_user from app_user where user_email='dan@gmail.com');
 
 insert into customer (customer_id_user, customer_first_name, customer_last_name, customer_address_1, customer_address_2, customer_zip_code, customer_city) values
-(@idGuto, 'guto', 'name guto', 'adresse 1 guto', 'adresse 2 guto', '68007', 'ville 68007')
-, (@idHayley, 'hayley', 'name hayley', 'adresse 1 hayley', 'adresse 2 hayley', '68000', 'ville 68000')
-, (@idClara, 'clara', 'name clara', 'adresse 1 clara', 'adresse 2 clara', '68001', 'ville 68001')
-, (@idSmith, 'smith', 'name smith', 'adresse 1 smith', 'adresse 2 smith', '68002', 'ville 68002')
-, (@idAlex, 'alex', 'name alex', 'adresse 1 alex', 'adresse 2 alex', '68003', 'ville 68003')
-, (@idBill, 'bill', 'name bill', 'adresse 1 bill', 'adresse 2 bill', '68004', 'ville 68004')
-, (@idDave, 'dave', 'name dave', 'adresse 1 dave', 'adresse 2 dave', '68005', 'ville 68005')
-, (@idDan, 'dan', 'name dan', 'adresse 1 dan', 'adresse 2 dan', '68006', 'ville 68006');
+(@idGuto, 'guto', 'GUTO', 'adresse 1 guto', 'adresse 2 guto', '68007', 'ville 68007')
+, (@idHayley, 'hayley', 'HAYLEY', 'adresse 1 hayley', 'adresse 2 hayley', '68000', 'ville 68000')
+, (@idClara, 'clara', 'CLARA', 'adresse 1 clara', 'adresse 2 clara', '68001', 'ville 68001')
+, (@idSmith, 'smith', 'SMITH', 'adresse 1 smith', 'adresse 2 smith', '68002', 'ville 68002')
+, (@idAlex, 'alex', 'ALEX', 'adresse 1 alex', 'adresse 2 alex', '68003', 'ville 68003')
+, (@idBill, 'bill', 'BILL', 'adresse 1 bill', 'adresse 2 bill', '68004', 'ville 68004')
+, (@idDave, 'dave', 'DAVE', 'adresse 1 dave', 'adresse 2 dave', '68005', 'ville 68005')
+, (@idDan, 'dan', 'DAN', 'adresse 1 dan', 'adresse 2 dan', '68006', 'ville 68006');
 
 insert into buddy (buddy_id_user, buddy_id_buddy, buddy_connection) values
 (@idGuto, @idHayley, 'Hayley')
@@ -225,7 +225,7 @@ create table app_user (
 	user_locked boolean,										-- User locked
 	user_credentia_expired boolean,								-- User credentials (password) expired
 	user_enabled boolean,										-- Activated user
-	user_email_validation_key binary(18),						-- Email validation key (36 characters)
+	user_email_validation_key varchar(36),						-- Email validation key
 	user_valid_email_end_date datetime,							-- Valid email end date
 	constraint uc_user_email UNIQUE KEY (user_email),
 	constraint uc_user_email_validation_key UNIQUE KEY (user_email_validation_key)

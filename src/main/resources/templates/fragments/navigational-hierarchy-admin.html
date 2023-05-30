@@ -1,0 +1,17 @@
+<!--
+/**
+ * navigational-hierarchy-admin
+ * @description Navigational hierarchy
+ */
+-->
+
+<!-- Home page -->
+<th:block th:if="${pageName == '/admin/home'}">
+	<li class="breadcrumb-item active" aria-current="Home">Home</li>
+</th:block>
+
+<!-- Customer page -->
+<th:block th:if="${pageName== '/admin/customer'}">
+	<li class="breadcrumb-item"><a th:href="@{/admin/home}">Home</a></li>
+	<li class="breadcrumb-item active" aria-current="page">Settings</li>
+</th:block>

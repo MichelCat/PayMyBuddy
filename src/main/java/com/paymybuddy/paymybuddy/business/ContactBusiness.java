@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.paymybuddy.paymybuddy.Exception.MyException;
@@ -22,7 +26,7 @@ import com.paymybuddy.paymybuddy.dao.user.entities.AppUserEntity;
  * @version 1.0
  */
 @Service
-public class ContactBussiness {
+public class ContactBusiness {
   
   @Autowired
   private CustomerMessageDao customerMessageDao;
@@ -35,14 +39,24 @@ public class ContactBussiness {
    * Search list of customer messages
    * 
    * @param id User ID
+   * @param pageNumber Current page
+   * @param pageSize Page size
    * @return List of customer messages
    */
-  public List<CustomerMessage> getCustomerMessageById(final String username) throws MyException {
+  public Page<CustomerMessage> getCustomerMessageById(final String username
+                                                      , final int pageNumber
+                                                      , final int pageSize
+                                                      ) throws MyException {
     // User does not exist
-    AppUserEntity appUserEntity = appUserDao.findByUsername(username)
-         .orElseThrow(() -> new MyException("throw.UserNotFound", username));
+    Optional<AppUserEntity> optAppUserEntity = appUserDao.findByUsername(username);
+    if (optAppUserEntity.isEmpty() == true) {
+      throw new MyException("throw.UserNotFound", username);
+    }
+    Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
     
-    List<CustomerMessageEntity> customerMessageEntities = customerMessageDao.getCustomerMessageById(appUserEntity.getId());
+    Page<CustomerMessageEntity> customerMessageEntities
+                                  = customerMessageDao.findByAppUserEntitySenderOrAppUserEntityRecipientOrderByMessageDateDesc(
+                                        optAppUserEntity, optAppUserEntity, pageable);
     
     List<CustomerMessage> customerMessages = new ArrayList<>();
     for (CustomerMessageEntity customerMessageEntity : customerMessageEntities) {
@@ -56,7 +70,7 @@ public class ContactBussiness {
       
       customerMessages.add(customerMessage);
     }
-    return customerMessages;
+    return new PageImpl<>(customerMessages, pageable, customerMessageEntities.getTotalElements());
   }
   
   /**

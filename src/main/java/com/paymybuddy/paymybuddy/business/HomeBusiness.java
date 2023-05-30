@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.paymybuddy.paymybuddy.Exception.MyException;
 import com.paymybuddy.paymybuddy.controller.model.Buddy;
@@ -32,7 +36,7 @@ import com.paymybuddy.paymybuddy.dao.db.entities.CustomerBuddyEntity;
  * @version 1.0
  */
 @Service
-public class HomeBussiness {
+public class HomeBusiness {
 
   @Autowired
   private TransactionParameterDao transactionParameterDao;
@@ -71,9 +75,18 @@ public class HomeBussiness {
    * 
    * @return List of transaction parameters sorted by descending effective date
    */
-  public List<TransactionParameter> getTransactionParameters() {
-    List<TransactionParameterEntity> transactionParameterEntities = transactionParameterDao.findAllByOrderByEffectiveDateDesc();
-    return transactionParameterUtils.fromListTransactionParameterEntityToListTransactionParameter(transactionParameterEntities);
+  public Page<TransactionParameter> getTransactionParameters(final int pageNumber, final int pageSize) {
+    Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+    
+    Page<TransactionParameterEntity> transactionParameterEntities = transactionParameterDao.findAllByOrderByEffectiveDateDesc(pageable);
+    
+    List<TransactionParameter> transactionParameters = new ArrayList<>();
+    transactionParameterEntities.getContent().forEach(b -> {
+      TransactionParameter transactionParameter = transactionParameterUtils.fromTransactionParameterEntityToTransactionParameter(b);
+      transactionParameters.add(transactionParameter);
+    });
+    
+    return new PageImpl<>(transactionParameters, pageable, transactionParameterEntities.getTotalElements());
   }
   
   /**
@@ -106,10 +119,20 @@ public class HomeBussiness {
    * Search user's buddy list
    * 
    * @param id User ID
+   * @param pageNumber Current page
+   * @param pageSize Page size
    * @return List of user's buddies
    */
-  public List<Buddy> getBuddiesById(Integer id) {
-    List<CustomerBuddyEntity> customerBuddyEntities = customerBuddyDao.findCustomerBuddyById(id);
-    return customerBuddyUtils.fromListCustomerBuddyEntityToListBuddy(customerBuddyEntities);
+  public Page<Buddy> getBuddiesById(Integer id, final int pageNumber, final int pageSize) {
+    Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+    
+    Page<CustomerBuddyEntity> customerBuddyEntities = customerBuddyDao.findCustomerBuddyById(id, pageable);
+    
+    List<Buddy> buddies = new ArrayList<>();
+    customerBuddyEntities.getContent().forEach(b -> {
+      Buddy buddy = customerBuddyUtils.fromCustomerBuddyEntityToBuddy(b);
+      buddies.add(buddy);
+    });
+    return new PageImpl<>(buddies, pageable, customerBuddyEntities.getTotalElements());
   }
 }

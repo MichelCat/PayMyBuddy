@@ -1,11 +1,6 @@
 package com.paymybuddy.paymybuddy.Exception;
 
-import java.text.MessageFormat;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 public class MyException extends Exception {
-//  private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("lang/messages", Locale.ENGLISH);
   private final String messsage;
   private Object[] parameters;
   
@@ -15,12 +10,6 @@ public class MyException extends Exception {
   }
   
   public String getMessage() {
-//    try {
-//      String message = resourceBundle.getString(messsage);
-//      return MessageFormat.format(message, parameters);
-//    } catch (Exception e) {
-//      return messsage;
-//    }
     return MessagePropertieFormat.getMessage(messsage, parameters);
   }
 }

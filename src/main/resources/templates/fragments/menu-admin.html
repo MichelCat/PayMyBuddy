@@ -1,0 +1,27 @@
+<!--
+/**
+ * menu-admin
+ * @description Menu admin
+ */
+-->
+
+<!-- Home page -->
+<li class="nav-item">
+	<a class="nav-link" th:classappend="${pageName == '/admin/home' ? 'text-primary' : ''}"
+		data-bs-toggle="tooltip" title="Dashboard"
+		th:href="@{/admin/home}">Home</a>
+</li>
+
+<!-- Settings page -->
+<li class="nav-item">
+	<a class="nav-link" th:classappend="${pageName == '/admin/customer' ? 'text-primary' : ''}"
+		data-bs-toggle="tooltip" title="Customer settings"
+		th:href="@{/admin/customer}">Customer</a>
+</li>
+
+<!-- Log off -->
+<li class="nav-item">
+	<a class="nav-link"
+		data-bs-toggle="tooltip" title="Release of Pay My Buddy"
+		th:href="@{/logout}">Log off</a>
+</li>

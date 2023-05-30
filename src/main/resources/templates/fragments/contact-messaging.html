@@ -14,7 +14,7 @@
 		</div>
 	</div>
 
-	<!-- Payment -->
+	<!-- Payment table -->
     <div class="row bg-light p-4">
 		<div class="table-responsive">
 			<table class="table table-striped table-sm table-hover caption-top text-center border mb-0">
@@ -26,18 +26,18 @@
 						<th scope="col" class="fw-normal">Date</th>
 					</tr>
 					<tr>
-						<th scope="col" class="fw-normal">De</th>
-						<th scope="col" class="fw-normal">A</th>
+						<th scope="col" class="fw-normal">From</th>
+						<th scope="col" class="fw-normal">To</th>
 					</tr>
 				</thead>
 				
 				<!-- Detail -->
 				<tbody>
-					<tr th:if="${customerMessages.empty}">
+					<tr th:if="${customerMessagePage.empty}">
 						<td colspan="3">Aucun mail</td>
 					</tr>
 					
-					<th:block th:each="customerMessage, itemStat : ${customerMessages}">
+					<th:block th:each="customerMessage, itemStat : ${customerMessagePage.content}">
 						<tr>
 							<td th:text="${customerMessage.subject}" />
 							<td th:text="${#dates.format(customerMessage.messageDate, 'dd/MM/yyyy hh:mm a')}" />
@@ -56,4 +56,11 @@
 			</table>
 		</div>
 	</div>
+	
+	<!-- Pagination -->
+    <div th:replace="~{fragments/pagination :: formField(pageName='/user/contact'
+    													, objectPage=${customerMessagePage}
+    													, variableNamePage='page'
+    													, variableNameSize='size'
+    													)}"></div>
 </div>

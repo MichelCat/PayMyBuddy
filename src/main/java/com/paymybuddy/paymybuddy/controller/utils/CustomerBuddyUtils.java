@@ -14,35 +14,6 @@ import com.paymybuddy.paymybuddy.dao.db.entities.CustomerBuddyEntity;
  */
 @Service
 public class CustomerBuddyUtils {
-
-  /**
-   * Conversion Object[] to CustomerBuddyEntity
-   * 
-   * @param object Object[] object
-   * @return CustomerBuddyEntity
-   */
-  public CustomerBuddyEntity fromObjectToCustomerBuddyEntity(Object[] object) {
-    CustomerBuddyEntity customerBuddyEntity = new CustomerBuddyEntity();
-    customerBuddyEntity.setIdUser((Integer)object[0]);
-    customerBuddyEntity.setIdBuddy((Integer)object[1]);
-    customerBuddyEntity.setConnection((String)object[2]);
-    customerBuddyEntity.setEmail((String)object[3]);
-    return customerBuddyEntity;
-  }
-  
-  /**
-   * Conversion Object[] list to CustomerBuddyEntity list
-   * 
-   * @param objects Object[] list
-   * @return CustomerBuddyEntity list
-   */
-  public List<CustomerBuddyEntity> fromListObjectToListCustomerBuddyEntity(List<Object[]> objects) {
-    List<CustomerBuddyEntity> customerBuddyEntities = new ArrayList<>();
-    for (Object[] object : objects) {
-      customerBuddyEntities.add(fromObjectToCustomerBuddyEntity(object));
-    }    
-    return customerBuddyEntities;
-  }
   
   /**
    * Conversion CustomerBuddyEntity to Buddy

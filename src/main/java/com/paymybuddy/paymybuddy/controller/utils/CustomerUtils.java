@@ -49,22 +49,4 @@ public class CustomerUtils {
     customerEntity.setCity(customer.getCity());
     return customerEntity;
   }
-  
-  /**
-   * Conversion Object[] to CustomerEntity
-   * 
-   * @param object Object[] object
-   * @return CustomerEntity
-   */
-  public CustomerEntity fromObjectToCustomerEntity(Object[] object) {
-    CustomerEntity customerEntity = new CustomerEntity();
-    customerEntity.setId((Integer)object[0]);
-    customerEntity.setFirstName((String)object[1]);
-    customerEntity.setLastName((String)object[2]);
-    customerEntity.setAddress1((String)object[3]);
-    customerEntity.setAddress2((String)object[4]);
-    customerEntity.setZipCode((String)object[5]);
-    customerEntity.setCity((String)object[6]);
-    return customerEntity;
-  }
 }

@@ -1,0 +1,29 @@
+<!--
+/**
+ * navigational-hierarchy-user
+ * @description Navigational hierarchy
+ */
+-->
+
+<!-- Home page -->
+<th:block th:if="${pageName == '/user/home'}">
+	<li class="breadcrumb-item active" aria-current="Home">Home</li>
+</th:block>
+
+<!-- Transfer page -->
+<th:block th:if="${pageName == '/user/transfer'}">
+	<li class="breadcrumb-item"><a th:href="@{/user/home}">Home</a></li>
+	<li class="breadcrumb-item active" aria-current="page">Transfer</li>
+</th:block>
+
+<!-- Profile page -->
+<th:block th:if="${pageName == '/user/profile'}">
+	<li class="breadcrumb-item"><a th:href="@{/user/home}">Home</a></li>
+	<li class="breadcrumb-item active" aria-current="page">Profile</li>
+</th:block>
+
+<!-- Contact page -->
+<th:block th:if="${pageName == '/user/contact'}">
+	<li class="breadcrumb-item"><a th:href="@{/user/home}">Home</a></li>
+	<li class="breadcrumb-item active" aria-current="page">Contact</li>
+</th:block>

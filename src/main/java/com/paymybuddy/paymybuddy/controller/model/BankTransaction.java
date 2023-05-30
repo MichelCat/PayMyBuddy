@@ -1,10 +1,11 @@
 package com.paymybuddy.paymybuddy.controller.model;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 import org.springframework.validation.annotation.Validated;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 /**
@@ -16,6 +17,8 @@ import lombok.experimental.FieldDefaults;
 @Validated
 @Data
 @FieldDefaults(level=AccessLevel.PRIVATE)
+@EqualsAndHashCode(of = {"id", "idDebit", "idCredit", "connection", "transactionDate", "description", "amount", "levy"})
+@ToString
 public class BankTransaction {
   /**
    * Bank transaction ID
@@ -49,40 +52,4 @@ public class BankTransaction {
    * Transaction levy
    */
   Float levy;
-  
-  /**
-   * Compare two objects
-   * 
-   * @param o Object to compare
-   * @return True if the objects are equal, and false if not.
-   */
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    var transaction = (BankTransaction) o;
-    return
-    Objects.equals(this.id, transaction.id)
-      && Objects.equals(this.idDebit, transaction.idDebit)
-      && Objects.equals(this.idCredit, transaction.idCredit)
-      && Objects.equals(this.transactionDate, transaction.transactionDate)
-      && Objects.equals(this.description, transaction.description)
-      && Objects.equals(this.amount, transaction.amount)
-      && Objects.equals(this.levy, transaction.levy);
-  }
-
-  /**
-   * Get the hash code for the object of class Method
-   * 
-   * @return Hash code
-   */
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, idDebit, idCredit, transactionDate, description, amount, levy);
-  }
-
 }

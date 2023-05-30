@@ -1,8 +1,12 @@
 package com.paymybuddy.paymybuddy.dao.db.entities;
 
-import java.util.Objects;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 /**
@@ -13,53 +17,29 @@ import lombok.experimental.FieldDefaults;
  */
 @Data
 @FieldDefaults(level=AccessLevel.PRIVATE)
+@EqualsAndHashCode(of = {"idUser", "idBuddy", "connection", "email"})
+@ToString
 public class CustomerBuddyEntity {
   /**
    * User ID
    */
+  @NotNull(message = "User ID cannot be null")
   Integer idUser;
   /**
    * Friend ID
    */
+  @NotNull(message = "Friend ID cannot be null")
   Integer idBuddy;
   /**
    * User connection
    */
+  @NotBlank(message = "User connection is required")
+  @Size(max = 50)
   String connection;
   /**
    * User email
    */
+  @NotBlank(message = "User email is required")
+  @Size(max = 254)
   String email;
-
-  /**
-   * Compare two objects
-   * 
-   * @param o Object to compare
-   * @return True if the objects are equal, and false if not.
-   */
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    var customerBuddyEntity = (CustomerBuddyEntity) o;
-    return
-    Objects.equals(this.idUser, customerBuddyEntity.idUser)
-    && Objects.equals(this.idBuddy, customerBuddyEntity.idBuddy)
-    && Objects.equals(this.connection, customerBuddyEntity.connection)
-    && Objects.equals(this.email, customerBuddyEntity.email);
-  }
- 
-  /**
-   * Get the hash code for the object of class Method
-   * 
-   * @return Hash code
-   */
-  @Override
-  public int hashCode() {
-    return Objects.hash(idUser, idBuddy, connection, email);
-  }
 }

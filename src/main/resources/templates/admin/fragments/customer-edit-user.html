@@ -1,0 +1,107 @@
+<!--
+/**
+ * customer-edit-user
+ * @description Modal edit user
+ */
+
+	<form th:action="@{/admin/edit-user}" th:object="${objet}" th:data-id="${id}" th:method="PATCH">
+	<form th:action="@{/admin/edit-user}" th:object="${customerUserPage.content[${id}]}" th:method="PATCH">
+	<form th:action="@{/admin/edit-user}" th:object="${objet}" th:data-id="${customerUserPage.content[1]}" th:method="PATCH">
+<p>Paramètre : <span th:text="${index}"></span></p>
+th:object="${objet}" th:data-id="${id}"			        
+
+ 
+	<form th:action="@{/admin/edit-user}" th:object="${newCustomerUser}" th:method="PATCH">
+	<form th:action="@{/admin/edit-user}" th:object="${customerUserPage.content[1]}" th:method="PATCH">
+<p>Paramètre : <span th:text="${customerUserPage.content[1]}"></span></p>			        
+	
+th:data-index="${iterStat.index}"	
+th:data="{index: ${iterStat.index}}"	
+	
+<p th:text="${idUser}"/>			        
+-->
+
+
+<div class="modal fade" id="modalEditUser" tabindex="-1"
+		aria-labelledby="editUserLabel" aria-hidden="true">
+	<form th:action="@{/admin/customer/edit-user}" th:object="${newCustomerUser}" th:method="PATCH">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="editUserLabel">Edit user</h5>
+	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	            </div>
+	            
+	            <div class="modal-body">
+	            
+			        <input type="hidden" id="idUser" th:field="*{idUser}" />
+			        
+ 					<!-- First name -->
+					<div class="mb-3">
+						<label for=idFirstName class="form-label">First name</label>
+						<input type="text" class="form-control" th:maxlength="50"
+									id="idFirstName" th:field="*{firstName}" />
+					</div>
+					
+					<!-- Last name -->
+					<div class="mb-3">
+						<label for=idLastName class="form-label">Last name</label>
+						<input type="text" class="form-control" th:maxlength="50"
+									id="idLastName" th:field="*{lastName}" />
+					</div>
+					
+					<!-- Email used to authenticate the user -->
+					<div class="mb-3">
+						<label for="idUsername" class="form-label">Email</label>
+				        <input type="email" required class="form-control" th:maxlength="100"
+				        		id="idUsername" placeholder="Email" th:field="*{username}" />
+					</div>
+			        
+					<!-- User account expired -->
+					<div class="mb-3">
+						<label for="idExpired" class="form-label">Account expired</label>
+						<input type="checkbox" checked data-toggle="toggle" data-onlabel="Yes" data-offlabel="No" data-onstyle="success" data-offstyle="danger"
+								data-style="ios" data-height="40" data-width="50"
+								id="idExpired" th:checked="*{expired}" />
+					</div>
+					
+					<!-- User locked -->
+					<div class="mb-3">
+						<label for="idLocked" class="form-label">Locked</label>
+						<input type="checkbox" checked data-toggle="toggle" data-onlabel="Yes" data-offlabel="No" data-onstyle="success" data-offstyle="danger"
+								data-style="ios" data-height="40" data-width="50"
+								id="idLocked" th:checked="*{locked}" />
+					</div>
+					
+					<!-- User credentials (password) expired -->
+					<div class="mb-3">
+						<label for="idCredentiaExpired" class="form-label">Password expired</label>
+						<input type="checkbox" checked data-toggle="toggle" data-onlabel="Yes" data-offlabel="No" data-onstyle="success" data-offstyle="danger"
+								data-style="ios" data-height="40" data-width="50"
+								id="idCredentiaExpired" th:checked="*{credentiaExpired}" />
+					</div>
+					
+					<!-- Activated user -->
+					<div class="mb-3">
+						<label for="idEnabled" class="form-label">Enabled</label>
+						<input type="checkbox" checked data-toggle="toggle" data-onlabel="Yes" data-offlabel="No" data-onstyle="success" data-offstyle="danger"
+								data-style="ios" data-height="40" data-width="50"
+								id="idEnabled" th:checked="*{enabled}" />
+					</div>
+	            
+					<!-- Valid email end date for customers -->
+					<div class="mb-3">
+						<label for="idValidEmailEndDate" class="form-label">Email validation end date</label>
+						<input type="text" readonly class="form-control"
+									id="idValidEmailEndDate" />
+					</div>
+	            </div>
+	            
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		            <button type="submit" class="btn btn-primary">Edit</button>
+	            </div>
+	        </div>
+	    </div>
+	</form>
+</div>

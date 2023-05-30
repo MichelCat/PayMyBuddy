@@ -33,7 +33,7 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "customer_message")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"customerSender", "customerRecipient", "messageDate", "subject", "message_detail"})
+@EqualsAndHashCode(of = {"appUserEntitySender", "appUserEntityRecipient", "messageDate", "subject", "detail"})
 @ToString
 public class CustomerMessageEntity {
   /**

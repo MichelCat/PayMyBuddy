@@ -5,8 +5,6 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import com.paymybuddy.paymybuddy.dao.db.entities.BankTransactionEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
 
@@ -18,12 +16,17 @@ import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
  */
 public interface BankTransactionDao extends JpaRepository<BankTransactionEntity, Integer> {
   
-  @Query(value = "select * from bank_transaction"
-                + " where transaction_id_debit = :id or transaction_id_credit = :id"
-                + " order by transaction_date desc"
-      , nativeQuery = true)
-  Page<BankTransactionEntity> findByIdNative(@Param("id") Integer id, Pageable pageable);
+//  @Query(value = "select * from bank_transaction"
+//                + " where transaction_id_debit = :id or transaction_id_credit = :id"
+//                + " order by transaction_date desc"
+//      , nativeQuery = true)
+//  Page<BankTransactionEntity> findByIdNative(@Param("id") Integer id, Pageable pageable);
+  Page<BankTransactionEntity> findByCustomerDebitOrCustomerCreditOrderByTransactionDateDesc(
+                                            Optional<CustomerEntity> customerDebit
+                                            , Optional<CustomerEntity> customerCredit
+                                            , Pageable pageable);
   
   List<BankTransactionEntity> findFirst2ByCustomerDebitOrCustomerCreditOrderByTransactionDateDesc(
-                                            Optional<CustomerEntity> customerDebit, Optional<CustomerEntity> customerCredit);
+                                            Optional<CustomerEntity> customerDebit
+                                            , Optional<CustomerEntity> customerCredit);
 }

@@ -39,51 +39,9 @@
 	</div>
 	
 	<!-- Pagination -->
-	<div class="row">
-		<nav aria-label="Page navigation">
-			<ul class="pagination justify-content-center">
-				<!-- Previous page -->
-				<th:block>
-					<li th:if="${transactionPage.hasPrevious()}" class="page-item">
-						<a class="page-link" th:href="@{/user/transfer(page=${transactionPage.number},size=${transactionPage.size})}">&laquo;</a>
-					</li>
-					<li th:unless="${transactionPage.hasPrevious()}" class="page-item disabled">
-						<span class="page-link">&laquo;</span>
-					</li>
-				</th:block>
-				
-				<!-- Beginning ... -->
-				<li th:if="${transactionPage.number > 2}" class="page-item disabled">
-					<span class="page-link">...</span>
-				</li>
-				
-				<!-- Current page -->
-				<th:block th:each="i: ${#numbers.sequence(0, transactionPage.totalPages - 1)}">
-					<th:block th:if="${transactionPage.number - 2 <= i && i <= transactionPage.number + 2}">
-						<li th:if="${transactionPage.number == i}" class="page-item active" aria-current="page">
-							<a class="page-link">[[${i}+1]]</a>
-						</li>
-						<li th:unless="${transactionPage.number == i}" class="page-item">
-							<a class="page-link" th:href="@{/user/transfer(page=${i+1},size=${transactionPage.size})}">[[${i}+1]]</a>
-						</li>
-					</th:block>
-				</th:block>
-						    
-				<!-- End ... -->
-				<li th:if="${transactionPage.totalPages - 3 > transactionPage.number}" class="page-item disabled">
-					<span class="page-link">...</span>
-				</li>
-			    
-				<!-- Next page -->
-				<th:block>
-					<li th:if="${transactionPage.hasNext()}" class="page-item">
-						<a class="page-link" th:href="@{/user/transfer(page=${transactionPage.number+2},size=${transactionPage.size})}">&raquo;</a>
-					</li>
-					<li th:unless="${transactionPage.hasNext()}" class="page-item disabled">
-						<span class="page-link">&raquo;</span>
-					</li>
-				</th:block>
-			</ul>
-		</nav>
-	</div>
+    <div th:replace="~{fragments/pagination :: formField(pageName='/user/transfer'
+    													, objectPage=${transactionPage}
+    													, variableNamePage='page'
+    													, variableNameSize='size'
+														)}"></div>
 </div>

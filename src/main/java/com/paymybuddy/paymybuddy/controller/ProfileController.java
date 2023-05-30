@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.paymybuddy.paymybuddy.business.ProfileBussiness;
+import com.paymybuddy.paymybuddy.business.ProfileBusiness;
 import com.paymybuddy.paymybuddy.controller.model.BankAccount;
 import com.paymybuddy.paymybuddy.controller.model.Customer;
 
@@ -23,7 +23,7 @@ import com.paymybuddy.paymybuddy.controller.model.Customer;
 public class ProfileController {
   
   @Autowired
-  private ProfileBussiness profileBussiness;
+  private ProfileBusiness profileBusiness;
   
   /**
    * Read - Get Profile Page Attributes
@@ -38,11 +38,11 @@ public class ProfileController {
                           , Model model
                           , RedirectAttributes redirectAttributes) {
     // Find customer information
-    Customer customer = profileBussiness.getCustomerByUsername(principal.getName());
+    Customer customer = profileBusiness.getCustomerByUsername(principal.getName());
     model.addAttribute("user", customer);
     
     // Find bank account information
-    BankAccount bankAccount = profileBussiness.getBankAccountById(customer.getId());
+    BankAccount bankAccount = profileBusiness.getBankAccountById(customer.getId());
     model.addAttribute("bankAccount", bankAccount);
     
     return "/user/profile";
@@ -66,7 +66,7 @@ public class ProfileController {
                                   , RedirectAttributes redirectAttributes) {
     try {
       // Editing customer information
-      customer = profileBussiness.updateUser(customer, principal.getName());
+      customer = profileBusiness.updateUser(customer, principal.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }
@@ -91,7 +91,7 @@ public class ProfileController {
                                       , RedirectAttributes redirectAttributes) {
     try {
       // Editing bank account information
-      bankAccount = profileBussiness.saveBankAccount(bankAccount, principal.getName());
+      bankAccount = profileBusiness.saveBankAccount(bankAccount, principal.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }

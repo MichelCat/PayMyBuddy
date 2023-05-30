@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -32,7 +33,7 @@ import lombok.ToString;
 @Table(name = "bank_transaction")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id", "customerDebit", "customerCredit", "transactionDate", "description", "amount", "levy"})
 @ToString
 public class BankTransactionEntity {
   /**
@@ -71,11 +72,14 @@ public class BankTransactionEntity {
   /**
    * Transaction amount
    */
+  @NotNull(message = "Transaction amount cannot be null")
   @Column(name = "transaction_amount")
   Float amount;
   /**
    * Transaction levy
    */
+  @NotNull(message = "Transaction levy cannot be null")
+  @PositiveOrZero
   @Column(name = "transaction_levy")
   Float levy;
 }

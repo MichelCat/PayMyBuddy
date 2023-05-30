@@ -21,13 +21,20 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @Entity
 @Table(name = "app_user")
+@FieldDefaults(level=AccessLevel.PRIVATE)
+@EqualsAndHashCode(of = {"username", "password", "appUserRole", "expired", "locked", "credentiaExpired", "enabled", "emailValidationKey", "validEmailEndDate"})
+@ToString
 public class AppUserEntity implements UserDetails {
   
   /**
@@ -36,14 +43,15 @@ public class AppUserEntity implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id_user")
-  private long id;
+  long id;
   /**
    * Email used to authenticate the user
    */
+  @NotBlank(message = "Email used to authenticate the user is required")
   @Email(message = "Email should be valid")
   @Column(name = "user_email", unique=true)
   @Size(max = 254)
-  private String username;
+  String username;
   /**
    * Password used to authenticate the user
    */
@@ -51,43 +59,49 @@ public class AppUserEntity implements UserDetails {
   @NotBlank(message = "Customer password is required")
   @Column(name = "user_password")
   @Size(max = 100)
-  private String password;
+  String password;
   /**
    * User role
    */
+  @NotBlank(message = "User role is required")
   @Column(name = "user_role")
-  private String appUserRole;
+  @Size(max = 20)
+  String appUserRole;
   /**
    * User account expired
    */
+  @NotNull(message = "User account expired cannot be null")
   @Column(name = "user_expired")
-  private Boolean expired;
+  Boolean expired;
   /**
    * User locked
    */
+  @NotNull(message = "User locked cannot be null")
   @Column(name = "user_locked")
-  private Boolean locked;
+  Boolean locked;
   /**
    * User credentials (password) expired
    */
+  @NotNull(message = "User credentials expired cannot be null")
   @Column(name = "user_credentia_expired")
-  private Boolean credentiaExpired;
+  Boolean credentiaExpired;
   /**
    * Activated user
    */
+  @NotNull(message = "Activated user cannot be null")
   @Column(name = "user_enabled")
-  private Boolean enabled;
+  Boolean enabled;
   /**
-   * Email validation key
+   * Email validation key for customers
    */
   @Column(name = "user_email_validation_key", unique=true)
   @Size(max = 36)
-  private String emailValidationKey;
+  String emailValidationKey;
   /**
-   * Valid email end date
+   * Valid email end date for customers
    */
   @Column(name = "user_valid_email_end_date")
-  private Date validEmailEndDate;
+  Date validEmailEndDate;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -141,7 +155,7 @@ public class AppUserEntity implements UserDetails {
   }
   
   /**
-   * Test valid email key
+   * Test valid email key for customers
    * 
    * @param testKey Key to validate
    * @return Boolean Validated key
@@ -151,7 +165,7 @@ public class AppUserEntity implements UserDetails {
   }
   
   /**
-   * Test valid email date
+   * Test valid email date for customers
    * 
    * @return Boolean Validated key
    */
@@ -161,14 +175,14 @@ public class AppUserEntity implements UserDetails {
   }
   
   /**
-   * Create valid email key
+   * Create valid email key for customers
    */
   public void createValidEmailKey() {
     this.emailValidationKey = UUID.randomUUID().toString();
   }
   
   /**
-   * Create valid email end date
+   * Create valid email end date for customers
    */
   public void createValidEndDate() {
     // Today's date plus 24 hours
@@ -177,5 +191,15 @@ public class AppUserEntity implements UserDetails {
     calendar.setTime(date);
     calendar.add(Calendar.HOUR_OF_DAY, 24);
     this.validEmailEndDate = calendar.getTime();
+  }
+  
+  /**
+   * Test Contains a role
+   * 
+   * @param role Role to search
+   * @return Boolean Role belongs to user
+   */
+  public boolean isContainsRole(String role) {
+    return appUserRole.equals(role);
   }
 }

@@ -1,15 +1,17 @@
 package com.paymybuddy.paymybuddy.controller;
 
 import java.security.Principal;
-import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.paymybuddy.paymybuddy.business.ContactBussiness;
+import com.paymybuddy.paymybuddy.business.ContactBusiness;
 import com.paymybuddy.paymybuddy.controller.model.CustomerMessage;
 
 /**
@@ -22,18 +24,22 @@ import com.paymybuddy.paymybuddy.controller.model.CustomerMessage;
 public class ContactController {
   
   @Autowired
-  private ContactBussiness contactBussiness;
+  private ContactBusiness contactBusiness;
 
   /**
    * Read - Get Contact Page Attributes
    * 
+   * @param page Current page
+   * @param size Page size
    * @param principal Currently logged in user
    * @param model Model object
    * @param redirectAttributes RedirectAttributes object
    * @return View 
    */
   @GetMapping("/user/contact")
-  public String getContact(Principal principal
+  public String getContact(@RequestParam("page") Optional<Integer> pageNumber
+                          , @RequestParam("size") Optional<Integer> size
+                          , Principal principal
                           , Model model
                           , RedirectAttributes redirectAttributes) {
     try {
@@ -42,8 +48,10 @@ public class ContactController {
       model.addAttribute("newCustomerMessage", customerMessage);
       
       // List of customer messages
-      List<CustomerMessage> customerMessages = contactBussiness.getCustomerMessageById(principal.getName());
-      model.addAttribute("customerMessages", customerMessages);
+      int currentPage = pageNumber.orElse(1);
+      int pageSize = size.orElse(3);
+      Page<CustomerMessage> customerMessagePage = contactBusiness.getCustomerMessageById(principal.getName(), currentPage, pageSize);
+      model.addAttribute("customerMessagePage", customerMessagePage);
       
     } catch (Exception e) {
       model.addAttribute("errorMessage", e.getMessage());
@@ -68,7 +76,7 @@ public class ContactController {
                                   , RedirectAttributes redirectAttributes) {
     try {
       // Adding the new transaction
-      customerMessage = contactBussiness.addCustomerMessage(customerMessage, principal.getName());
+      customerMessage = contactBusiness.addCustomerMessage(customerMessage, principal.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }

@@ -1,9 +1,10 @@
 package com.paymybuddy.paymybuddy.controller.model;
 
-import java.util.Objects;
 import org.springframework.validation.annotation.Validated;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 /**
@@ -15,6 +16,8 @@ import lombok.experimental.FieldDefaults;
 @Validated
 @Data
 @FieldDefaults(level=AccessLevel.PRIVATE)
+@EqualsAndHashCode(of = {"id", "idCustomer", "bankName", "bankCode", "branchCode", "accountNumber", "rib", "iban", "bic"})
+@ToString
 public class BankAccount {
   /**
    * Bank account ID
@@ -52,43 +55,6 @@ public class BankAccount {
    * BIC code
    */
   String bic;
-  
-  /**
-   * Compare two objects
-   * 
-   * @param o Object to compare
-   * @return True if the objects are equal, and false if not.
-   */
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    var bankAccount = (BankAccount) o;
-    return
-    // Objects.equals(this.id, bankAccount.id) &&
-    Objects.equals(this.idCustomer, bankAccount.idCustomer)
-        && Objects.equals(this.bankName, bankAccount.bankName)
-        && Objects.equals(this.bankCode, bankAccount.bankCode)
-        && Objects.equals(this.branchCode, bankAccount.branchCode)
-        && Objects.equals(this.accountNumber, bankAccount.accountNumber)
-        && Objects.equals(this.rib, bankAccount.rib)
-        && Objects.equals(this.iban, bankAccount.iban)
-        && Objects.equals(this.bic, bankAccount.bic);
-  }
-
-  /**
-   * Get the hash code for the object of class Method
-   * 
-   * @return Hash code
-   */
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, idCustomer, bankName, bankCode, branchCode, accountNumber, rib, iban, bic);
-  }
   
   public BankAccount() {
     id = 0;

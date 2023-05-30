@@ -3,14 +3,17 @@ package com.paymybuddy.paymybuddy.controller;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import com.paymybuddy.paymybuddy.business.HomeBussiness;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.paymybuddy.paymybuddy.business.HomeBusiness;
 import com.paymybuddy.paymybuddy.controller.model.Buddy;
 import com.paymybuddy.paymybuddy.controller.model.CustomerAccount;
 import com.paymybuddy.paymybuddy.controller.model.TransactionParameter;
@@ -27,7 +30,7 @@ import com.paymybuddy.paymybuddy.controller.model.BankTransaction;
 public class HomeController {
   
   @Autowired
-  private HomeBussiness homeBussiness;
+  private HomeBusiness homeBusiness;
   
   
   @GetMapping("/default")
@@ -45,32 +48,41 @@ public class HomeController {
   /**
    * Read - Get user home page attributes
    * 
+   * @param page Current page
+   * @param size Page size
    * @param principal Currently logged in user
    * @param model Model object
    * @return View 
    */
   @GetMapping("/user/home")
-//  @PreAuthorize("hasAuthority('USER_ROLE')")
-  public String getUserHome(Principal principal
+  public String getUserHome(@RequestParam("buddyPage") Optional<Integer> buddyPageNumber 
+                          , @RequestParam("buddySize") Optional<Integer> buddySize
+                          , @RequestParam("transactionPage") Optional<Integer> transactionPageNumber 
+                          , @RequestParam("transactionSize") Optional<Integer> transactionSize
+                          , Principal principal
                           , Model model) {
     try {
-      Integer idCustomer = homeBussiness.getCustomerId(principal.getName());
+      Integer idCustomer = homeBusiness.getCustomerId(principal.getName());
       
       // Last transaction
-      List<BankTransaction> bankTransactions = homeBussiness.getLastTransactionById(idCustomer);
+      List<BankTransaction> bankTransactions = homeBusiness.getLastTransactionById(idCustomer);
       model.addAttribute("bankTransactions", bankTransactions);
       
       // Find customer account information
-      CustomerAccount customerAccount = homeBussiness.getCustomerAccountById(idCustomer);
+      CustomerAccount customerAccount = homeBusiness.getCustomerAccountById(idCustomer);
       model.addAttribute("customerAccount", customerAccount);
       
       // Find the list of transaction parameters
-      List<TransactionParameter> transactionParameters = homeBussiness.getTransactionParameters();
-      model.addAttribute("transactionParameters", transactionParameters);
+      int currentTransactionPage = transactionPageNumber.orElse(1);
+      int transactionPageSize = transactionSize.orElse(3);
+      Page<TransactionParameter> transactionParameterPage = homeBusiness.getTransactionParameters(currentTransactionPage, transactionPageSize);
+      model.addAttribute("transactionParameterPage", transactionParameterPage);
       
       // Search user's buddy list
-      List<Buddy> buddies = homeBussiness.getBuddiesById(idCustomer);
-      model.addAttribute("buddies", buddies);
+      int currentBuddyPage = buddyPageNumber.orElse(1);
+      int buddyPageSize = buddySize.orElse(3);
+      Page<Buddy> buddyPage = homeBusiness.getBuddiesById(idCustomer, currentBuddyPage, buddyPageSize);
+      model.addAttribute("buddyPage", buddyPage);
       
     } catch (Exception e) {
       model.addAttribute("errorMessage", e.getMessage());
@@ -86,7 +98,6 @@ public class HomeController {
    * @return View 
    */
   @GetMapping("/admin/home")
-//  @PreAuthorize("hasAuthority('ADMIN_ROLE')")
   public String getAdminHome(Principal principal
                             , Model model) {
     return "/admin/home";

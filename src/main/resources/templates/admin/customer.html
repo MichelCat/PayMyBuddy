@@ -1,0 +1,31 @@
+<!--
+/**
+ * customer
+ * @description Customer page
+ */
+-->
+
+<!DOCTYPE html>
+<html lang="en"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="fragments/main-layout">
+
+<body>
+  
+	<main layout:fragment="content">
+		
+		<!-- Error message -->
+		<div th:replace="~{fragments/error-message}"></div>
+	
+		<!-- Customer settings -->
+	    <div th:replace="~{admin/fragments/customer-list}"></div>
+	    
+		<!-- Modal edit user -->
+		<div th:replace="~{admin/fragments/customer-edit-user}"></div>
+		
+	</main>
+    
+</body>
+  
+</html>

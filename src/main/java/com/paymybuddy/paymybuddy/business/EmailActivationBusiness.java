@@ -24,7 +24,7 @@ public class EmailActivationBusiness {
   /**
    * Account activation
    * 
-   * @param validationKey Validation key
+   * @param validationKey Validation key for customers
    * @return New modified user record
    */
   @Transactional(rollbackFor = Exception.class)
@@ -37,11 +37,11 @@ public class EmailActivationBusiness {
     }
     
     AppUserEntity appUserEntity = optAppUserEntity.get();
-    // Invalid email key
+    // Invalid email key for customers
     if (!appUserEntity.isValidEmailKey(validationKey)) {
       throw new MyException("throw.InvalidEmailKey");
     }
-    // Email validation time exceeded    
+    // Email validation for customers time exceeded    
     if (!appUserEntity.isValidEmailEndDate()) {
       throw new MyException("throw.EmailTimeExceeded");
     }

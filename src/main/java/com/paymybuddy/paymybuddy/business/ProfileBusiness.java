@@ -21,7 +21,7 @@ import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
  * @version 1.0
  */
 @Service
-public class ProfileBussiness {
+public class ProfileBusiness {
   
   @Autowired
   private CustomerDao customerDao;
