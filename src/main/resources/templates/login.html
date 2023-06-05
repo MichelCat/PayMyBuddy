@@ -6,10 +6,15 @@
 -->
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="en"
+	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	
-	<head th:replace="fragments/header">
+	<head>
+		<title>Pay My Buddy - Login</title>
+		<head th:replace="fragments/head">
+	</head>
+	
     
 <body class="text-center vh-100">
   
@@ -27,7 +32,10 @@
 					
 					<div class="row">
 						<div th:if="${logout}" class="alert alert-info" role="alert">
-							<p>Vous êtes bien déconnecté.</p>
+							<p>You are logged out.</p>
+						</div>
+						<div th:if="${error}" class="alert alert-danger" role="alert">
+							<p>Wrong user or password.</p>
 						</div>
 					</div>
 				
@@ -50,7 +58,7 @@
 						
 						<div class="form-group">
 							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="customControlInline" checked />
+								<input type="checkbox" class="custom-control-input" name="remember-me" id="customControlInline" checked />
 								<label class="custom-control-label" for="customControlInline">Remember me</label>
 							</div>
 						</div>

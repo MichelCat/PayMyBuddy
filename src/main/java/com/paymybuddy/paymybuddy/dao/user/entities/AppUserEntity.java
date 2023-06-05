@@ -121,12 +121,6 @@ public class AppUserEntity implements UserDetails {
   @Override
   public boolean isEnabled() { return enabled; }
   
-//  /**
-//   * AppUserEntity [1..1] to CustomerEntity [0..1], appUserEntity relationship
-//   */
-//  @OneToOne( mappedBy = "appUserEntity" )
-//  private CustomerEntity customerEntity;
-  
   /**
    * AppUserEntity [1..1] to CustomerMessageEntity [0..n], sender relationship
    */

@@ -1,6 +1,5 @@
 package com.paymybuddy.paymybuddy.dao.db;
 
-import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +15,6 @@ import com.paymybuddy.paymybuddy.dao.user.entities.AppUserEntity;
  */
 public interface CustomerMessageDao extends JpaRepository<CustomerMessageEntity, Integer> {
 
-//  @Query(value = "select * from customer_message"
-//      + " where message_id_sender = :id or message_id_recipient = :id"
-//      + " order by message_date desc"
-//  , nativeQuery = true)
-//  List<CustomerMessageEntity> getCustomerMessageById(@Param("id") Long id);
   Page<CustomerMessageEntity> findByAppUserEntitySenderOrAppUserEntityRecipientOrderByMessageDateDesc(
                                         Optional<AppUserEntity> idSender
                                         , Optional<AppUserEntity> idRecipient

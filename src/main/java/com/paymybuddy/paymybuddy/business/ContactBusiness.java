@@ -63,9 +63,15 @@ public class ContactBusiness {
       CustomerMessage customerMessage = customerMessageUtils.fromCustomerMessageEntityToCustomerMessage(customerMessageEntity);
       
       Optional<AppUserEntity> optUserSender = appUserDao.findById(customerMessage.getIdUserSender());
+      if (optUserSender.isEmpty()) {
+        throw new MyException("throw.SenderUnknown");
+      }
       customerMessage.setEmailSender(optUserSender.get().getUsername());
       
       Optional<AppUserEntity> optUserRecipient = appUserDao.findById(customerMessage.getIdUserRecipient());
+      if (optUserRecipient.isEmpty()) {
+        throw new MyException("throw.RecipientUnknown");
+      }
       customerMessage.setEmailRecipient(optUserRecipient.get().getUsername());
       
       customerMessages.add(customerMessage);

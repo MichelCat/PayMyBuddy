@@ -21,7 +21,8 @@ public class CustomerAccountUtils {
    */
   public CustomerAccount fromCustomerAccountEntityToCustomerAccount(CustomerAccountEntity customerAccountEntity) {
     CustomerAccount customerAccount = new CustomerAccount();
-    customerAccount.setIdCustomer(customerAccountEntity.getIdCustomer());
+    customerAccount.setId(customerAccountEntity.getId());
+    customerAccount.setIdCustomer(customerAccountEntity.getCustomer().getId());
     customerAccount.setBalance(customerAccountEntity.getBalance());
     return customerAccount;
   }

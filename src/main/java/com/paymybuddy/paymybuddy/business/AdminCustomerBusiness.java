@@ -21,7 +21,6 @@ import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerUserEntity;
 import com.paymybuddy.paymybuddy.dao.user.AppUserDao;
 import com.paymybuddy.paymybuddy.dao.user.entities.AppUserEntity;
-import com.paymybuddy.paymybuddy.dao.user.entities.AppUserRole;
 
 /**
  * SettingsBusiness is the settings page processing service

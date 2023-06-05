@@ -21,21 +21,24 @@ public class PaymybuddySecurityConfiguration {
         .cors(withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/default").authenticated()
             .requestMatchers("/admin/**").hasAuthority(AppUserRole.ADMIN_ROLE.name())
             .requestMatchers("/user/**").hasAuthority(AppUserRole.USER_ROLE.name())
             .anyRequest().permitAll()
         );
-      
+
     http
         .formLogin(a -> a.loginPage("/login")
            .loginProcessingUrl("/login")
-           .defaultSuccessUrl("/default")
-           .failureUrl("/login-error")
+           .successHandler(successHandler())
+           .failureUrl("/login?error=true")
            .permitAll());
 
-      http
-            .logout(withDefaults());
+    http
+          .logout(withDefaults());
+    
+    http
+          .rememberMe()
+          .key("LUJDU_DYJNF8FLFOI_Foifkqsi_432824412");
 
     return http.build();
   }
@@ -44,4 +47,12 @@ public class PaymybuddySecurityConfiguration {
   public PasswordEncoder passwordEncoder() {
      return new BCryptPasswordEncoder();
   }
+  
+  /**
+   * Custom success handler
+   */
+  @Bean
+  public PaymybuddyAuthenticationSuccessHandler successHandler() {
+    return new PaymybuddyAuthenticationSuccessHandler();
+  }  
 }

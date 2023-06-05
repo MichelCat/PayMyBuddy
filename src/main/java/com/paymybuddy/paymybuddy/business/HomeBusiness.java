@@ -95,8 +95,11 @@ public class HomeBusiness {
    * @param id User ID
    * @return Customer account information
    */
-  public CustomerAccount getCustomerAccountById(final Integer id) {
+  public CustomerAccount getCustomerAccountById(final Integer id) throws MyException {
     Optional<CustomerAccountEntity> optCustomerAccountEntity = customerAccountDao.findById(id);
+    if (optCustomerAccountEntity.isEmpty()) {
+      throw new MyException("throw.UnknownBankAccount");
+    }
     return customerAccountUtils.fromCustomerAccountEntityToCustomerAccount(optCustomerAccountEntity.get());
   }
   
@@ -112,7 +115,19 @@ public class HomeBusiness {
     List<BankTransactionEntity> bankTransactionEntities
                               = bankTransactionDao.findFirst2ByCustomerDebitOrCustomerCreditOrderByTransactionDateDesc(
                                    optCustomerEntity, optCustomerEntity);
-    return bankTransactionUtils.fromListBankTransactionEntityToListBankTransaction(bankTransactionEntities);
+    
+    List<BankTransaction> bankTransactions = new ArrayList<>();
+    bankTransactionEntities.forEach(b -> {
+      BankTransaction bankTransaction = bankTransactionUtils.fromBankTransactionEntityToBankTransaction(b);
+      
+      if (b.getCustomerDebit().getId().equals(id)) {
+        // Debit transaction.
+        bankTransaction.setAmount(-bankTransaction.getAmount());
+      }
+      bankTransactions.add(bankTransaction);
+    });
+    
+    return bankTransactions;
   }
   
   /**

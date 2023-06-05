@@ -55,9 +55,9 @@ public class TransactionParameterUtils {
    */
   public float roundLevy(float numberRound) {
     int numberDecimal = 2;
-    BigDecimal bigDecimal = new BigDecimal(numberRound);
+    BigDecimal bigDecimal = BigDecimal.valueOf(numberRound);
     // Rounded to the nearest 2 decimal places
-    bigDecimal = bigDecimal.setScale(2, RoundingMode.HALF_UP);
+    bigDecimal = bigDecimal.setScale(numberDecimal, RoundingMode.HALF_UP);
     return bigDecimal.floatValue();
   }
 }

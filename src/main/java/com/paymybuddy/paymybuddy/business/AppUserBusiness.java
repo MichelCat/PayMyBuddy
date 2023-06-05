@@ -50,7 +50,7 @@ public class AppUserBusiness implements UserDetailsService {
     // User account expired
     if (!appUserEntity.isAccountNonExpired()) {
       throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.AccountExpired"));
-   }
+    }
     // User locked
     if (!appUserEntity.isAccountNonLocked()) {
       throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.AccountLocked"));
@@ -96,7 +96,7 @@ public class AppUserBusiness implements UserDetailsService {
     
     // Add customer account
     CustomerAccountEntity customerAccountEntity = new CustomerAccountEntity();
-    customerAccountEntity.setIdCustomer(customerEntity.getId());
+    customerAccountEntity.setCustomer(customerEntity);
     customerAccountEntity.setBalance(0.0f);
     customerAccountDao.save(customerAccountEntity);
     
@@ -107,7 +107,7 @@ public class AppUserBusiness implements UserDetailsService {
     // Send activation email contact
     String subject = "Activation Email";
     String message = "You can activate your account using the link : "
-                      + "http://localhost:8080/register/" + newAppUserEntity.getEmailValidationKey().toString();
+                      + "http://localhost:8080/register/" + newAppUserEntity.getEmailValidationKey();
     emailBusiness.sendEmail(userContactEmail.getUsername(), register.getEmail(), subject, message);
   }
 }

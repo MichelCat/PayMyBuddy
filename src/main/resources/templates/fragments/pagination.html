@@ -26,7 +26,7 @@
 				
 				<!-- Current page -->
 				<th:block th:each="i: ${#numbers.sequence(0, objectPage.totalPages - 1)}">
-					<th:block th:if="${objectPage.number - 2 <= i && i <= objectPage.number + 2}">
+					<th:block th:if="${objectPage.number - 2 <= i && i <= objectPage.number + 2 && i >= 0}">
 						<li class="page-item" th:classappend="${objectPage.number == i} ? 'disabled'">
 							<a class="page-link" th:href="@{${pageName}(${variableNamePage}=${i+1},${variableNameSize}=${objectPage.size})}">[[${i}+1]]</a>
 						</li>
@@ -39,12 +39,12 @@
 				</li>
 						    
 				<!-- Next page -->
-				<li class="page-item" th:classappend="${objectPage.number == objectPage.totalPages - 1} ? 'disabled'">
+				<li class="page-item" th:classappend="${objectPage.number == objectPage.totalPages - 1 || objectPage.totalPages <= 0} ? 'disabled'">
 					<a class="page-link" th:href="@{${pageName}(${variableNamePage}=${objectPage.number+2},${variableNameSize}=${objectPage.size})}">&raquo;</a>
 				</li>
 				
 				<!-- Last Page -->
-				<li class="page-item" th:classappend="${objectPage.number == objectPage.totalPages - 1} ? 'disabled'">
+				<li class="page-item" th:classappend="${objectPage.number == objectPage.totalPages - 1 || objectPage.totalPages <= 0} ? 'disabled'">
 					<a class="page-link" th:href="@{${pageName}(${variableNamePage}=${objectPage.totalPages},${variableNameSize}=${objectPage.size})}">&raquo;|</a>
 				</li>
 			</ul>

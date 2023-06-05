@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.paymybuddy.paymybuddy.controller.model.Register;
-import com.paymybuddy.paymybuddy.Exception.MessagePropertieFormat;
 import com.paymybuddy.paymybuddy.business.AppUserBusiness;
 import com.paymybuddy.paymybuddy.dao.user.entities.AppUserEntity;
 
@@ -41,27 +40,15 @@ public class UserController {
     if (params.containsKey("logout")) {
       model.addAttribute("logout", true);
     }
+    if (params.containsKey("error")) {
+      model.addAttribute("error", true);
+    }
     // User record exists
     AppUserEntity appUserEntity = new AppUserEntity();
     model.addAttribute("user", appUserEntity);
     return "login";
   }
     
-  /**
-   * Read - Get Login with error
-   * 
-   * @param model Model object
-   * @param redirectAttributes RedirectAttributes object
-   * @return View 
-  */
-  @GetMapping("/login-error")
-  public String getLoginError(Model model
-                            , RedirectAttributes redirectAttributes) {
-    redirectAttributes.addFlashAttribute("errorMessage", MessagePropertieFormat.getMessage("throw.WrongUserPassword"));
-    return "redirect:/login";
-  }
-  
-  
   /**
    * Read - Get Register Page Attributes
    * 
@@ -101,10 +88,4 @@ public class UserController {
    return "redirect:/login";
   }
   
-  
-  
-  @GetMapping("/403")
-  public String error403() {
-    return "/error/403";
-  }
 }

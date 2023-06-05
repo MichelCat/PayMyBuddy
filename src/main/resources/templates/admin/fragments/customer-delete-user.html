@@ -1,0 +1,32 @@
+<!--
+/**
+ * customer-delete-user
+ * @description Modal delete user
+ */
+-->
+
+<div th:each="customerUser : ${customerUserPage.content}">
+
+	<div class="modal fade" th:id="modalDeleteUser+${customerUser.idUser}" tabindex="-1"
+			th:aria-labelledby="deleteUserLabel+${customerUser.idUser}" aria-hidden="true">
+		<form th:action="@{/admin/customer/delete-user/{id}(id=${customerUser.idUser})}" th:method="DELETE">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title" th:id="deleteUserLabel+${customerUser.idUser}">Delete user</h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		            </div>
+		            <div class="modal-body">
+						<h3>Are you sure want to delete this user ( [[${customerUser.lastName}]],  [[${customerUser.firstName}]] ) ?</h3>
+		            </div>
+		            
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					    <button type="submit" class="btn btn-danger btn-sm"><spam class="bi bi-check-lg" />&nbsp;Delete</button>
+		            </div>
+		        </div>
+		    </div>
+		</form>
+	</div>
+
+</div>

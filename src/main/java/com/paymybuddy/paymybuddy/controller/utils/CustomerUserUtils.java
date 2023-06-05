@@ -25,7 +25,6 @@ public class CustomerUserUtils {
     CustomerUser customerUser = new CustomerUser();
     customerUser.setIdUser(customerUserEntity.getIdUser());
     customerUser.setUsername(customerUserEntity.getUsername());
-//    customerUser.setPassword(customerUserEntity.getPassword());
     customerUser.setFirstName(customerUserEntity.getFirstName());
     customerUser.setLastName(customerUserEntity.getLastName());
     customerUser.setAppUserRole(customerUserEntity.getAppUserRole());

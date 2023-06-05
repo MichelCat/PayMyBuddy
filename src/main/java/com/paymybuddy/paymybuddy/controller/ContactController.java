@@ -76,7 +76,7 @@ public class ContactController {
                                   , RedirectAttributes redirectAttributes) {
     try {
       // Adding the new transaction
-      customerMessage = contactBusiness.addCustomerMessage(customerMessage, principal.getName());
+      contactBusiness.addCustomerMessage(customerMessage, principal.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }

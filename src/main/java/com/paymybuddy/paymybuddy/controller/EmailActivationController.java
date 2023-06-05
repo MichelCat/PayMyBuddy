@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.paymybuddy.paymybuddy.business.EmailActivationBusiness;
-import com.paymybuddy.paymybuddy.dao.user.entities.AppUserEntity;
 
 /**
  * EmailActivationController is the Endpoint of for email activation pages
@@ -36,7 +35,7 @@ public class EmailActivationController {
                                       , RedirectAttributes redirectAttributes) {
     try {
       // Account activation
-      AppUserEntity appUserEntity = emailActivationBusiness.emailActivationBusiness(validationKey);
+      emailActivationBusiness.emailActivationBusiness(validationKey);
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }

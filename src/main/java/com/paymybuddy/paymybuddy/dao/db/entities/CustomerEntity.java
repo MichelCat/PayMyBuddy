@@ -128,12 +128,13 @@ public class CustomerEntity {
           , cascade = CascadeType.ALL )
   private List<BankTransactionEntity> bankTransactionEntityCredits = new ArrayList<>();
   
+  
   /**
-   * CustomerEntity [1..1] to CustomerAccountEntity [1..1]
+   * CustomerEntity [1..1] to CustomerAccountEntity [0..1]
    */
-  @OneToOne( cascade = CascadeType.ALL ) 
-  @JoinColumn( name="idCustomer", nullable=false )
-  private CustomerAccountEntity customerAccountEntity;
+  @OneToMany( targetEntity=CustomerAccountEntity.class, mappedBy="customer"
+      , cascade = CascadeType.ALL )
+  private List<CustomerAccountEntity> customerAccountEntities = new ArrayList<>();
   
   /**
    * CustomerEntity [1..1] to BuddyEntity [0..n], customer relationship

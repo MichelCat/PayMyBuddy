@@ -5,13 +5,6 @@
  */
 -->
 
-<!-- Home page -->
-<li class="nav-item">
-	<a class="nav-link" th:classappend="${pageName == '/admin/home' ? 'text-primary' : ''}"
-		data-bs-toggle="tooltip" title="Dashboard"
-		th:href="@{/admin/home}">Home</a>
-</li>
-
 <!-- Settings page -->
 <li class="nav-item">
 	<a class="nav-link" th:classappend="${pageName == '/admin/customer' ? 'text-primary' : ''}"

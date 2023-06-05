@@ -1,8 +1,13 @@
 package com.paymybuddy.paymybuddy.dao.db.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -24,18 +29,23 @@ import lombok.ToString;
 @Table(name = "customer_account")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 @NoArgsConstructor
-@EqualsAndHashCode(of= {"idCustomer", "balance"})
+@EqualsAndHashCode(of= {"customer", "balance"})
 @ToString
 public class CustomerAccountEntity {
+  
   /**
    * Customer account ID
-   * CustomerEntity [1..1] to CustomerAccountEntity [1..1]
    */
   @Id
-  @NotNull(message = "Customer account ID cannot be null")
-  @Column(name = "account_id_customer")
-  Integer idCustomer;
-  
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id_customer_account")
+  Integer id;
+  /**
+   * Customer ID
+   */
+  @ManyToOne( cascade = { CascadeType.PERSIST, CascadeType.MERGE } )
+  @JoinColumn(name="accountIdCustomer", nullable=false)
+  private CustomerEntity customer;
   /**
    * Account balance
    */

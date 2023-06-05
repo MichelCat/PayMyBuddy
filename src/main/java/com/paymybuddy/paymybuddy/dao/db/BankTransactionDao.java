@@ -16,11 +16,6 @@ import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
  */
 public interface BankTransactionDao extends JpaRepository<BankTransactionEntity, Integer> {
   
-//  @Query(value = "select * from bank_transaction"
-//                + " where transaction_id_debit = :id or transaction_id_credit = :id"
-//                + " order by transaction_date desc"
-//      , nativeQuery = true)
-//  Page<BankTransactionEntity> findByIdNative(@Param("id") Integer id, Pageable pageable);
   Page<BankTransactionEntity> findByCustomerDebitOrCustomerCreditOrderByTransactionDateDesc(
                                             Optional<CustomerEntity> customerDebit
                                             , Optional<CustomerEntity> customerCredit

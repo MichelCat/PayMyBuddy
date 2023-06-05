@@ -16,13 +16,13 @@
 				<thead class="bg-success text-white">
 					<tr>
 						<th scope="col" style="display:none">#</th>
-						<th scope="col" class="fw-normal">Name</th>
+						<th scope="col" class="fw-normal">Last name</th>
+						<th scope="col" class="fw-normal">First name</th>
 						<th scope="col" class="fw-normal">Email</th>
 						<th scope="col" class="fw-normal">Account expired</th>
 						<th scope="col" class="fw-normal">Locked</th>
 						<th scope="col" class="fw-normal">Password expired</th>
 						<th scope="col" class="fw-normal">Enabled</th>
-						<th scope="col" class="fw-normal">Email validation end date</th>
 						<th scope="col" class="fw-normal">Action</th>
 					</tr>
 				</thead>
@@ -32,56 +32,56 @@
 					<tr th:if="${customerUserPage.content.empty}">
 						<td colspan="3">No customer in the database</td>
 					</tr>
-					<tr th:each="customerUser, iterStat : ${customerUserPage.content}">
+					<tr th:each="customerUser : ${customerUserPage.content}">
 						<!-- User ID -->
-						<th scope="row" style="display:none" th:text="${customerUser.idUser}" id="idPageUser" />
-						<!-- Customer first name -->
-						<th scope="row" style="display:none" th:text="${customerUser.firstName}" id="idPageFirstName" />
-						<!-- Customer last name -->
-						<th scope="row" style="display:none" th:text="${customerUser.lastName}" id="idPageLastName" />
+						<th scope="row" style="display:none" th:text="${customerUser.idUser}"
+									th:id="idRowIdUser+${customerUser.idUser}" />
 						
-						<!-- Customer name -->
-						<td class="text-start" th:text="${customerUser.lastName + ' ' + customerUser.firstName}" />
+						<!-- Customer last name -->
+						<td class="text-start" th:text="${customerUser.lastName}"
+									th:id="idRowLastName+${customerUser.idUser}" />
+						<!-- Customer first name -->
+						<td class="text-start" th:text="${customerUser.firstName}"
+									th:id="idRowFirstName+${customerUser.idUser}" />
+						
 						<!-- Email used to authenticate the user -->
 						<td class="text-start" th:text="${customerUser.username}"
-									id="idPageUsername" />
+									th:id="idRowUsername+${customerUser.idUser}" />
 						
 						<!-- User account expired -->
 						<td>
-							<input type="checkbox" readonly checked data-toggle="toggle" data-onlabel="Yes" data-offlabel="No" data-onstyle="success" data-offstyle="danger"
-									th:checked="${customerUser.expired}" data-style="ios" data-size="xs" data-height="25"
-									id="idPageExpired" />
+							<input type="checkbox" onclick="return false;"
+									th:checked="${customerUser.expired}"
+									th:id="idRowExpired+${customerUser.idUser}" />
 						</td>
 						<!-- User locked -->
 						<td>
-							<input type="checkbox" readonly checked data-toggle="toggle" data-onlabel="Yes" data-offlabel="No" data-onstyle="success" data-offstyle="danger"
-									th:checked="${customerUser.locked}" data-style="ios" data-size="xs" data-height="25"
-									id="idPageLocked" />
+							<input type="checkbox" onclick="return false;"
+									th:checked="${customerUser.locked}"
+									th:id="idRowLocked+${customerUser.idUser}" />
 						</td>
 						<!-- User credentials (password) expired -->
 						<td>
-							<input type="checkbox" readonly checked data-toggle="toggle" data-onlabel="Yes" data-offlabel="No" data-onstyle="success" data-offstyle="danger"
-									th:checked="${customerUser.credentiaExpired}" data-style="ios" data-size="xs" data-height="25"
-									id="idPageCredentiaExpired" />
+							<input type="checkbox" onclick="return false;"
+									th:checked="${customerUser.credentiaExpired}"
+									th:id="idRowCredentiaExpired+${customerUser.idUser}" />
 						</td>
 						<!-- Activated user -->
 						<td>
-							<input type="checkbox" readonly checked data-toggle="toggle" data-onlabel="Yes" data-offlabel="No" data-onstyle="success" data-offstyle="danger"
-									th:checked="${customerUser.enabled}" data-style="ios" data-size="xs" data-height="25"
-									id="idPageEnabled" />
+							<input type="checkbox" onclick="return false;"
+									th:checked="${customerUser.enabled}"
+									th:id="idRowEnabled+${customerUser.idUser}" />
 						</td>
-						<!-- Valid email end date for customers -->
-						<td th:text="${#dates.format(customerUser.validEmailEndDate, 'dd/MM/yyyy hh:mm a')}"
-									id="idPageValidEmailEndDate" />
 						<!-- Action -->
 						<td>
 							<div class="btn-group" role="group" aria-label="Basic example">
-						    	<button class="btn btn-info btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#modalEditUser"
-						    					th:attr="data-id=${customerUser}" >Edit</button>
-						    					
-								<form th:action="@{/admin/customer/delete-user/{id}(id=${customerUser.idUser})}" th:method="DELETE">
-								    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-								</form>					    	
+						    	<button class="btn btn-info btn-sm mx-1 btnModalEditUser" data-bs-toggle="modal"
+						    		th:data-id="${customerUser.idUser}"
+									th:data-bs-target="${'#modalEditUser'}" ><spam class="bi bi-pencil" /></button>
+									
+						    	<button class="btn btn-danger btn-sm mx-1" data-bs-toggle="modal"
+						    		th:data-id="${customerUser.idUser}"
+									th:data-bs-target="${'#modalDeleteUser'+customerUser.idUser}" ><spam class="bi bi-trash" /></button>
 							</div>
 						</td>
 					</tr>

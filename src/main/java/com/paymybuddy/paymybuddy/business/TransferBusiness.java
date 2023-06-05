@@ -111,6 +111,7 @@ public class TransferBusiness {
       } else {
         // Debit transaction. Creditor search
         idBuddy = b.getCustomerCredit().getId();
+        bankTransaction.setAmount(-bankTransaction.getAmount());
       }
 
       // Connection search
@@ -217,9 +218,15 @@ public class TransferBusiness {
     
     // Customer user
     Optional<CustomerEntity> optCustomerUser = customerDao.findByUsername(username);
+    if (optCustomerUser.isEmpty()) {
+      throw new MyException("throw.CustomerNotExist", username);
+    }
     
     // Customer user
     Optional<CustomerEntity> optCustomerBuddy = customerDao.findByAppUserEntity(optAppUserEntity);
+    if (optCustomerBuddy.isEmpty()) {
+      throw new MyException("throw.BuddyNotExist", username);
+    }
     
     // Buddy already present
     Optional<BuddyEntity> optBuddyEntity = buddyDao.findByCustomerUserAndCustomerBuddy(optCustomerUser, optCustomerBuddy);

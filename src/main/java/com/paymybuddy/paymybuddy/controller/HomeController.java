@@ -1,14 +1,10 @@
 package com.paymybuddy.paymybuddy.controller;
 
 import java.security.Principal;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +13,6 @@ import com.paymybuddy.paymybuddy.business.HomeBusiness;
 import com.paymybuddy.paymybuddy.controller.model.Buddy;
 import com.paymybuddy.paymybuddy.controller.model.CustomerAccount;
 import com.paymybuddy.paymybuddy.controller.model.TransactionParameter;
-import com.paymybuddy.paymybuddy.dao.user.entities.AppUserRole;
 import com.paymybuddy.paymybuddy.controller.model.BankTransaction;
 
 /**
@@ -32,18 +27,6 @@ public class HomeController {
   @Autowired
   private HomeBusiness homeBusiness;
   
-  
-  @GetMapping("/default")
-  public String getDefaultUser() {
-    Collection<? extends GrantedAuthority> authorities;
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();    
-    authorities = auth.getAuthorities();
-    String myRole = authorities.toArray()[0].toString();
-    if (myRole.equals(AppUserRole.ADMIN_ROLE.name())) {
-      return "redirect:/admin/home";
-    }    
-    return "redirect:/user/home";
-  }
   
   /**
    * Read - Get user home page attributes
@@ -90,16 +73,4 @@ public class HomeController {
     return "/user/home";
   }
   
-  /**
-   * Read - Get admin home page attributes
-   * 
-   * @param principal Currently logged in user
-   * @param model Model object
-   * @return View 
-   */
-  @GetMapping("/admin/home")
-  public String getAdminHome(Principal principal
-                            , Model model) {
-    return "/admin/home";
-  }
 }

@@ -37,13 +37,6 @@ public class CustomerUser {
   @Email(message = "Email should be valid")
   @Size(max = 254)
   String username;
-//  /**
-//   * Password used to authenticate the user
-//   */
-//  @ToString.Exclude
-//  @NotBlank(message = "Customer password is required")
-//  @Size(max = 100)
-//  String password;
   /**
    * User role
    */

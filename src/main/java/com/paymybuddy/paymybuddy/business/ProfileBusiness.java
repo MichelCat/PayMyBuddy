@@ -38,8 +38,11 @@ public class ProfileBusiness {
    * @param username Email
    * @return Customer information
    */
-  public Customer getCustomerByUsername(final String username) {
+  public Customer getCustomerByUsername(final String username) throws MyException {
     Optional<CustomerEntity> optCustomerEntity = customerDao.findByUsername(username);
+    if (optCustomerEntity.isEmpty()) {
+      throw new MyException("throw.CustomerNotExist", username);
+    }
     return customerUtils.fromCustomerEntityToUser(optCustomerEntity.get());
   }
   

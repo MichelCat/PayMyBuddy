@@ -11,13 +11,17 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="fragments/main-layout">
 
+    <head>
+		<title>Customer home page</title>
+    </head>
+    
 <body>
 
 	<main layout:fragment="content">
 		
 		<div class="bg-image"
-				style="background-image: url('img/ImagePayMyBuddy.png');
-						height: 100vh;">
+				th:style="'background-image:url(' + @{/img/ImagePayMyBuddy.png} + ');
+							height: 100vh;'" >
 			<div class="mask h-100" style="background-color: rgba(255, 255, 255, 0.9);">
 				<div class="d-flex justify-content-center align-items-start">
 					<div class="container">

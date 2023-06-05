@@ -89,7 +89,7 @@ public class TransferController {
                             , RedirectAttributes redirectAttributes) {
     try {
       // Adding the new BankTransaction
-      bankTransaction = transferBusiness.addTransaction(bankTransaction, principal.getName());
+      transferBusiness.addTransaction(bankTransaction, principal.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }
@@ -114,7 +114,7 @@ public class TransferController {
                                   , RedirectAttributes redirectAttributes) {
     try {
       // Adding the new connection
-      buddy = transferBusiness.addBuddy(buddy, principal.getName());
+      transferBusiness.addBuddy(buddy, principal.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }

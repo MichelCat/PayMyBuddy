@@ -16,15 +16,18 @@ import lombok.experimental.FieldDefaults;
 @Validated
 @Data
 @FieldDefaults(level=AccessLevel.PRIVATE)
-@EqualsAndHashCode(of = {"idCustomer", "balance"})
+@EqualsAndHashCode(of = {"id", "idCustomer", "balance"})
 @ToString
 public class CustomerAccount {
-
+  
   /**
    * Customer account ID
    */
+  Integer id;
+  /**
+   * Customer ID
+   */
   Integer idCustomer;
-  
   /**
    * Account balance
    */

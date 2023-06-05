@@ -19,20 +19,4 @@ public interface AppUserDao extends JpaRepository<AppUserEntity, Long> {
   , nativeQuery = true)
   Optional<AppUserEntity> findByContactEmail();
   
-//  @Modifying
-//  @Query(value = "update app_user set"
-//      + " user_email = :email"
-//      + " , user_expired = :expired"
-//      + " , user_locked = :locked"
-//      + " , user_credentia_expired = :credentia_expired"
-//      + " , user_enabled = :enabled"
-//      + " where id_user = :id"
-//  , nativeQuery = true)
-//  int updateUserSetEmailAndStatus(@Param("email") String email
-//                                  , @Param("expired") Boolean expired
-//                                  , @Param("locked") Boolean locked
-//                                  , @Param("credentia_expired") Boolean credentia_expired
-//                                  , @Param("enabled") Boolean enabled
-//                                  , @Param("id") long id);
-  
 }

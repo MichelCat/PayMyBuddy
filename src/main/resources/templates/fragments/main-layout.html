@@ -11,8 +11,10 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 	
+	<head th:insert="fragments/head">
+		<title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Pay My Buddy</title>
+	</head>
 	
-    <head th:replace="~{fragments/header}">
 <body>
 	
 	<div class="container-fluid">

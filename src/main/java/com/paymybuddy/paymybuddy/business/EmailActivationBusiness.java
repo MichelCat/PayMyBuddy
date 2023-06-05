@@ -45,6 +45,10 @@ public class EmailActivationBusiness {
     if (!appUserEntity.isValidEmailEndDate()) {
       throw new MyException("throw.EmailTimeExceeded");
     }
+    // Account already activated
+    if (appUserEntity.isEnabled()) {
+      throw new MyException("throw.AccountAlreadyActivated");
+    }
     appUserEntity.setEnabled(true);
     return appUserDao.save(appUserEntity);
   }

@@ -37,14 +37,18 @@ public class ProfileController {
   public String getProfile(Principal principal
                           , Model model
                           , RedirectAttributes redirectAttributes) {
-    // Find customer information
-    Customer customer = profileBusiness.getCustomerByUsername(principal.getName());
-    model.addAttribute("user", customer);
-    
-    // Find bank account information
-    BankAccount bankAccount = profileBusiness.getBankAccountById(customer.getId());
-    model.addAttribute("bankAccount", bankAccount);
-    
+    try {
+      // Find customer information
+      Customer customer = profileBusiness.getCustomerByUsername(principal.getName());
+      model.addAttribute("user", customer);
+      
+      // Find bank account information
+      BankAccount bankAccount = profileBusiness.getBankAccountById(customer.getId());
+      model.addAttribute("bankAccount", bankAccount);
+      
+    } catch (Exception e) {
+      model.addAttribute("errorMessage", e.getMessage());
+    }
     return "/user/profile";
   }
 
@@ -66,7 +70,7 @@ public class ProfileController {
                                   , RedirectAttributes redirectAttributes) {
     try {
       // Editing customer information
-      customer = profileBusiness.updateUser(customer, principal.getName());
+      profileBusiness.updateUser(customer, principal.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }
@@ -91,7 +95,7 @@ public class ProfileController {
                                       , RedirectAttributes redirectAttributes) {
     try {
       // Editing bank account information
-      bankAccount = profileBusiness.saveBankAccount(bankAccount, principal.getName());
+      profileBusiness.saveBankAccount(bankAccount, principal.getName());
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }

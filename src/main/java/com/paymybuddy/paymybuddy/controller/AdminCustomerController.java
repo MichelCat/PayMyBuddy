@@ -69,7 +69,7 @@ public class AdminCustomerController {
                                   , RedirectAttributes redirectAttributes) {
     try {
       // Editing customer information
-      customerUser = adminCustomerBusiness.updateUser(customerUser);
+      adminCustomerBusiness.updateUser(customerUser);
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
     }

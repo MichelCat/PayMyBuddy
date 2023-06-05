@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @version 1.0
  */
 @SpringBootTest
-public class AppUserRoleTest {
+class AppUserRoleTest {
   
   /**
    * Read USER_ROLE
