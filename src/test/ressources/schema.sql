@@ -5,6 +5,15 @@
 -- -----------------------------------------------------------------------------
 
 
+-- Table of Remember me
+CREATE TABLE persistent_logins (
+	username VARCHAR(64) NOT NULL,
+	series VARCHAR(64) NOT NULL,
+	token VARCHAR(64) NOT NULL,
+	last_used TIMESTAMP NOT NULL,
+	PRIMARY KEY (series)
+);
+
 -- Table of users
 create table app_user (
 	id_user int PRIMARY KEY AUTO_INCREMENT,						-- User ID
@@ -13,12 +22,9 @@ create table app_user (
     user_role varchar(20),										-- User role
 	user_expired boolean,										-- User account expired
 	user_locked boolean,										-- User locked
-	user_credentia_expired boolean,								-- User credentials (password) expired
+	user_credentials_expired boolean,							-- User credentials (password) expired
 	user_enabled boolean,										-- Activated user
-	user_email_validation_key varchar(36),						-- Email validation key
-	user_valid_email_end_date datetime,							-- Valid email end date
-	constraint uc_user_email UNIQUE KEY (user_email),
-	constraint uc_user_email_validation_key UNIQUE KEY (user_email_validation_key)
+	constraint uc_user_email UNIQUE KEY (user_email)
 );
 
 -- Table of customers
@@ -31,7 +37,10 @@ create table customer (
 	customer_address_2 varchar(100) NOT NULL default '',		-- Address 2 customer
 	customer_zip_code varchar(50) NOT NULL default '',			-- Customer zip code
 	customer_city varchar(50) NOT NULL default '',				-- Customer city
-	constraint fk_customer_user FOREIGN KEY (customer_id_user) REFERENCES app_user (id_user)
+	customer_email_validation_key varchar(36),					-- Email validation key
+	customer_valid_email_end_date datetime,						-- Valid email end date
+	constraint fk_customer_user FOREIGN KEY (customer_id_user) REFERENCES app_user (id_user),
+	constraint uc_customer_email_validation_key UNIQUE KEY (customer_email_validation_key)
 );
 
 -- Buddy relationship join table

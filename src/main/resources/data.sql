@@ -5,7 +5,7 @@
 -- -----------------------------------------------------------------------------
 
 
-insert into app_user (user_email, user_password, user_role, user_expired, user_locked, user_credentia_expired, user_enabled) values
+insert into app_user (user_email, user_password, user_role, user_expired, user_locked, user_credentials_expired, user_enabled) values
 ('guto@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 'USER_ROLE', false, false, false, true)
 , ('hayley@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 'USER_ROLE', false, false, false, true)
 , ('clara@gmail.com', '$2a$10$mrfxRneNX/SdXiXSgcg9g.xK/Hhat/kYH3at8OZdCbZjTWNIfV9Pq', 'USER_ROLE', false, false, false, true)

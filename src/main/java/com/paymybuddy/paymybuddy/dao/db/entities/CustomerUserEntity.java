@@ -19,7 +19,7 @@ import lombok.experimental.FieldDefaults;
  */
 @Data
 @FieldDefaults(level=AccessLevel.PRIVATE)
-@EqualsAndHashCode(of = {"idUser", "username", "password", "firstName", "lastName", "appUserRole", "expired", "locked", "credentiaExpired", "enabled", "emailValidationKey", "validEmailEndDate"})
+@EqualsAndHashCode(of = {"idUser", "username", "password", "firstName", "lastName", "appUserRole", "expired", "locked", "credentialsExpired", "enabled", "emailValidationKey", "validEmailEndDate"})
 @ToString
 public class CustomerUserEntity {
   
@@ -62,7 +62,7 @@ public class CustomerUserEntity {
    * User credentials (password) expired
    */
   @NotNull(message = "User credentials expired cannot be null")
-  Boolean credentiaExpired;
+  Boolean credentialsExpired;
   /**
    * Activated user
    */

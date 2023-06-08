@@ -43,8 +43,8 @@ $('document').ready(function(){
 		targetCheckbox = document.getElementById("idLocked");
 		targetCheckbox.checked = sourceCheckbox.checked;
 		
-		sourceCheckbox = document.getElementById("idRowCredentiaExpired"+itemId);
-		targetCheckbox = document.getElementById("idCredentiaExpired");
+		sourceCheckbox = document.getElementById("idRowCredentialsExpired"+itemId);
+		targetCheckbox = document.getElementById("idCredentialsExpired");
 		targetCheckbox.checked = sourceCheckbox.checked;
 		
 		sourceCheckbox = document.getElementById("idRowEnabled"+itemId);

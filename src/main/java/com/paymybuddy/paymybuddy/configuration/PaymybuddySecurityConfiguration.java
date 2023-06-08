@@ -15,6 +15,25 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class PaymybuddySecurityConfiguration {
   
+
+//  @Autowired
+//  private DataSource dataSource;
+//  
+//  @Autowired
+//  private AppUserBusiness appUserBusiness;
+//  
+//  @Bean
+//  public UserDetailsManager users(HttpSecurity http) throws Exception {
+//      AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManagerBuilder.class)
+//          .userDetailsService(appUserBusiness)
+//          .passwordEncoder(passwordEncoder())
+//          .build();
+//
+//      JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+//      jdbcUserDetailsManager.setAuthenticationManager(authenticationManager);
+//      return jdbcUserDetailsManager;
+//  }  
+  
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
@@ -54,5 +73,49 @@ public class PaymybuddySecurityConfiguration {
   @Bean
   public PaymybuddyAuthenticationSuccessHandler successHandler() {
     return new PaymybuddyAuthenticationSuccessHandler();
-  }  
+  }
+  
+  
+  
+//  public SecurityFilterChain filterChain(HttpSecurity http, RememberMeServices rememberMeServices) throws Exception {
+//  
+//          .rememberMeServices(rememberMeServices);  
+//  
+//  @Autowired
+//  private DataSource dataSource;
+//
+//  @Bean
+//  public JdbcTokenRepositoryImpl tokenRepository() {
+//      JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+//      tokenRepository.setDataSource(dataSource);
+//      return tokenRepository;
+//  }
+  
+  
+  
+// public SecurityFilterChain filterChain(HttpSecurity http, RememberMeServices rememberMeServices) throws Exception {
+//  
+//  @Bean
+//  RememberMeServices rememberMeServices(UserDetailsService userDetailsService) {
+//      RememberMeTokenAlgorithm encodingAlgorithm = RememberMeTokenAlgorithm.SHA256;
+//      TokenBasedRememberMeServices rememberMe = new TokenBasedRememberMeServices("456987161654664161616_6fdsgg", userDetailsService, encodingAlgorithm);
+//      rememberMe.setMatchingAlgorithm(RememberMeTokenAlgorithm.MD5);
+//      return rememberMe;
+//  }
+  
+//  @Autowired
+//  private DataSource dataSource;
+//
+//  @Autowired
+//  public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//      auth.jdbcAuthentication()
+//          .dataSource(dataSource)
+//          .usersByUsernameQuery("select user_email as email, user_password as password, user_enabled as enabled "
+//              + "from app_user "
+//              + "where user_email = ?")
+//          .authoritiesByUsernameQuery("select user_email as email, user_role as authority "
+//              + "from app_user "
+//              + "where user_email = ?");
+//  }
+  
 }

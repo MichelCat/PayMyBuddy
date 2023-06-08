@@ -1,10 +1,11 @@
 package com.paymybuddy.paymybuddy.business;
 
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.paymybuddy.paymybuddy.Exception.MyException;
+import com.paymybuddy.paymybuddy.dao.db.CustomerDao;
+import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
 import com.paymybuddy.paymybuddy.dao.user.AppUserDao;
 import com.paymybuddy.paymybuddy.dao.user.entities.AppUserEntity;
 
@@ -19,6 +20,8 @@ public class EmailActivationBusiness {
 
   @Autowired
   private AppUserDao appUserDao;
+  @Autowired
+  private CustomerDao customerDao;
 
 
   /**
@@ -30,25 +33,25 @@ public class EmailActivationBusiness {
   @Transactional(rollbackFor = Exception.class)
   public AppUserEntity emailActivationBusiness(String validationKey) throws MyException {
     
-    Optional<AppUserEntity> optAppUserEntity = appUserDao.findByEmailValidationKey(validationKey);
-    // Key not found
-    if (optAppUserEntity.isEmpty() == true) {
-      throw new MyException("throw.EmailKeyNotFound");
-    }
+    // User does not exist
+    CustomerEntity customerEntity = customerDao.findByEmailValidationKey(validationKey)
+        .orElseThrow(() -> new MyException("throw.CustomerNotExist"));
     
-    AppUserEntity appUserEntity = optAppUserEntity.get();
     // Invalid email key for customers
-    if (!appUserEntity.isValidEmailKey(validationKey)) {
+    if (!customerEntity.isValidEmailKey(validationKey)) {
       throw new MyException("throw.InvalidEmailKey");
     }
     // Email validation for customers time exceeded    
-    if (!appUserEntity.isValidEmailEndDate()) {
+    if (!customerEntity.isValidEmailEndDate()) {
       throw new MyException("throw.EmailTimeExceeded");
     }
+   
     // Account already activated
+    AppUserEntity appUserEntity = customerEntity.getAppUserEntity();
     if (appUserEntity.isEnabled()) {
       throw new MyException("throw.AccountAlreadyActivated");
     }
+    
     appUserEntity.setEnabled(true);
     return appUserDao.save(appUserEntity);
   }

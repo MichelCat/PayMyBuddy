@@ -29,6 +29,8 @@ public class CustomerUtils {
     customer.setAddress2(customerEntity.getAddress2());
     customer.setZipCode(customerEntity.getZipCode());
     customer.setCity(customerEntity.getCity());
+    customer.setEmailValidationKey(customerEntity.getEmailValidationKey());
+    customer.setValidEmailEndDate(customerEntity.getValidEmailEndDate());
     return customer;
   }
   
@@ -47,6 +49,8 @@ public class CustomerUtils {
     customerEntity.setAddress2(customer.getAddress2());
     customerEntity.setZipCode(customer.getZipCode());
     customerEntity.setCity(customer.getCity());
+    customerEntity.setEmailValidationKey(customer.getEmailValidationKey());
+    customerEntity.setValidEmailEndDate(customer.getValidEmailEndDate());
     return customerEntity;
   }
 }

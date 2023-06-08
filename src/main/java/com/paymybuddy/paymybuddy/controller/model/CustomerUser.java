@@ -21,7 +21,7 @@ import lombok.experimental.FieldDefaults;
 @Validated
 @Data
 @FieldDefaults(level=AccessLevel.PRIVATE)
-@EqualsAndHashCode(of = {"idUser", "username", "password", "firstName", "lastName", "appUserRole", "expired", "locked", "credentiaExpired", "enabled", "emailValidationKey", "validEmailEndDate"})
+@EqualsAndHashCode(of = {"idUser", "username", "firstName", "lastName", "appUserRole", "expired", "locked", "credentialsExpired", "enabled", "emailValidationKey", "validEmailEndDate"})
 @ToString
 public class CustomerUser {
 
@@ -57,7 +57,7 @@ public class CustomerUser {
    * User credentials (password) expired
    */
   @NotNull(message = "User credentials expired cannot be null")
-  Boolean credentiaExpired;
+  Boolean credentialsExpired;
   /**
    * Activated user
    */
@@ -66,13 +66,13 @@ public class CustomerUser {
   /**
    * Email validation key for customers
    */
-  @NotBlank(message = "Email validation key is required")
-  @Size(max = 36)
+//  @NotBlank(message = "Email validation key is required")
+//  @Size(max = 36)
   String emailValidationKey;
   /**
    * Valid email end date for customers
    */
-  @NotNull(message = "Valid email end date cannot be null")
+//  @NotNull(message = "Valid email end date cannot be null")
   Date validEmailEndDate;
   
   /**
@@ -94,7 +94,7 @@ public class CustomerUser {
     appUserRole = "";
     expired = true;
     locked = true;
-    credentiaExpired = true;
+    credentialsExpired = true;
     enabled = false;
     emailValidationKey = "";
     validEmailEndDate= null;

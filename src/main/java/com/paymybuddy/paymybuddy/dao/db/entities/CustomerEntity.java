@@ -1,7 +1,10 @@
 package com.paymybuddy.paymybuddy.dao.db.entities;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import com.paymybuddy.paymybuddy.dao.user.entities.AppUserEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,7 +37,7 @@ import lombok.ToString;
 @Table(name = "customer")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 //@NoArgsConstructor
-@EqualsAndHashCode(of = {"firstName", "lastName", "address1", "address2", "zipCode", "city"})
+@EqualsAndHashCode(of = {"firstName", "lastName", "address1", "address2", "zipCode", "city", "emailValidationKey", "validEmailEndDate"})
 @ToString
 public class CustomerEntity {
   /**
@@ -94,6 +97,20 @@ public class CustomerEntity {
   @Column(name = "customer_city")
   @Size(max = 50)
   String city;
+  
+  /**
+   * Email validation key for customers
+   */
+//  @Column(name = "customer_email_validation_key", unique=true)
+  @Column(name = "customer_email_validation_key")
+  @Size(max = 36)
+  String emailValidationKey;
+  /**
+   * Valid email end date for customers
+   */
+  @Column(name = "customer_valid_email_end_date")
+  Date validEmailEndDate;
+  
   
   /**
    * CustomerEntity [1..1] to TransactionLogEntity [0..n], debit relationship
@@ -158,5 +175,46 @@ public class CustomerEntity {
     address2 = "";
     zipCode = "";
     city = "";
+    emailValidationKey = "";
+    validEmailEndDate = null;
+  }
+  
+  /**
+   * Test valid email key for customers
+   * 
+   * @param testKey Key to validate
+   * @return Boolean Validated key
+   */
+  public boolean isValidEmailKey(String testKey) {
+    return this.emailValidationKey.equals(testKey);
+  }
+
+  /**
+   * Test valid email date for customers
+   * 
+   * @return Boolean Validated key
+   */
+  public boolean isValidEmailEndDate() {
+    Date currentDate = new Date();
+    return currentDate.before(validEmailEndDate);    
+  }
+  
+  /**
+   * Create valid email key for customers
+   */
+  public void createValidEmailKey() {
+    this.emailValidationKey = UUID.randomUUID().toString();
+  }
+  
+  /**
+   * Create valid email end date for customers
+   */
+  public void createValidEndDate() {
+    // Today's date plus 24 hours
+    Date date = new Date();
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
+    calendar.add(Calendar.HOUR_OF_DAY, 24);
+    this.validEmailEndDate = calendar.getTime();
   }
 }

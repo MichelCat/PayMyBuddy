@@ -27,7 +27,9 @@ public class CustomerUserDaoImpl implements CustomerUserDao {
   @Override
   public Page<CustomerUserEntity> findAllCustomerUser(Pageable pageable) {
     // Paginated entities
-    var query = entityManager.createNativeQuery("select app_user.*, customer_first_name, customer_last_name"
+    var query = entityManager.createNativeQuery("select app_user.*"
+                                                + " , customer_email_validation_key, customer_valid_email_end_date"
+                                                + " , customer_first_name, customer_last_name"
                                                 + " from customer"
                                                 + " inner join app_user on id_user = customer_id_user"
                                                 + " order by customer_last_name, customer_first_name");
@@ -45,7 +47,7 @@ public class CustomerUserDaoImpl implements CustomerUserDao {
       customerUserEntity.setAppUserRole((String)object[3]);
       customerUserEntity.setExpired((Boolean)object[4]);
       customerUserEntity.setLocked((Boolean)object[5]);
-      customerUserEntity.setCredentiaExpired((Boolean)object[6]);
+      customerUserEntity.setCredentialsExpired((Boolean)object[6]);
       customerUserEntity.setEnabled((Boolean)object[7]);
       customerUserEntity.setEmailValidationKey((String)object[8]);
       customerUserEntity.setFirstName((String)object[10]);

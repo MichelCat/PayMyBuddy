@@ -2,11 +2,8 @@ package com.paymybuddy.paymybuddy.dao.user.entities;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.UUID;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerMessageEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,9 +30,14 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @Table(name = "app_user")
 @FieldDefaults(level=AccessLevel.PRIVATE)
-@EqualsAndHashCode(of = {"username", "password", "appUserRole", "expired", "locked", "credentiaExpired", "enabled", "emailValidationKey", "validEmailEndDate"})
+@EqualsAndHashCode(of = {"id", "username", "password", "appUserRole", "expired", "locked", "credentialsExpired", "enabled"})
 @ToString
 public class AppUserEntity implements UserDetails {
+  
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
   
   /**
    * User ID
@@ -43,7 +45,7 @@ public class AppUserEntity implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id_user")
-  long id;
+  Long id;
   /**
    * Email used to authenticate the user
    */
@@ -83,25 +85,14 @@ public class AppUserEntity implements UserDetails {
    * User credentials (password) expired
    */
   @NotNull(message = "User credentials expired cannot be null")
-  @Column(name = "user_credentia_expired")
-  Boolean credentiaExpired;
+  @Column(name = "user_credentials_expired")
+  Boolean credentialsExpired;
   /**
    * Activated user
    */
   @NotNull(message = "Activated user cannot be null")
   @Column(name = "user_enabled")
   Boolean enabled;
-  /**
-   * Email validation key for customers
-   */
-  @Column(name = "user_email_validation_key", unique=true)
-  @Size(max = 36)
-  String emailValidationKey;
-  /**
-   * Valid email end date for customers
-   */
-  @Column(name = "user_valid_email_end_date")
-  Date validEmailEndDate;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -116,7 +107,7 @@ public class AppUserEntity implements UserDetails {
   public boolean isAccountNonLocked() { return !locked; }
 
   @Override
-  public boolean isCredentialsNonExpired() { return !credentiaExpired; }
+  public boolean isCredentialsNonExpired() { return !credentialsExpired; }
 
   @Override
   public boolean isEnabled() { return enabled; }
@@ -136,55 +127,14 @@ public class AppUserEntity implements UserDetails {
   
   
   public AppUserEntity() {
-    id = 0;
+    id = 0L;
     username = "";
     password = "";
     appUserRole = "";
     expired = false;
     locked = false;
-    credentiaExpired = false;
+    credentialsExpired = false;
     enabled = false;
-    emailValidationKey = null;
-    validEmailEndDate = null;
-  }
-  
-  /**
-   * Test valid email key for customers
-   * 
-   * @param testKey Key to validate
-   * @return Boolean Validated key
-   */
-  public boolean isValidEmailKey(String testKey) {
-    return this.emailValidationKey.equals(testKey);
-  }
-  
-  /**
-   * Test valid email date for customers
-   * 
-   * @return Boolean Validated key
-   */
-  public boolean isValidEmailEndDate() {
-    Date currentDate = new Date();
-    return currentDate.before(validEmailEndDate);    
-  }
-  
-  /**
-   * Create valid email key for customers
-   */
-  public void createValidEmailKey() {
-    this.emailValidationKey = UUID.randomUUID().toString();
-  }
-  
-  /**
-   * Create valid email end date for customers
-   */
-  public void createValidEndDate() {
-    // Today's date plus 24 hours
-    Date date = new Date();
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(date);
-    calendar.add(Calendar.HOUR_OF_DAY, 24);
-    this.validEmailEndDate = calendar.getTime();
   }
   
   /**

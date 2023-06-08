@@ -78,7 +78,7 @@ public class AdminCustomerBusiness {
     appUserEntity.setUsername(customerUser.getUsername());
     appUserEntity.setExpired(customerUser.getExpired());
     appUserEntity.setLocked(customerUser.getLocked());
-    appUserEntity.setCredentiaExpired(customerUser.getCredentiaExpired());
+    appUserEntity.setCredentialsExpired(customerUser.getCredentialsExpired());
     appUserEntity.setEnabled(customerUser.getEnabled());
     appUserDao.save(appUserEntity);
 

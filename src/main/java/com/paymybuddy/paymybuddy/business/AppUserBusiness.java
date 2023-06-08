@@ -10,16 +10,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.paymybuddy.paymybuddy.Exception.MessagePropertieFormat;
 import com.paymybuddy.paymybuddy.Exception.MyException;
+import com.paymybuddy.paymybuddy.controller.model.AppUserPrincipal;
 import com.paymybuddy.paymybuddy.controller.model.Register;
 import com.paymybuddy.paymybuddy.dao.user.AppUserDao;
 import com.paymybuddy.paymybuddy.dao.user.entities.AppUserRole;
 import com.paymybuddy.paymybuddy.utils.EmailBusiness;
+import lombok.extern.slf4j.Slf4j;
 import com.paymybuddy.paymybuddy.dao.user.entities.AppUserEntity;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerEntity;
 import com.paymybuddy.paymybuddy.dao.db.CustomerAccountDao;
 import com.paymybuddy.paymybuddy.dao.db.CustomerDao;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerAccountEntity;
 
+@Slf4j
 @Service
 public class AppUserBusiness implements UserDetailsService {
   
@@ -36,33 +39,54 @@ public class AppUserBusiness implements UserDetailsService {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+    log.trace("Entering method loadUserByUsername");
+    log.debug("Authentication user email: " + username);
+    
     Optional<AppUserEntity> optAppUserEntity = appUserDao.findByUsername(username);
     if (optAppUserEntity.isEmpty()) {
+      log.error(MessagePropertieFormat.getMessage("throw.UserNotFound", username));
       throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.UserNotFound", username));
     }
     AppUserEntity appUserEntity = optAppUserEntity.get();
     
     // Activated user
     if (!appUserEntity.isEnabled()) {
-      throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.AccountNotActivated"));
+      log.info(MessagePropertieFormat.getMessage("throw.AccountNotActivated", username));
+      throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.AccountNotActivated", username));
     }
     // User account expired
     if (!appUserEntity.isAccountNonExpired()) {
-      throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.AccountExpired"));
+      log.info(MessagePropertieFormat.getMessage("throw.AccountExpired", username));
+      throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.AccountExpired", username));
     }
     // User locked
     if (!appUserEntity.isAccountNonLocked()) {
-      throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.AccountLocked"));
+      log.info(MessagePropertieFormat.getMessage("throw.AccountLocked", username));
+      throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.AccountLocked", username));
     }
     // User credentials (password) expired
     if (!appUserEntity.isCredentialsNonExpired()) {
-      throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.PasswordExpired"));
+      log.info(MessagePropertieFormat.getMessage("throw.PasswordExpired", username));
+      throw new UsernameNotFoundException(MessagePropertieFormat.getMessage("throw.PasswordExpired", username));
     }
     
-    return new org.springframework.security.core.userdetails.User(appUserEntity.getUsername(),
-        appUserEntity.getPassword(),
-        appUserEntity.getAuthorities());
+    return new AppUserPrincipal(appUserEntity);
+    
+//    return new org.springframework.security.core.userdetails.User(appUserEntity.getUsername(),
+//        appUserEntity.getPassword(),
+//        appUserEntity.getAuthorities());
+    
+//    return new org.springframework.security.core.userdetails.User(
+//        appUserEntity.getUsername(),
+//        appUserEntity.getPassword(),
+//        appUserEntity.isEnabled(),
+//        appUserEntity.isCredentialsNonExpired(),
+//        appUserEntity.isAccountNonExpired(),
+//        appUserEntity.isAccountNonLocked(),
+//        appUserEntity.getAuthorities());
+//    }
+    
   }
   
   /**
@@ -82,8 +106,6 @@ public class AppUserBusiness implements UserDetailsService {
     AppUserEntity newAppUserEntity = new AppUserEntity();
     newAppUserEntity.setUsername(register.getEmail());
     newAppUserEntity.setPassword(passwordEncoder.encode(register.getPassword()));
-    newAppUserEntity.createValidEmailKey();
-    newAppUserEntity.createValidEndDate();
     newAppUserEntity.setAppUserRole(AppUserRole.USER_ROLE.name());
     newAppUserEntity = appUserDao.save(newAppUserEntity);
     
@@ -92,6 +114,8 @@ public class AppUserBusiness implements UserDetailsService {
     customerEntity.setAppUserEntity(newAppUserEntity);
     customerEntity.setFirstName(register.getFirstName());
     customerEntity.setLastName(register.getLastName());
+    customerEntity.createValidEmailKey();
+    customerEntity.createValidEndDate();
     customerEntity = customerDao.save(customerEntity);
     
     // Add customer account
@@ -107,7 +131,7 @@ public class AppUserBusiness implements UserDetailsService {
     // Send activation email contact
     String subject = "Activation Email";
     String message = "You can activate your account using the link : "
-                      + "http://localhost:8080/register/" + newAppUserEntity.getEmailValidationKey();
+                      + "http://localhost:8080/register/" + customerEntity.getEmailValidationKey();
     emailBusiness.sendEmail(userContactEmail.getUsername(), register.getEmail(), subject, message);
   }
 }

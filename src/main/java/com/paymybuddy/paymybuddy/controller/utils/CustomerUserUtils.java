@@ -30,7 +30,7 @@ public class CustomerUserUtils {
     customerUser.setAppUserRole(customerUserEntity.getAppUserRole());
     customerUser.setExpired(customerUserEntity.getExpired());
     customerUser.setLocked(customerUserEntity.getLocked());
-    customerUser.setCredentiaExpired(customerUserEntity.getCredentiaExpired());
+    customerUser.setCredentialsExpired(customerUserEntity.getCredentialsExpired());
     customerUser.setEnabled(customerUserEntity.getEnabled());
     customerUser.setEmailValidationKey(customerUserEntity.getEmailValidationKey());
     customerUser.setValidEmailEndDate(customerUserEntity.getValidEmailEndDate());

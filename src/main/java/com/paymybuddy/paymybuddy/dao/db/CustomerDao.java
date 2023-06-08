@@ -23,4 +23,6 @@ public interface CustomerDao extends JpaRepository<CustomerEntity, Integer> {
                 + " where user_email = :username"
       , nativeQuery = true)
   Optional<CustomerEntity> findByUsername(@Param("username") String username);
+  
+  Optional<CustomerEntity> findByEmailValidationKey(String validationKey);
 }
