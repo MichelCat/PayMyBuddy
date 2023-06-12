@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import com.paymybuddy.paymybuddy.Exception.MyException;
 import com.paymybuddy.paymybuddy.controller.model.Buddy;
 import com.paymybuddy.paymybuddy.controller.model.CustomerAccount;
+import com.paymybuddy.paymybuddy.controller.mapper.CustomerAccountMapper;
 import com.paymybuddy.paymybuddy.controller.model.BankTransaction;
 import com.paymybuddy.paymybuddy.controller.model.TransactionParameter;
-import com.paymybuddy.paymybuddy.controller.utils.CustomerAccountUtils;
 import com.paymybuddy.paymybuddy.controller.utils.CustomerBuddyUtils;
 import com.paymybuddy.paymybuddy.controller.utils.TransactionParameterUtils;
 import com.paymybuddy.paymybuddy.controller.utils.BankTransactionUtils;
@@ -45,8 +45,6 @@ public class HomeBusiness {
   @Autowired
   private CustomerAccountDao customerAccountDao;
   @Autowired
-  private CustomerAccountUtils customerAccountUtils;
-  @Autowired
   private BankTransactionDao bankTransactionDao;
   @Autowired
   private BankTransactionUtils bankTransactionUtils;
@@ -56,6 +54,8 @@ public class HomeBusiness {
   private CustomerBuddyDao customerBuddyDao;
   @Autowired
   private CustomerBuddyUtils customerBuddyUtils;
+  @Autowired
+  private CustomerAccountMapper customerAccountMapper;
   
   /**
    * Find customer ID
@@ -100,7 +100,7 @@ public class HomeBusiness {
     if (optCustomerAccountEntity.isEmpty()) {
       throw new MyException("throw.UnknownBankAccount");
     }
-    return customerAccountUtils.fromCustomerAccountEntityToCustomerAccount(optCustomerAccountEntity.get());
+    return customerAccountMapper.mapEntityToModel(optCustomerAccountEntity.get());
   }
   
   /**

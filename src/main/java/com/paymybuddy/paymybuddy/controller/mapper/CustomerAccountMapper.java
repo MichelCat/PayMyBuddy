@@ -1,25 +1,29 @@
-package com.paymybuddy.paymybuddy.controller.utils;
+package com.paymybuddy.paymybuddy.controller.mapper;
 
-import org.springframework.stereotype.Service;
+import org.mapstruct.Mapper;
 import com.paymybuddy.paymybuddy.controller.model.CustomerAccount;
 import com.paymybuddy.paymybuddy.dao.db.entities.CustomerAccountEntity;
 
 /**
- * CustomerAccountUtils is an CustomerAccount object conversion utility class
+ * Mapper CustomerAccountEntity to CustomerAccount
  * 
- * @author MC
- * @version 1.0
+ * @param customerAccountEntity CustomerAccountEntity object
+ * @return CustomerAccount
  */
-@Service
-public class CustomerAccountUtils {
-
+@Mapper(componentModel = "spring")
+public class CustomerAccountMapper {
+  
   /**
-   * Conversion CustomerAccountEntity to CustomerAccount
+   * Mapper CustomerAccountEntity to CustomerAccount
    * 
    * @param customerAccountEntity CustomerAccountEntity object
    * @return CustomerAccount
    */
-  public CustomerAccount fromCustomerAccountEntityToCustomerAccount(CustomerAccountEntity customerAccountEntity) {
+  public CustomerAccount mapEntityToModel(CustomerAccountEntity customerAccountEntity) {
+    if ( customerAccountEntity == null ) {
+      return null;
+    }
+    
     CustomerAccount customerAccount = new CustomerAccount();
     customerAccount.setId(customerAccountEntity.getId());
     customerAccount.setIdCustomer(customerAccountEntity.getCustomer().getId());

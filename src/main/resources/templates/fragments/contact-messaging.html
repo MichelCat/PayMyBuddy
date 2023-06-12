@@ -10,7 +10,7 @@
     <div class="row d-flex justify-content-between">
     	<div class="col-3">
 	    	<button class="btn btn-primary w-100"
-	    		data-bs-toggle="modal" data-bs-target="#modalSendMessage"><spam class="bi bi-envelope" />&nbsp;&nbsp;Send message</button>
+	    		data-bs-toggle="modal" data-bs-target="#modalSendMessage"><spam class="bi bi-envelope" />&nbsp;&nbsp;Send message to contact</button>
 		</div>
 	</div>
 
@@ -22,12 +22,7 @@
 				<!-- Title -->
 				<thead class="bg-success text-white">
 					<tr>
-						<th scope="col" class="fw-normal">Object</th>
-						<th scope="col" class="fw-normal">Date</th>
-					</tr>
-					<tr>
-						<th scope="col" class="fw-normal">From</th>
-						<th scope="col" class="fw-normal">To</th>
+						<td colspan="2">&nbsp;</td>
 					</tr>
 				</thead>
 				
@@ -38,13 +33,13 @@
 					</tr>
 					
 					<th:block th:each="customerMessage, itemStat : ${customerMessagePage.content}">
-						<tr>
-							<td th:text="${customerMessage.subject}" />
-							<td th:text="${#dates.format(customerMessage.messageDate, 'dd/MM/yyyy hh:mm a')}" />
+						<tr class="text-start">
+							<td th:text="'Object : ' + ${customerMessage.subject}" />
+							<td th:text="'Date : ' + ${#dates.format(customerMessage.messageDate, 'dd/MM/yyyy hh:mm a')}" />
 						</tr>
-						<tr>
-							<td th:text="${customerMessage.emailSender}" />
-							<td th:text="${customerMessage.emailRecipient}" />
+						<tr class="text-start">
+							<td th:text="'From : ' + ${customerMessage.emailSender}" />
+							<td th:text="'To : ' + ${customerMessage.emailRecipient}" />
 						</tr>
 						<tr>
 							<td colspan="2">

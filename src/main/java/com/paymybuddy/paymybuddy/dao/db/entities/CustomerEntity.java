@@ -37,7 +37,7 @@ import lombok.ToString;
 @Table(name = "customer")
 @FieldDefaults(level=AccessLevel.PRIVATE)
 //@NoArgsConstructor
-@EqualsAndHashCode(of = {"firstName", "lastName", "address1", "address2", "zipCode", "city", "emailValidationKey", "validEmailEndDate"})
+@EqualsAndHashCode(of = {"appUserEntity", "firstName", "lastName", "address1", "address2", "zipCode", "city", "emailValidationKey", "validEmailEndDate"})
 @ToString
 public class CustomerEntity {
   /**
@@ -101,8 +101,7 @@ public class CustomerEntity {
   /**
    * Email validation key for customers
    */
-//  @Column(name = "customer_email_validation_key", unique=true)
-  @Column(name = "customer_email_validation_key")
+  @Column(name = "customer_email_validation_key", unique=true)
   @Size(max = 36)
   String emailValidationKey;
   /**

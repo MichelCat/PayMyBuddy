@@ -72,21 +72,6 @@ public class AppUserBusiness implements UserDetailsService {
     }
     
     return new AppUserPrincipal(appUserEntity);
-    
-//    return new org.springframework.security.core.userdetails.User(appUserEntity.getUsername(),
-//        appUserEntity.getPassword(),
-//        appUserEntity.getAuthorities());
-    
-//    return new org.springframework.security.core.userdetails.User(
-//        appUserEntity.getUsername(),
-//        appUserEntity.getPassword(),
-//        appUserEntity.isEnabled(),
-//        appUserEntity.isCredentialsNonExpired(),
-//        appUserEntity.isAccountNonExpired(),
-//        appUserEntity.isAccountNonLocked(),
-//        appUserEntity.getAuthorities());
-//    }
-    
   }
   
   /**

@@ -66,13 +66,13 @@ public class CustomerUser {
   /**
    * Email validation key for customers
    */
-//  @NotBlank(message = "Email validation key is required")
-//  @Size(max = 36)
+  @NotBlank(message = "Email validation key is required")
+  @Size(max = 36)
   String emailValidationKey;
   /**
    * Valid email end date for customers
    */
-//  @NotNull(message = "Valid email end date cannot be null")
+  @NotNull(message = "Valid email end date cannot be null")
   Date validEmailEndDate;
   
   /**

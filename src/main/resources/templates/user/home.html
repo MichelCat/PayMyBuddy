@@ -26,18 +26,6 @@
 				<div class="d-flex justify-content-center align-items-start">
 					<div class="container">
 					
-<div sec:authorize="isAuthenticated()">isAuthenticated()</div>
-<div sec:authorize="hasRole('USER')">Role USER</div>
-<div sec:authorize="hasRole('ADMIN')">Role ADMIN</div>
-<div sec:authorize="hasRole('USER_ROLE')">Role USER_ROLE</div>
-<div sec:authorize="hasRole('ADMIN_ROLE')">Role ADMIN_ROLE</div>
-<div sec:authentication="name"></div>
-<div sec:authentication="principal.authorities"></div>
-<!--
-<div sec:authentication="principal.user.name"></div>
--->
-					
-					
 						<!-- Error message -->
 						<div th:replace="~{fragments/error-message}"></div>
 					

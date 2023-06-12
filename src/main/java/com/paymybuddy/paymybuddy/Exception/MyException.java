@@ -1,6 +1,12 @@
 package com.paymybuddy.paymybuddy.Exception;
 
 public class MyException extends Exception {
+  
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+  
   private final String messsage;
   private final Object[] parameters;
   
