@@ -230,12 +230,6 @@
 </dependency>
 -->
 
-		<dependency>
-			<groupId>com.openclassrooms</groupId>
-			<artifactId>SpringSecurityAuth</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-
 		<!-- Starter for using Java Mail and Spring Framework's email sending support -->		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

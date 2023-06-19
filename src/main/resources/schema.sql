@@ -5,6 +5,11 @@
 -- -----------------------------------------------------------------------------
 
 
+drop database if exists PayMyBuddyProd;
+
+create database PayMyBuddyProd;
+use PayMyBuddyProd;
+
 -- Table of users
 create table app_user (
 	id_user int PRIMARY KEY AUTO_INCREMENT,						-- User ID
