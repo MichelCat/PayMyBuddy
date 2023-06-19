@@ -62,7 +62,7 @@ Here are the steps to deploy to production :
 1. Run the Maven command to run the application.
    * java -jar target\paymybuddy-0.0.1-SNAPSHOT.jar
 
-2. Once the application is running, it can be accessed by default at http://localhost:8080/
+2. Once the application is running, it can be accessed by default at http://localhost:8080/login
 
 ```
 
