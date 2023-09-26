@@ -1,4 +1,4 @@
-![Image](src\main\resources\static\img\ImagePayMyBuddy.png "Pay My Buddy")
+![Image](src/main/resources/static/img/ImagePayMyBuddy.png "Pay My Buddy")
 # PayMyBuddy
 
 PayMyBuddy is an application for transferring money between buddies.
